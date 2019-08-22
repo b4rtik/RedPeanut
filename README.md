@@ -96,24 +96,27 @@ The properties that can be set are:
   * TargetClass (Class to search for image recover)  
 * _Http Get_
   * ApiPath (comma separated list of url es /news-list.jsp,/antani.php etc.)
-  * _Server_
-   * Prepend
-   * Append
-   * Headers (name and value pair for http headers)
-  * _Client_
-   * Headers    
+   * _Server_
+     * Prepend
+     * Append
+     * Headers (name and value pair for http headers)
+   * _Client_
+     * Headers    
 * _Http Post_
   * ApiPath (comma separated list of url es /news-list.jsp,/antani.php etc.)
-  * Param (the name of the post request payload parameter)
-  * Mask (format for interpreting the key value pair eg {0}={1}) !!!!!!!!!!  
-  * _Server_
-   * Prepend
-   * Append
-   * Headers (name and value pair for http headers)      
-  * _Client_
-   * Headers
+  * Param (the name of the post request payload parameter)
+  * Mask (format for interpreting the key value pair eg {0}={1}) !!!!!!!!!!
+  * _Server_
+    * Prepend
+    * Append
+    * Headers (name and value pair for http headers)
+  * _Client_
+    * Headers
 
-Domain Fronting
+_Domain Fronting_
+
+To enable the domain fronting support it is necessary to value the "Host" header in the client section, both post and get (exemplified in the default profile 2)
+
 
 ## PowerShellExecuter
 
