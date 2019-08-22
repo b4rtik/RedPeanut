@@ -303,7 +303,7 @@ PS Z:\donut>
 
 ## Tools updating
 
-Some of the well-known tools present in RedPeanut such as the GohostPack tools are wrapped 
+Some of the well-known tools present in RedPeanut such as the GhostPack tools are wrapped 
 in full and executed on the client side. To update the tools, for example SeatBelt, without 
 updating the entire repository is necessary: Clone the Seatbelt repository, rename the "Main" 
 method in "Execute", insert the public modifier and recompile as dll. The dll must be compressed 
