@@ -22,9 +22,9 @@ process -> spawnasshellcode
 - - - -
 
 RedPeanut is a small RAT developed in .Net Core 2 and its agent in .Net 3.5 / 4.0. RedPeanut 
-code execution And on is based on shellcode generated with [Donut](https://github.com/TheWover/donut.git). It is therefore a hybrid, although developed in .Net it 
+code execution And on is based on shellcode generated with [Donut](https://github.com/TheWover/donut). It is therefore a hybrid, although developed in .Net it 
 does not rely solely on the Ammbly.Load. If you are interested in a .Net C2 Framework that is 
-consistent and can be used in an enagement, I suggest [Covenant](https://github.com/cobbr/Covenant.git).
+consistent and can be used in an enagement, I suggest [Covenant](https://github.com/cobbr/Covenant).
 
 RedPeanut is weaponized with:
 
@@ -304,19 +304,19 @@ Some of the well-known tools present in RedPeanut such as the GohostPack tools a
 in full and executed on the client side. To update the tools, for example SeatBelt, without 
 updating the entire repository is necessary: Clone the Seatbelt repository, rename the "Main" 
 method in "Execute", insert the public modifier and recompile as dll. The dll must be compressed 
-and encoded in Base64 with the ps RastaMouse script Get-CompressedShellcode.ps1 (https://github.com/rasta-mouse/TikiTorch.git)
+and encoded in Base64 with the ps RastaMouse script [Get-CompressedShellcode.ps1](https://github.com/rasta-mouse/TikiTorch/blob/dev/Get-CompressedShellcode.ps1)
 
 ## Credits
 
-Donut - [@TheRealWover](https://twitter.com/TheRealWover)
-SharpSploit - [@cobbr_io](https://twitter.com/cobbr_io)
-GhostPack - [@harmj0y](https://twitter.com/harmj0y)
-SharpGPOAbuse - [@mwrlabs](https://twitter.com/mwrlabs)
-EvilClippy - [@StanHacked](https://twitter.com/StanHacked)
-DotNetToJS - [@tiraniddo](https://twitter.com/tiraniddo)
-Sharpshooter - [@domchell](https://twitter.com/domchell)
-SharpWeb - [@djhohnstein](https://twitter.com/djhohnstein)
-Original version of PsExec - [@malcomvetter](https://twitter.com/malcomvetter)
-TikiTorch - [@_RastaMouse](https://twitter.com/_RastaMouse)
+* Donut - [@TheRealWover](https://twitter.com/TheRealWover)
+* SharpSploit - [@cobbr_io](https://twitter.com/cobbr_io)
+* GhostPack - [@harmj0y](https://twitter.com/harmj0y)
+* SharpGPOAbuse - [@mwrlabs](https://twitter.com/mwrlabs)
+* EvilClippy - [@StanHacked](https://twitter.com/StanHacked)
+* DotNetToJS - [@tiraniddo](https://twitter.com/tiraniddo)
+* Sharpshooter - [@domchell](https://twitter.com/domchell)
+* SharpWeb - [@djhohnstein](https://twitter.com/djhohnstein)
+* Original version of PsExec - [@malcomvetter](https://twitter.com/malcomvetter)
+* TikiTorch - [@_RastaMouse](https://twitter.com/_RastaMouse)
 
 
