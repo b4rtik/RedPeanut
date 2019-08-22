@@ -1,0 +1,6 @@
+[submodule "External/SharpSploit"]
+	path = External/SharpSploit
+	url = https://github.com/cobbr/SharpSploit.git
+[submodule "External/TikiTorch"]
+	path = External/TikiTorch
+	url = https://github.com/rasta-mouse/TikiTorch.git

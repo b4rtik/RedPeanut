@@ -1,0 +1,90 @@
+{
+  "Name": "Default",
+  "Default": true,
+  "HtmlCovered": false,
+  "TargetClass": null,
+  "Delay": 5000,
+  "ContentUri": "/content/",
+  "HttpGet": {
+    "ApiPath": [
+      "/newslist.jsp"
+    ],
+    "Server": {
+      "Headers": [
+        {
+          "Name": "Content-Type",
+          "Value": "application/octet-stream"
+        },
+        {
+          "Name": "Connection",
+          "Value": "Keep-Alive"
+        },
+        {
+          "Name": "Server",
+          "Value": "Apache"
+        }
+      ],
+      "Prepend": null,
+      "Append": null
+    },
+    "Client": {
+      "Headers": [
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Connection",
+          "Value": "Keep-Alive"
+        },
+        {
+          "Name": "Pragma",
+          "Value": "no-cache"
+        }
+      ]
+    }
+  },
+  "HttpPost": {
+    "ApiPath": [
+      "/newslist.jsp"
+    ],
+    "Param": "stocklevel",
+    "Mask": "{0}={1}",
+    "Server": {
+      "Headers": [
+        {
+          "Name": "Content-Type",
+          "Value": "application/octet-stream"
+        },
+        {
+          "Name": "Connection",
+          "Value": "Keep-Alive"
+        },
+        {
+          "Name": "Server",
+          "Value": "Apache"
+        }
+      ],
+      "Prepend": null,
+      "Append": null
+    },
+    "Client": {
+      "Headers": [
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Connection",
+          "Value": "Keep-Alive"
+        },
+        {
+          "Name": "Pragma",
+          "Value": "no-cache"
+        }
+      ]
+    }
+  },
+  "UserAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.103 Safari/537.36",
+  "Spawn": "notepad.exe"
+}
