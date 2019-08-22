@@ -104,7 +104,7 @@ namespace RedPeanut
         {
             if(!srv.IsStarted(name))
             {
-                if (!string.IsNullOrEmpty(lhost) && lport > 0 && !string.IsNullOrEmpty(name))
+                if (!string.IsNullOrEmpty(lhost) && lport > 0 && !string.IsNullOrEmpty(name) )
                 {
                     HttpProfile profile;
                     if (profileid != 0 && srv.GetProfiles().ContainsKey(profileid))
@@ -114,6 +114,7 @@ namespace RedPeanut
                     else
                     {
                         profile = srv.GetProfile(srv.GetDefaultProfile());
+                        profileid = srv.GetDefaultProfile();
                     }
 
                     ListenerConfig conf = new ListenerConfig(name, lhost, lport, profile, profileid, ssl);
