@@ -23,7 +23,7 @@ process -> spawnasshellcode
 
 RedPeanut is a small RAT developed in .Net Core 2 and its agent in .Net 3.5 / 4.0. RedPeanut 
 code execution And on is based on shellcode generated with [Donut](https://github.com/TheWover/donut). It is therefore a hybrid, although developed in .Net it 
-does not rely solely on the Ammbly.Load. If you are interested in a .Net C2 Framework that is 
+does not rely solely on the Assembly.Load. If you are interested in a .Net C2 Framework that is 
 consistent and can be used in an enagement, I suggest [Covenant](https://github.com/cobbr/Covenant).
 
 RedPeanut is weaponized with:
