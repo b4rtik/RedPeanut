@@ -256,7 +256,7 @@ __________________________________________________________________________
 [RP] >
 ```
 
-## Donut static Shellcode to dynami assembly execution 
+## Donut static Shellcode to dynamic assembly execution 
 
 Donut is a shellcode generation tool that creates position-independant shellcode payloads from .NET Assemblies. 
 This shellcode may be used to inject the Assembly into arbitrary Windows processes. 
