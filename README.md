@@ -1,3 +1,4 @@
+```
 __________________________________________________________________________
 ooooooo________________oo_ooooooo___________________________________oo____
 oo____oo___ooooo___oooooo_oo____oo__ooooo___ooooo__oo_ooo__oo____o__oo____
@@ -8,31 +9,32 @@ oo_____oo__ooooo___oooooo_oo________ooooo___oooo_o_oo____o_oo_ooo____ooo__
 __________________________________________________________________________
 ________________________________________________RedPeanut_v0.2.3___@b4rtik
 __________________________________________________________________________
-
+```
 - - - -
 Currently being tested.
 
 Known modules Issues:
 
 process -> spawnasagent
+
 process -> spawnasshellcode
 - - - -
 
 RedPeanut is a small RAT developed in .Net Core 2 and its agent in .Net 3.5 / 4.0. RedPeanut 
-code execution And on is based on shellcode generated with Donut. It is therefore a hybrid, although developed in .Net it 
+code execution And on is based on shellcode generated with [Donut](https://github.com/TheWover/donut.git). It is therefore a hybrid, although developed in .Net it 
 does not rely solely on the Ammbly.Load. If you are interested in a .Net C2 Framework that is 
-consistent and can be used in an enagement, I suggest Covenant (https://github.com/cobbr/Covenant.git).
+consistent and can be used in an enagement, I suggest [Covenant](https://github.com/cobbr/Covenant.git).
 
 RedPeanut is weaponized with:
 
-*GhostPack
-*SharpGPOAbuse
-*EvilClippy
-*DotNetToJS
-*SharpWeb
-*Modified version of PsExec
-*SharpSploit
-*TikiTorch
+* GhostPack
+* SharpGPOAbuse
+* EvilClippy
+* DotNetToJS
+* SharpWeb
+* Modified version of PsExec
+* SharpSploit
+* TikiTorch
 
 
 ## RedPeanut Agent
@@ -84,40 +86,31 @@ Content delivery is organized in 4 channels:
 RedPeanut capability of customization of network footprint both server side and client side.
 The properties that can be set are:
 
-*_General_
-
-   Delay (between requests)
-   ContentUri (url of dynamic content eg. dll hta etc.)
-   UserAgent
-   Spawn (the process to create to perform critical tasks)
-   HtmlCovered (Enable covered channel)
-   TargetClass (Class to search for image recover)
-   
-*_Http Get_
-
-	*ApiPath (comma separated list of url es /news-list.jsp,/antani.php etc.)
-    
-    *_Server_
-    	*Prepend
-    	*Append
-    	*Headers (name and value pair for http headers)
-        
-    *_Client_
-    	*Headers
-    
-*_Http Post_
-
-	*ApiPath (comma separated list of url es /news-list.jsp,/antani.php etc.)
-    *Param (the name of the post request payload parameter)
-    *Mask (format for interpreting the key value pair eg {0}={1}) !!!!!!!!!!
-    
-    *_Server_
-    	*Prepend
-    	*Append
-    	*Headers (name and value pair for http headers)
-        
-    *_Client_
-    	*Headers
+* _General_
+  * Delay (between requests)
+  * ContentUri (url of dynamic content eg. dll hta etc.)
+  * UserAgent
+  * Spawn (the process to create to perform critical tasks)
+  * HtmlCovered (Enable covered channel)
+  * TargetClass (Class to search for image recover)  
+* _Http Get_
+  * ApiPath (comma separated list of url es /news-list.jsp,/antani.php etc.)
+  * _Server_
+   * Prepend
+   * Append
+   * Headers (name and value pair for http headers)
+  * _Client_
+   * Headers    
+* _Http Post_
+  * ApiPath (comma separated list of url es /news-list.jsp,/antani.php etc.)
+  * Param (the name of the post request payload parameter)
+  * Mask (format for interpreting the key value pair eg {0}={1}) !!!!!!!!!!  
+  * _Server_
+   * Prepend
+   * Append
+   * Headers (name and value pair for http headers)      
+  * _Client_
+   * Headers
 
 Domain Fronting
 
@@ -129,76 +122,76 @@ with AMSI bypass, Logging bypass and PowerView already loaded.
 
 ## Launchers
 
-Exe
-Dll
-PowerShell
-Hta (vbs,powershell)
-InstallUtil
-MSBuild
-MacroVba
+* Exe
+* Dll
+* PowerShell
+* Hta (vbs,powershell)
+* InstallUtil
+* MSBuild
+* MacroVba
 
 
 ## Local modules
 
-EvilClippy
+* EvilClippy
 
 
 ## Agent Tasks
 
-Upload
-DownLoad
-SharpWeb
-SharpWmi
-SharpUp
-UACBypass Token Duplication
-SharpDPAPIVaults
-SharpDPAPITriage
-SharpDPAPIRdg
-SharpDPAPIMasterKeys
-SharpDPAPIMachineVaults
-SharpDPAPIMachineTriage
-SharpDPAPIMachineMasterKeys
-SharpDPAPIMachineCredentials
-SharpDPAPICredentials
-SharpDPAPIBackupKey
-Seatbelt
-SafetyKatz
-RubeusTriage
-RubeusTgtDeleg
-RubeusS4U
-RubeusRenew
-RubeusPurge
-RubeusPtt
-RubeusMonitor
-RubeusKlist
-RubeusKerberoast
-RubeusHash
-RubeusHarvest
-RubeusDump
-RubeusDescribe
-RubeusCreateNetOnly
-RubeusChangePw
-RubeusASREPRoast
-RubeusAskTgt
-SharpGPOAddUserRights
-SharpGPOAddStartupScript
-SharpGPOAddLocalAdmin
-SharpGPOAddImmediateTask
-PowerShellExecuter
-LatteralMSBuild
-SharpPsExec
-SharpAdidnsdump
-PPIDAgent
-SpawnAsAgent
-SpawnShellcode
-SpawnAsShellcode
+* Upload
+* DownLoad
+* SharpWeb
+* SharpWmi
+* SharpUp
+* UACBypass Token Duplication
+* SharpDPAPIVaults
+* SharpDPAPITriage
+* SharpDPAPIRdg
+* SharpDPAPIMasterKeys
+* SharpDPAPIMachineVaults
+* SharpDPAPIMachineTriage
+* SharpDPAPIMachineMasterKeys
+* SharpDPAPIMachineCredentials
+* SharpDPAPICredentials
+* SharpDPAPIBackupKey
+* Seatbelt
+* SafetyKatz
+* RubeusTriage
+* RubeusTgtDeleg
+* RubeusS4U
+* RubeusRenew
+* RubeusPurge
+* RubeusPtt
+* RubeusMonitor
+* RubeusKlist
+* RubeusKerberoast
+* RubeusHash
+* RubeusHarvest
+* RubeusDump
+* RubeusDescribe
+* RubeusCreateNetOnly
+* RubeusChangePw
+* RubeusASREPRoast
+* RubeusAskTgt
+* SharpGPOAddUserRights
+* SharpGPOAddStartupScript
+* SharpGPOAddLocalAdmin
+* SharpGPOAddImmediateTask
+* PowerShellExecuter
+* LatteralMSBuild
+* SharpPsExec
+* SharpAdidnsdump
+* PPIDAgent
+* SpawnAsAgent
+* SpawnShellcode
+* SpawnAsShellcode
 
 
 ## Persistence
 
-Autorun
-Startup
-WMI
+* Autorun
+* Startup
+* WMI
 
 
 
@@ -267,14 +260,10 @@ Given an arbitrary .NET Assembly, parameters, and an entry point (such as Progra
 it produces position-independent shellcode that loads it from memory. 
 The .NET Assembly can either be staged from a URL or stageless by being embedded directly in the shellcode. 
 
-Donut produces a shellcode with the embedded target assembly. This introduces a certain rigidity. While waiting for a shellcode generator to be used with .Net Core 2, I have created two possible solutions:
-1. Recover the assembly from the calling process via NamedPipe InjectionLoader (https://github.com/b4rtik/DonutSupport)
-2. Retrieve the assembly from the calling process using Wnf InjectionLoaderWnf (https://github.com/b4rtik/DonutSupport)
+Donut produces a shellcode with the embedded target assembly. This introduces a certain rigidity. While waiting for a shellcode generator to be used with .Net Core 2, I have created two possible solutions in this [repository](https://github.com/b4rtik/DonutSupport) :
+1. Recover the assembly from the calling process via NamedPipe [InjectionLoader](https://github.com/b4rtik/DonutSupport)
+2. Retrieve the assembly from the calling process using Wnf [InjectionLoaderWnf](https://github.com/b4rtik/DonutSupport)
 
-InjectionLoader
-InjectionLoaderWnf
-
-https://github.com/b4rtik/DonutSupport
 
 ```
 PS Z:\donut> .\donut.exe -donut -f Z:\DonutSupport\InjectionLoaderWnf\bin\x64\Release\InjectionLoaderWnf.dll -a 2 -c InjectionLoaderWnf -m LoadRP
@@ -312,21 +301,21 @@ PS Z:\donut>
 
 Some of the well-known tools present in RedPeanut such as the GohostPack tools are wrapped 
 in full and executed on the client side. To update the tools, for example SeatBelt, without 
-updating the entire repository is necessary: ​​Plug the Seatbelt repository, rename the "Main" 
+updating the entire repository is necessary: Clone the Seatbelt repository, rename the "Main" 
 method in "Execute", insert the public modifier and recompile as dll. The dll must be compressed 
 and encoded in Base64 with the ps RastaMouse script Get-CompressedShellcode.ps1 (https://github.com/rasta-mouse/TikiTorch.git)
 
 ## Credits
 
-Donut - @TheRealWover (https://twitter.com/TheRealWover)
-SharpSploit - @cobbr_io (https://twitter.com/cobbr_io)
-GhostPack - @harmj0y (https://twitter.com/harmj0y)
-SharpGPOAbuse - @mwrlabs (https://twitter.com/mwrlabs)
-EvilClippy - @StanHacked (https://twitter.com/StanHacked)
-DotNetToJS - @tiraniddo (https://twitter.com/tiraniddo)
-Sharpshooter - @domchell (https://twitter.com/domchell)
-SharpWeb - @djhohnstein (https://twitter.com/djhohnstein)
-Original version of PsExec - @malcomvetter (https://twitter.com/malcomvetter)
-TikiTorch - @_RastaMouse (https://twitter.com/_RastaMouse)
+Donut - [@TheRealWover](https://twitter.com/TheRealWover)
+SharpSploit - [@cobbr_io](https://twitter.com/cobbr_io)
+GhostPack - [@harmj0y](https://twitter.com/harmj0y)
+SharpGPOAbuse - [@mwrlabs](https://twitter.com/mwrlabs)
+EvilClippy - [@StanHacked](https://twitter.com/StanHacked)
+DotNetToJS - [@tiraniddo](https://twitter.com/tiraniddo)
+Sharpshooter - [@domchell](https://twitter.com/domchell)
+SharpWeb - [@djhohnstein](https://twitter.com/djhohnstein)
+Original version of PsExec - [@malcomvetter](https://twitter.com/malcomvetter)
+TikiTorch - [@_RastaMouse](https://twitter.com/_RastaMouse)
 
 
