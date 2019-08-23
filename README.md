@@ -60,8 +60,8 @@ The agent currently only supports https channel.
 The agent checkin protocol is very simple:
 
 1. The stager requires an agent id, the message is encrypted with RC4 with the shared serverkey
-2. The server decrypts the message, compiles and sends the agent, generates and sends KEY and IV for future communications AES encryption, the message is encrypted RC4
-3. The stager decrypts the message and loads the agent via Assembly.Load
+2. The server decrypt the message, compile and sends the agent, generate and send KEY and IV for future communications AES encryption, the message is encrypted RC4
+3. The stager decrypt the message and load the agent via Assembly.Load
 4. The agent sends a checkin message to the server, the message is encrypted with AES
 
 Alternatively, the covered channel feature can be activated(at the moment it is just a PoC). 
