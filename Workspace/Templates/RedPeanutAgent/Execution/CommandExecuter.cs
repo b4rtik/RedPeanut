@@ -125,6 +125,21 @@ namespace RedPeanutAgent.Execution
             }
             catch (Exception e)
             {
+                if (e.InnerException != null)
+                {
+                    try
+                    {
+                        Type newextype = Type.GetType(e.InnerException.GetType().FullName);
+                        RedPeanutAgent.Core.Utility.EndOfLifeException newex = (RedPeanutAgent.Core.Utility.EndOfLifeException)Activator.CreateInstance(newextype);
+                        throw newex;
+                    }
+                    catch (InvalidCastException ex)
+                    {
+                    }
+                    catch (ArgumentNullException ex)
+                    {
+                    }
+                }
                 output = e.Message;
             }
             SendResponse(output);

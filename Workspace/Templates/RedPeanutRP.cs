@@ -65,8 +65,9 @@ public class RedPeanutRP
         
 
         string agentidrequesttemplate = new JavaScriptSerializer().Serialize(agentIdReqMsg);
-        
-        while (true)
+        bool agentexit = false;
+
+        while (true && !agentexit)
         {
             try
             {
@@ -136,6 +137,12 @@ public class RedPeanutRP
             catch (WebException)
             {
                 Thread.Sleep(30000);
+            }
+            catch (SystemException e)
+            {
+                if(e.Data.Contains("reason"))
+                    if(e.Data["reason"].Equals("exit"))
+                        agentexit = true;
             }
         }
     }

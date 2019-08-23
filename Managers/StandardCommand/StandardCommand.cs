@@ -18,6 +18,7 @@ namespace RedPeanut
             { "pwd", "Set Domain" },
             { "getuid", "Set username" },
             { "getsystem", "Set SYSTEM" },
+            { "killagent", "Kill current agent" },
             { "reverttoself", "Revert all token" }
         };
 
@@ -62,6 +63,9 @@ namespace RedPeanut
                             return true;
                         case "reverttoself":
                             RunReverToSelf();
+                            return true;
+                        case "killagent":
+                            RunKillAgent();
                             return true;
                         default:
                             return false;
@@ -112,6 +116,15 @@ namespace RedPeanut
             string commandstr = Convert.ToBase64String(CompressGZipAssembly(Builder.BuidStreamAssembly(source, RandomAString(10, new Random()) + ".dll", agent.TargetFramework, compprofile: CompilationProfile.StandardCommand)));
 
             RunStandardBase64(commandstr, "RevertToSelf", "StandardCommandImpl.Program", new string[] { " " }, agent);
+        }
+
+        private void RunKillAgent()
+        {
+            string source = File.ReadAllText(Path.Combine(folderrpath, STANDARD_TEMPLATE));
+
+            string commandstr = Convert.ToBase64String(CompressGZipAssembly(Builder.BuidStreamAssembly(source, RandomAString(10, new Random()) + ".dll", agent.TargetFramework, compprofile: CompilationProfile.StandardCommand)));
+
+            RunStandardBase64(commandstr, "KillAgent", "StandardCommandImpl.Program", new string[] { " " }, agent);
         }
     }
 }

@@ -71,5 +71,10 @@ namespace StandardCommandImpl
                 Console.WriteLine("GetSystem error : " + e.Message + Environment.NewLine + e.StackTrace);
             }
         }
+
+        public static void KillAgent(string[] param)
+        {
+            throw new RedPeanutAgent.Core.Utility.EndOfLifeException();
+        }
     }   
 }

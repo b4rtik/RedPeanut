@@ -330,6 +330,23 @@ namespace RedPeanutAgent.Core
             return sysinfo;
         }
 
+        public class EndOfLifeException : Exception
+        {
+            public EndOfLifeException()
+            {
+            }
+
+            public EndOfLifeException(string message)
+                : base(message)
+            {
+            }
+
+            public EndOfLifeException(string message, Exception inner)
+                : base(message, inner)
+            {
+            }
+        }
+
         public class SystemInfo
         {
             public string Os { get; set; }

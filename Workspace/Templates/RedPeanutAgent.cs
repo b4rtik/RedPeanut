@@ -149,7 +149,7 @@ namespace RedPeanutAgent
                                 }
                                 else
                                 {
-                                    if (task.TaskType.Equals("download"))
+                                    if (task.TaskType.Equals("standard") || task.TaskType.Equals("download"))
                                     {
                                         try
                                         {
@@ -164,30 +164,15 @@ namespace RedPeanutAgent
                                     }
                                     else
                                     {
-                                        if (task.TaskType.Equals("standard"))
+                                        try
                                         {
-                                            try
-                                            {
-                                                Execution.CommandExecuter commandExecuter = new Execution.CommandExecuter(task, pipe, wc, aeskey, aesiv, agentid,spawnp);
-                                                commandExecuter.ExecuteLocal();
-                                            }
-                                            catch (Exception)
-                                            {
-                                                
-                                            }
+                                            Execution.CommandExecuter commandExecuter = new Execution.CommandExecuter(task, pipe, wc, aeskey, aesiv, agentid,spawnp);
+                                            Thread commandthread = new Thread(new ThreadStart(commandExecuter.ExecuteCmd));
+                                            commandthread.Start();
                                         }
-                                        else
+                                        catch (Exception)
                                         {
-                                            try
-                                            {
-                                                Execution.CommandExecuter commandExecuter = new Execution.CommandExecuter(task, pipe, wc, aeskey, aesiv, agentid,spawnp);
-                                                Thread commandthread = new Thread(new ThreadStart(commandExecuter.ExecuteCmd));
-                                                commandthread.Start();
-                                            }
-                                            catch (Exception)
-                                            {
-                                                
-                                            }
+                                            
                                         }
                                     }
                                 }
@@ -219,6 +204,12 @@ namespace RedPeanutAgent
                             }
                         }
                     }
+                }
+                catch (RedPeanutAgent.Core.Utility.EndOfLifeException e)
+                {
+                    SystemException ex = new SystemException();
+                    ex.Data["reason"] = "exit";
+                    throw ex;
                 }
                 catch (WebException e)
                 {
