@@ -54,9 +54,10 @@ namespace RedPeanut
 
             string templatePath = Path.Combine(Directory.GetCurrentDirectory(), WORKSPACE_FOLDER, TEMPLATE_FOLDER, HTA_TEMPLATE);
 
+            //Super credits to @cobbr_io for this trick
             string delegatepre = ReadResourceFile(PL_BINARY_DELEGATE_PRE_35);
             string delegatepost = ReadResourceFile(PL_BINARY_DELEGATE_POST_35);
-
+            
             byte[] delegatebyte = Convert.FromBase64String(delegatepre)
                 .Concat(Convert.FromBase64String(this.base64assembly))
                 .Concat(Convert.FromBase64String(delegatepost))

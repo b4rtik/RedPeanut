@@ -45,6 +45,7 @@ namespace RedPeanut
 
             string templatePath = Path.Combine(Directory.GetCurrentDirectory(), WORKSPACE_FOLDER, TEMPLATE_FOLDER, VBA_TEMPLATE);
 
+            //Super credits to @cobbr_io for this trick
             string delegatepre = ReadResourceFile(PL_BINARY_DELEGATE_PRE_35);
             string delegatepost = ReadResourceFile(PL_BINARY_DELEGATE_POST_35);
 
