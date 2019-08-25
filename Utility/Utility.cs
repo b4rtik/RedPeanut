@@ -557,7 +557,7 @@ namespace RedPeanut
         public static string GetParsedSetStringMulti(string input)
         {
             string[] a_input = input.Split(' ');
-            if (a_input.Length > 3)
+            if (a_input.Length >= 3)
             {
                 string f_input = "";
                 for (int i = 2;i < a_input.Length; i++)
