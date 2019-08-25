@@ -324,18 +324,23 @@ namespace RedPeanut
         {
             if (GetAgents() != null)
             {
+                Console.WriteLine("[*]  {0}", new string('-', 144));
+                Console.WriteLine("[*] | {0,-10} | {1,-15} | {2,-10} | {3,-32} | {4,-20} | {5,-40} |", "Agent", "IP", "Integrity", "User", "Process", "System");
+                Console.WriteLine("[*]  {0}", new string('-', 144));
+
                 foreach (KeyValuePair<string , IAgentInstance> item in GetAgents())
                 {
                     try
                     {                   
                         SystemInfo sysinfo = item.Value.GetSystemInfo();
 
-                        Console.WriteLine("[*] {0} | IP: {1} | Integrity: {2} | User: {3} | Process: {4} | OS: {5}", item.Key, sysinfo.Ip, sysinfo.Integrity, sysinfo.User, sysinfo.ProcessName, sysinfo.Os);
-                    }catch(Exception e)
+                        Console.WriteLine("[*] | {0,-10} | {1,-15} | {2,-10} | {3,-32} | {4,-20} | {5,-40} |", item.Key, sysinfo.Ip, sysinfo.Integrity, sysinfo.User, sysinfo.ProcessName, sysinfo.Os);
+                    }catch(Exception)
                     {
-                        Console.WriteLine("[x] agent need to be removed {0}", e.Message);
+                        //Console.WriteLine("[x] agent need to be removed {0}", e.Message);
                     }
                 }
+                Console.WriteLine("[*]  {0}", new string('-', 144));
             }
         }
 
@@ -343,18 +348,23 @@ namespace RedPeanut
         {
             if (GetListenersConfig() != null)
             {
+                Console.WriteLine("[*]  {0}", new string('-', 66));
+                Console.WriteLine("[*] | {0,-20} | {1,-15} | {2,-5} | {3,-7} | {4,-5} |", "Name", "IP", "Port", "Profile", "SSL");
+                Console.WriteLine("[*]  {0}", new string('-', 66));
+
                 foreach (KeyValuePair<string, ListenerConfig> item in GetListenersConfig())
                 {
                     try
                     {
                         ListenerConfig listenerConfig = item.Value;
-                        Console.WriteLine("[*] {0} | Host: {1} | port: {2} | profile: {3}", listenerConfig.GetName(), listenerConfig.GetHost(), listenerConfig.GetPort(), listenerConfig.GetProfileid());
+                        Console.WriteLine("[*] | {0,-20} | {1,-15} | {2,-5} | {3,-7} | {4,-5} |", listenerConfig.GetName(), listenerConfig.GetHost(), listenerConfig.GetPort(), listenerConfig.GetProfileid(), listenerConfig.GetSsl());
                     }
                     catch (Exception e)
                     {
                         Console.WriteLine("[x] Listener need to be removed {0}", e.Message);
                     }
                 }
+                Console.WriteLine("[*]  {0}", new string('-', 66));
             }
         }
 

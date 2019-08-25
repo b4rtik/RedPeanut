@@ -146,6 +146,7 @@ namespace RedPeanut
             public string Agentid { get; set; }
             public string AgentPivot { get; set; }
             public string TaskInstanceid { get; set; }
+            public SystemInfo SystemInfo { get; set; }
             public bool Chunked { get; set; }
             public int Number { get; set; }
             public string Data { get; set; }
