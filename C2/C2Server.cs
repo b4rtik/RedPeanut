@@ -324,8 +324,8 @@ namespace RedPeanut
         {
             if (GetAgents() != null)
             {
-                Console.WriteLine("[*] | {0,-10} | {1,15} | {2,10} | {3,32} | {4,20} | {5,20} |\n", "Agent", "IP", "Integrity", "User", "Process", "System");
-                Console.WriteLine("[*] {0}", new string('-', 124));
+                Console.WriteLine("[*] | {0,-10} | {1,15} | {2,10} | {3,32} | {4,20} | {5,40} |", "Agent", "IP", "Integrity", "User", "Process", "System");
+                Console.WriteLine("[*] {0}", new string('-', 144));
 
                 foreach (KeyValuePair<string , IAgentInstance> item in GetAgents())
                 {
@@ -333,7 +333,7 @@ namespace RedPeanut
                     {                   
                         SystemInfo sysinfo = item.Value.GetSystemInfo();
 
-                        Console.WriteLine("[*] | {0,-10} | {1,15} | {2,10} | {3,32} | {4,20} | {5,20} |", item.Key, sysinfo.Ip, sysinfo.Integrity, sysinfo.User, sysinfo.ProcessName, sysinfo.Os);
+                        Console.WriteLine("[*] | {0,-10} | {1,15} | {2,10} | {3,32} | {4,20} | {5,40} |", item.Key, sysinfo.Ip, sysinfo.Integrity, sysinfo.User, sysinfo.ProcessName, sysinfo.Os);
                     }catch(Exception e)
                     {
                         Console.WriteLine("[x] agent need to be removed {0}", e.Message);
