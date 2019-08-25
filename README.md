@@ -196,6 +196,7 @@ with AMSI bypass, Logging bypass and PowerView already loaded.
 * Autorun
 * Startup
 * WMI
+* CRL
 
 
 
