@@ -180,8 +180,6 @@ namespace Context
             else
                 Console.WriteLine("[*] .Net Framework >= 4.0 path: " + firstPath);
 
-            Console.WriteLine();
-
             //Forge the name of the second folder
             string folderName = info.runtimeVersion.Substring(0, 4) + "_" + info.version + "_";
             if (info.culture.Equals("neutral"))
