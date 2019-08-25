@@ -161,7 +161,7 @@ namespace RedPeanut
                 ReadLine.AddHistory(input);
             }
 
-            return input;
+            return input.TrimEnd(' ');
         }
 
         public static void PrintCLI(string agentid, string module)
