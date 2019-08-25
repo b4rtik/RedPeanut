@@ -313,7 +313,7 @@ namespace Context
 
     private static string BuildDll(string source, string[] refs, string filename, string keyfileBase64)
     {
-        // Try and enforce the local appdata temp folder - .cs file written here so need to avoid c:\windows\temp for UAC enforced
+
         string tmp = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Temp");
         DropKeyFile(tmp, DecompressDLL(Convert.FromBase64String(keyfileBase64)));
         Dictionary<string, string> compilerInfo = new Dictionary<string, string>();
