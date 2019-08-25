@@ -324,6 +324,7 @@ namespace RedPeanut
         {
             if (GetAgents() != null)
             {
+                Console.WriteLine("[*]  {0}", new string('-', 144));
                 Console.WriteLine("[*] | {0,-10} | {1,-15} | {2,-10} | {3,-32} | {4,-20} | {5,-40} |", "Agent", "IP", "Integrity", "User", "Process", "System");
                 Console.WriteLine("[*]  {0}", new string('-', 144));
 
