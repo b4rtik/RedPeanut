@@ -348,18 +348,23 @@ namespace RedPeanut
         {
             if (GetListenersConfig() != null)
             {
+                Console.WriteLine("[*]  {0}", new string('-', 66));
+                Console.WriteLine("[*] | {0,-20} | {1,-15} | {2,-5} | {3,-7} | {4,-5} |", "Name", "IP", "Port", "Profile", "SSL");
+                Console.WriteLine("[*]  {0}", new string('-', 66));
+
                 foreach (KeyValuePair<string, ListenerConfig> item in GetListenersConfig())
                 {
                     try
                     {
                         ListenerConfig listenerConfig = item.Value;
-                        Console.WriteLine("[*] {0} | Host: {1} | port: {2} | profile: {3}", listenerConfig.GetName(), listenerConfig.GetHost(), listenerConfig.GetPort(), listenerConfig.GetProfileid());
+                        Console.WriteLine("[*] | {0,-20} | {1,-15} | {2,-5} | {3,-7} | {4,-5} |", listenerConfig.GetName(), listenerConfig.GetHost(), listenerConfig.GetPort(), listenerConfig.GetProfileid(), listenerConfig.GetSsl());
                     }
                     catch (Exception e)
                     {
                         Console.WriteLine("[x] Listener need to be removed {0}", e.Message);
                     }
                 }
+                Console.WriteLine("[*]  {0}", new string('-', 66));
             }
         }
 
