@@ -313,8 +313,8 @@ PS Z:\donut>
 
 ## CLR Persistence
 
-The CLR persistence technique was presented for the first time in this [post] (https://www.contextis.com/en/blog/common-language-runtime-hook-for-persistence) by
-[@ Am0nsec] (https://twitter.com/am0nsec). The technique consists in carrying out the application 
+The CLR persistence technique was presented for the first time in this [post](https://www.contextis.com/en/blog/common-language-runtime-hook-for-persistence) by
+[@ Am0nsec](https://twitter.com/am0nsec). The technique consists in carrying out the application 
 domain manager hooking. As described in the post, the assembly to carry out hooking is necessary
 which is available in the GAC. An assembly to be used from the GAC must be strong-named and 
 then signed with a key. The CLR persistence module needs a key to be able to sign the assemblies, 
