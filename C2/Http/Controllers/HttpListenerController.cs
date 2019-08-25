@@ -191,6 +191,7 @@ namespace RedPeanut
             try
             {
                 msg = JsonConvert.DeserializeObject<ResponseMsg>(line);
+                ((AgentInstanceHttp)agent).SysInfo = msg.SystemInfo;
             }
             catch (Exception e)
             {

