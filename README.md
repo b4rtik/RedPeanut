@@ -352,5 +352,6 @@ and encoded in Base64 with the ps RastaMouse's script [Get-CompressedShellcode.p
 * SharpWeb - [@djhohnstein](https://twitter.com/djhohnstein)
 * Original version of PsExec - [@malcomvetter](https://twitter.com/malcomvetter)
 * TikiTorch - [@_RastaMouse](https://twitter.com/_RastaMouse)
+* ReadLine - [Toni Solarin-Sodara](https://github.com/tonerdo/readline)
 
 
