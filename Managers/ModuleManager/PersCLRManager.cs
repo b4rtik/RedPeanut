@@ -152,8 +152,6 @@ namespace RedPeanut
                             .Replace("#FILENAME#", hookfilename)
                             .Replace("#PROCESS#", process);
 
-                        Console.WriteLine(source);
-
                         Builder.GenerateDll(source, RandomAString(10, new Random()) + ".dll", targetframework);
                         string clrhookinstaller = Convert.ToBase64String(CompressGZipAssembly(Builder.BuidStreamAssembly(source, RandomAString(10, new Random()) + ".dll", targetframework, compprofile: CompilationProfile.UACBypass)));
 
