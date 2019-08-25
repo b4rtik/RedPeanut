@@ -24,7 +24,7 @@ namespace RedPeanut
 
         public void RePrintCLI()
         {
-            Utility.RePrintCLI(agent, modulename);
+            Utility.RePrintCLI(agent, null);
             return;
         }
 
