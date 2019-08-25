@@ -341,6 +341,9 @@ namespace Context
 
             throw new InvalidOperationException(sb.ToString());
         }
+
+        File.Delete(Path.Combine(tmp, "key.snk"));
+
         return Path.Combine(tmp, filename);
     }
 }
