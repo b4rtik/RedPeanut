@@ -70,7 +70,7 @@ Alternatively, the covered channel feature can be activated(at the moment it is 
 The idea is to imitate the web traffic carried out by a real user. Usually a web page is composed 
 of the html page and all the objects necessary for its display as css, images, etc.
 At the request of a new task the answer from the server will not be directly the encrypted 
-task but an html page from which to extract the link to the image that will have emitted the 
+task but an html page from which to extract the link to the image that will have embedded the 
 encrypted task. The http request for the image will contain the Referer header.
 
 
