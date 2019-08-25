@@ -267,7 +267,7 @@ namespace Context
         {
             string firstPath = GetFirstPath(info, CLRVersion.Net35);
             Console.WriteLine("[*] .Net Framework < 4.0 folder: " + firstPath);
-            Console.WriteLine();
+            Console.WriteLine("[*]");
             //Move the DLL into the created folder
             if (!FileCopy(filename, outputbyte, firstPath))
                 return null;
@@ -276,7 +276,7 @@ namespace Context
         {
             string secondPath = GetFirstPath(info, CLRVersion.Net40);
             Console.WriteLine("[*] .Net Framework >= 4.0 folder: " + secondPath);
-            Console.WriteLine();
+            Console.WriteLine("[*]");
             //Move the DLL into the created folder
             if (!FileCopy(filename, outputbyte, secondPath))
                 return null;
