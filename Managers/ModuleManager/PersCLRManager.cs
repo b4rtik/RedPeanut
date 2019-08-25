@@ -28,7 +28,7 @@ namespace RedPeanut
         IAgentInstance agent = null;
         string modulename = "clr";
         string process = "";
-        bool ssl = true;
+        //bool ssl = true;
         bool exit = false;
 
         public PersCLRManager()
