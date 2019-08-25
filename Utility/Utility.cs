@@ -238,7 +238,14 @@ namespace RedPeanut
                 }
                 else
                 {
-                    PrintCLI(agent);
+                    if (agent != null && !string.IsNullOrEmpty(modulename))
+                    {
+                        PrintCLI(agent.AgentId,modulename);
+                    }
+                    else
+                    {
+                        PrintCLI(agent);
+                    }
                 }
             }
         }
