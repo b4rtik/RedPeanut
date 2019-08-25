@@ -18,8 +18,14 @@ namespace RedPeanut
             { "c2", "C2 Server" },
             { "list", "List modules available" },
             { "exit", "Bye" }
-        };   
-        
+        };
+
+        public void RePrintCLI()
+        {
+            Utility.RePrintCLI(null, null);
+            return;
+        }
+
         static C2Manager c2m = null;
         static LauncherManager launcherm = null;
 

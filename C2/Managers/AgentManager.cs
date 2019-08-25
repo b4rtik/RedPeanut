@@ -21,7 +21,13 @@ namespace RedPeanut
             { "list", "List agents" },
             { "back", "Back to main menu" }
         };
-        
+
+        public void RePrintCLI()
+        {
+            Utility.RePrintCLI(agent, null);
+            return;
+        }
+
         IAgentInstance agent = null;
         ShellManager shellm = null;
         ModulesManager modulem = null;

@@ -312,6 +312,7 @@ namespace RedPeanut
 
                     Console.WriteLine("\n[*] Agent " + agent.AgentId + " checkedin");
                     Console.WriteLine("[*] IP: {0} | Integrity: {1} | User: {2} | Process: {3} | OS: {4}", agent.SysInfo.Ip, agent.SysInfo.Integrity, agent.SysInfo.User, agent.SysInfo.ProcessName, agent.SysInfo.Os);
+                    Program.GetMenuStack().Peek().RePrintCLI();
                     RedPeanutC2.server.RemoveAgentInbound(agent.AgentId);
                     RedPeanutC2.server.RegisterAgent(agent.AgentId, agent);
                     return Ok(CreateOkMgs(agent));

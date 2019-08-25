@@ -20,6 +20,12 @@ namespace RedPeanut
             { "back", "Back to lateral menu" }
         };
 
+        public void RePrintCLI()
+        {
+            Utility.RePrintCLI(agent, modulename);
+            return;
+        }
+
         string auditmode;
         IAgentInstance agent = null;
         string modulename = "sharpup";

@@ -33,6 +33,12 @@ namespace RedPeanut
             { "back", "Back to lateral menu" }
         };
 
+        public void RePrintCLI()
+        {
+            Utility.RePrintCLI(agent, modulename);
+            return;
+        }
+
         IAgentInstance agent = null;
         string modulename = "kerberoast";
         string user;

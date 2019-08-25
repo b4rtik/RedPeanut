@@ -18,6 +18,12 @@ namespace RedPeanut
             
         };
 
+        public void RePrintCLI()
+        {
+            Utility.RePrintCLI(agent, modulename);
+            return;
+        }
+
         IAgentInstance agent = null;
         string modulename = "shell";
 

@@ -20,6 +20,11 @@ namespace RedPeanut
             { "back", "Back to main menu" }
         };
 
+        public void RePrintCLI()
+        {
+            Utility.RePrintCLI(agent, modulename);
+            return;
+        }
 
         SharpWmiManager wmimanager;
         SharpPsExecManager psexecmanager;

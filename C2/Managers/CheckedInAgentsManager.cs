@@ -21,7 +21,12 @@ namespace RedPeanut
             { "back", "Back to main menu" }
         };
 
-        
+        public void RePrintCLI()
+        {
+            Utility.RePrintCLI(agent, modulename);
+            return;
+        }
+
         C2Server server = null;
 
         Dictionary<string, AgentManager> insteractList = new Dictionary<string, AgentManager>();
