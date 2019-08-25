@@ -156,7 +156,7 @@ namespace RedPeanut
 
                 if (result.Success)
                 {
-                    Console.WriteLine("[*] Bulid finished IL for assembly {0} created", destfilename);
+                    //Console.WriteLine("[*] Bulid finished IL for assembly {0} created", destfilename);
                     return s.ToArray();
                 }
                 else
