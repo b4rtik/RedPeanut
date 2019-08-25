@@ -9,6 +9,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Text;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -31,7 +32,8 @@ namespace RedPeanut
             {CompilationProfile.Generic, new string[]{""}},
             {CompilationProfile.UACBypass,new string[]{"Natives.cs", "Crypto.cs", "Utility.cs", "ImageLoader.cs", "Spawner.cs" ,"InjectionHelper.cs", "InjectionLoaderListener.cs", "UACBypassHelper.cs","WnfHelper.cs", "Enums.cs", "Imports.cs", "Loader.cs", "Structs.cs","Tokens.cs", "Win32.cs", "Generic.cs"}},
             {CompilationProfile.StandardCommand,new string[]{"Tokens.cs", "Win32.cs", "Generic.cs", "Utility.cs", "Crypto.cs", "ImageLoader.cs"}},
-            {CompilationProfile.Persistence,new string[]{ "Autorun.cs", "Startup.cs", "WMI.cs", "Registry.cs"}}
+            {CompilationProfile.Persistence,new string[]{ "Autorun.cs", "Startup.cs", "WMI.cs", "Registry.cs"}},
+            {CompilationProfile.PersistenceCLR,new string[]{}}
         };
 
         private static SyntaxTree Parse(string text, string filename = "", CSharpParseOptions options = null)
@@ -67,7 +69,7 @@ namespace RedPeanut
         static CSharpCompilation CreateCompilation(string filesrcasstr, string destfilename, IEnumerable<MetadataReference> references, string type = "dll", CompilationProfile compprofile = CompilationProfile.Generic)
         {
             var source = filesrcasstr;
-
+            string keyfilename = Path.Combine(Directory.GetCurrentDirectory(), WORKSPACE_FOLDER, KEYFILE_FOLDER, "key.snk");
             List<SyntaxTree> compilationTrees = new List<SyntaxTree>();
 
             string[] sourceDirectorys = { srcPath, srcExternalPath };
