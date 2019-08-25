@@ -36,7 +36,7 @@ namespace RedPeanut
         [HttpGet()]
         public ActionResult<string> Get(string filename)
         {
-            Console.WriteLine("[*] Get content");
+            //Console.WriteLine("[*] Get content");
             // Api call used to deliver payload
             if (string.IsNullOrEmpty(filename))
             {

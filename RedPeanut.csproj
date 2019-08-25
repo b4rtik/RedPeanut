@@ -10,6 +10,7 @@
     <Compile Remove="Workspace\Templates\FileDownLoader.cs" />
     <Compile Remove="Workspace\Templates\FileUpLoader.cs" />
     <Compile Remove="Workspace\Templates\PersAutorun.cs" />
+    <Compile Remove="Workspace\Templates\PersCLRInstall.cs" />
     <Compile Remove="Workspace\Templates\PersStartup.cs" />
     <Compile Remove="Workspace\Templates\PersWMI.cs" />
     <Compile Remove="Workspace\Templates\PowerShellExecuter.cs" />
@@ -98,6 +99,7 @@
     <Folder Include="Workspace\Downloads\" />
     <Folder Include="Workspace\EvilClippy\" />
     <Folder Include="Workspace\ImageLoad\" />
+    <Folder Include="Workspace\KeyFile\" />
     <Folder Include="Workspace\Shellcode\" />
     <Folder Include="Workspace\Profiles\" />
     <Folder Include="Workspace\Payloads\" />
@@ -107,6 +109,7 @@
     <None Include="Workspace\Templates\FileDownLoader.cs" />
     <None Include="Workspace\Templates\FileUpLoader.cs" />
     <None Include="Workspace\Templates\PersAutorun.cs" />
+    <None Include="Workspace\Templates\PersCLRInstall.cs" />
     <None Include="Workspace\Templates\PersStartup.cs" />
     <None Include="Workspace\Templates\PersWMI.cs" />
     <None Include="Workspace\Templates\PowerShellExecuter.cs" />
@@ -116,8 +119,8 @@
     <None Include="Workspace\Templates\RedPeanutAgent\Core\Crypto.cs" />
     <None Include="Workspace\Templates\RedPeanutAgent\Core\Natives.cs" />
     <None Include="Workspace\Templates\RedPeanutAgent\Core\Utility.cs" />
-    <None Include="Workspace\Templates\RedPeanutAgent\Execution\InjectionHelper.cs" />
     <None Include="Workspace\Templates\RedPeanutAgent\Execution\CommandExecuter.cs" />
+    <None Include="Workspace\Templates\RedPeanutAgent\Execution\InjectionHelper.cs" />
     <None Include="Workspace\Templates\RedPeanutAgent\Execution\InjectionLoaderListener.cs" />
     <None Include="Workspace\Templates\RedPeanutAgent\Execution\Spawner.cs" />
     <None Include="Workspace\Templates\RedPeanutAgent\ImageLoader\ImageLoader.cs" />
@@ -132,8 +135,8 @@
       <SubType>Component</SubType>
     </None>
     <None Include="Workspace\Templates\SharpSpawner.cs" />
-    <None Include="Workspace\Templates\StandardCommandImpl.cs" />
     <None Include="Workspace\Templates\RedPeanutSpawn.cs" />
+    <None Include="Workspace\Templates\StandardCommandImpl.cs" />
     <None Include="Workspace\Templates\TokenManipulation.cs" />
   </ItemGroup>
 

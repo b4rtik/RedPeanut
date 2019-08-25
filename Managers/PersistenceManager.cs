@@ -16,6 +16,7 @@ namespace RedPeanut
             { "autorun", "Autorun" },
             { "startup", "Startup" },
             { "wmi", "Wmi" },
+            { "clr", "clr" },
             { "list", "List module" },
             { "back", "Back to main menu" }
         };
@@ -24,6 +25,7 @@ namespace RedPeanut
         PersAutorunManager registrym;
         PersStartupManager startupm;
         PersWMIManager wmim;
+        PersCLRManager clrm;
         IAgentInstance agent = null;
         string modulename = "persistence";
 
@@ -73,6 +75,11 @@ namespace RedPeanut
                         case "wmi":
                             wmim = new PersWMIManager(agent);
                             Program.GetMenuStack().Push(wmim);
+                            exit = true;
+                            break;
+                        case "clr":
+                            clrm = new PersCLRManager(agent);
+                            Program.GetMenuStack().Push(clrm);
                             exit = true;
                             break;
                         case "list":

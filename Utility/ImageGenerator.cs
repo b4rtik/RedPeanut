@@ -82,7 +82,7 @@ namespace RedPeanut
                 img.Save(outputfile, ImageFormat.Png);
                 img.Dispose();
 
-                Console.WriteLine("[*] Image file created {0}", outputfile);
+                //Console.WriteLine("[*] Image file created {0}", outputfile);
 
             }
             catch (Exception e)

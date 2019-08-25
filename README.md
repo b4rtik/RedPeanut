@@ -196,6 +196,7 @@ with AMSI bypass, Logging bypass and PowerView already loaded.
 * Autorun
 * Startup
 * WMI
+* CRL
 
 
 
@@ -234,6 +235,14 @@ For OSx
 ```
 brew install mono-libgdiplus
 ```
+
+Assembly signing key generation
+
+```
+C:\Program Files (x86)\Microsoft Visual Studio\2017\Community>sn.exe -k 4096 key.snk
+```
+
+Than copy key.snk in Workspace/KeyFile
 
 ```
 root@kali:~# cd RedPanut
@@ -301,13 +310,35 @@ PS Z:\donut> Get-CompressedShellcode Z:\donut\payload.bin Z:\RedPeanut\Resources
 PS Z:\donut>
 ```
 
+
+## CLR Persistence
+
+The CLR persistence technique was presented for the first time in this [post] (https://www.contextis.com/en/blog/common-language-runtime-hook-for-persistence) by
+[@ Am0nsec] (https://twitter.com/am0nsec). The technique consists in carrying out the application 
+domain manager hooking. As described in the post, the assembly to carry out hooking is necessary
+which is available in the GAC. An assembly to be used from the GAC must be strong-named and 
+then signed with a key. The CLR persistence module needs a key to be able to sign the assemblies, 
+which can be generated with the sn.exe tool as follows:
+
+```
+**********************************************************************
+** Visual Studio 2017 Developer Command Prompt v15.9.3
+** Copyright (c) 2017 Microsoft Corporation
+**********************************************************************
+
+C:\Program Files (x86)\Microsoft Visual Studio\2017\Community>sn.exe -k 4096 key.snk
+```
+
+Copy the key.snk file to Workspace/KeyFile folder. This file will be used to sign the assembly
+for persistence.
+
 ## Tools updating
 
 Some of the well-known tools present in RedPeanut such as the GhostPack tools are wrapped 
 in full and executed on the client side. To update the tools, for example SeatBelt, without 
 updating the entire repository is necessary: Clone the Seatbelt repository, rename the "Main" 
 method in "Execute", insert the public modifier and recompile as dll. The dll must be compressed 
-and encoded in Base64 with the ps RastaMouse script [Get-CompressedShellcode.ps1](https://github.com/rasta-mouse/TikiTorch/blob/dev/Get-CompressedShellcode.ps1)
+and encoded in Base64 with the ps RastaMouse's script [Get-CompressedShellcode.ps1](https://github.com/rasta-mouse/TikiTorch/blob/dev/Get-CompressedShellcode.ps1)
 
 ## Credits
 

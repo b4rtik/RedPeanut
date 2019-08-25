@@ -56,7 +56,7 @@ namespace RedPeanut
             Console.WriteLine("oo____oo__oo______oo___oo_oo_______oo______oo___oo_oo____o_ooo___o__oo__o_");
             Console.WriteLine("oo_____oo__ooooo___oooooo_oo________ooooo___oooo_o_oo____o_oo_ooo____ooo__");
             Console.WriteLine("__________________________________________________________________________");
-            Console.WriteLine("________________________________________________RedPeanut_v0.2.3___@b4rtik");
+            Console.WriteLine("________________________________________________RedPeanut_v0.2.4___@b4rtik");
             Console.WriteLine("__________________________________________________________________________");
             Console.WriteLine("");
         }
