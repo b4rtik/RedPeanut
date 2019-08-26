@@ -14,10 +14,12 @@ namespace RedPeanut
     {
         public static Dictionary<string, string> mainmenu = new Dictionary<string, string>
         {
-            { "adduserrights", "Set pipe name" },
-            { "addlocaladmin", "Start server" },
-            { "addstartupscript", "Start server" },
-            { "addimmediatetask", "Start server" },
+            { "adduserrights", "Add rights to a user" },
+            { "addlocaladmin", "Add a user to the local admins group" },
+            { "addcomputerscript", "Add a new computer startup script" },
+            { "adduserscript", "Configure a user logon script" },
+            { "addcomputertask", "Configure a computer immediate task" },
+            { "addusertask", "Add an immediate task to a user" },
             { "options", "Print help" },
             { "back", "Back to main menu" }
         };
@@ -30,9 +32,11 @@ namespace RedPeanut
 
         IAgentInstance agent = null;
         string modulename = "gpoabuse";
-        static SharpGPOAddImmediateTaskManager taskm = null;
+        static SharpGPOAddUserTaskManager usertaskm = null;
+        static SharpGPOAddComputerTaskManager computertaskm = null;
         static SharpGPOAddLocalAdminManager locadminm = null;
-        static SharpGPOAddStartupScriptManager starupscrm = null;
+        static SharpGPOAddUserScriptManager userscrm = null;
+        static SharpGPOAddComputerScriptManager computerscrm = null;
         static SharpGPOAddUserRightsManager userrightm = null;
 
         bool exit = false;
@@ -81,14 +85,24 @@ namespace RedPeanut
                             Program.GetMenuStack().Push(locadminm);
                             exit = true;
                             break;
-                        case "addstartupscript":
-                            starupscrm = new SharpGPOAddStartupScriptManager(agent);
-                            Program.GetMenuStack().Push(starupscrm);
+                        case "adduserscript":
+                            userscrm = new SharpGPOAddUserScriptManager(agent);
+                            Program.GetMenuStack().Push(userscrm);
                             exit = true;
                             break;
-                        case "addimmediatetask":
-                            taskm = new SharpGPOAddImmediateTaskManager(agent);
-                            Program.GetMenuStack().Push(taskm);
+                        case "addcomputerscript":
+                            computerscrm = new SharpGPOAddComputerScriptManager(agent);
+                            Program.GetMenuStack().Push(computerscrm);
+                            exit = true;
+                            break;
+                        case "addusertask":
+                            usertaskm = new SharpGPOAddUserTaskManager(agent);
+                            Program.GetMenuStack().Push(usertaskm);
+                            exit = true;
+                            break;
+                        case "addcomputertask":
+                            computertaskm = new SharpGPOAddComputerTaskManager(agent);
+                            Program.GetMenuStack().Push(computertaskm);
                             exit = true;
                             break;
                         case "options":
