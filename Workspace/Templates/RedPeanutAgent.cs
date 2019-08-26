@@ -73,9 +73,14 @@ namespace RedPeanutAgent
                     delegate
                     { return true; }
                 );
+
+            string[] hhosts = webHeaderCollection.GetValues("Host");
+            if(hhosts != null)
+            {
+                foreach (string s in webHeaderCollection.GetValues("Host"))
+                    wc.Add(new Cookie("sessionid", cookie, "/", s));
+            }
             
-            foreach(string s in webHeaderCollection.GetValues("Host"))
-                wc.Add(new Cookie("sessionid", cookie, "/", s));
 
             wc.Add(new Cookie("sessionid", cookie, "/", host));
 
