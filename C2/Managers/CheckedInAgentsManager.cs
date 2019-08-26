@@ -110,7 +110,7 @@ namespace RedPeanut
                         server.ListAgents();
                         break;
                     case "options":
-                        PrintOptions("Options availlable", mainmenu);
+                        PrintOptionsNoStd("Options availlable", mainmenu);
                         break;
                     case "back":
                         Program.GetMenuStack().Pop();
@@ -122,7 +122,7 @@ namespace RedPeanut
             }
             else
             {
-                PrintOptions("Command not found", mainmenu);
+                PrintOptionsNoStd("Command not found", mainmenu);
             }
         }
     }

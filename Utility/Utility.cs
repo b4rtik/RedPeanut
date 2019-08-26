@@ -516,32 +516,57 @@ namespace RedPeanut
             }
         }
 
-        public static void PrintOptions(String reason, Dictionary<string,string> menu)
+        private static void PrintStandards()
         {
-            Console.WriteLine("[+]");
-            Console.WriteLine("[+]   {0}",reason);
-            Console.WriteLine("[+]");
+            Console.WriteLine("[*]");
+            Console.WriteLine("[*]   Commands");
+            Console.WriteLine("[*]");
+            //Display help
+            for (int i = 0; i < StandardCommand.mainmenu.Count; i++)
+            {
+                //Display help
+                Console.WriteLine("[*]   {0}: {1}", StandardCommand.mainmenu.ElementAt(i).Key, StandardCommand.mainmenu.ElementAt(i).Value);
+            }
+            Console.WriteLine("[*]");
+        }
+
+        private static void PrintModoleOptions(String reason, Dictionary<string, string> menu)
+        {
+            Console.WriteLine("[*]");
+            Console.WriteLine("[*]   {0}", reason);
+            Console.WriteLine("[*]");
             //Display help
             for (int i = 0; i < menu.Count; i++)
             {
                 //Display help
-                Console.WriteLine("[+]   {0}: {1}", menu.ElementAt(i).Key, menu.ElementAt(i).Value);
+                Console.WriteLine("[*]   {0}: {1}", menu.ElementAt(i).Key, menu.ElementAt(i).Value);
             }
-            Console.WriteLine("[+]");
+            Console.WriteLine("[*]");
+        }
+
+        public static void PrintOptions(String reason, Dictionary<string,string> menu)
+        {
+            PrintStandards();
+            PrintModoleOptions(reason, menu);
+        }
+
+        public static void PrintOptionsNoStd(String reason, Dictionary<string, string> menu)
+        {
+            PrintModoleOptions(reason, menu);
         }
 
         public static void PrintCurrentConfig(string modulename, Dictionary<string, string> options)
         {
-            Console.WriteLine("[+]");
-            Console.WriteLine("[+]   {0}", modulename);
-            Console.WriteLine("[+]");
+            Console.WriteLine("[*]");
+            Console.WriteLine("[*]   {0}", modulename);
+            Console.WriteLine("[*]");
             //Display help
             for (int i = 0; i < options.Count; i++)
             {
                 //Display help
-                Console.WriteLine("[+]   {0}: {1}", options.ElementAt(i).Key, options.ElementAt(i).Value);
+                Console.WriteLine("[*]   {0}: {1}", options.ElementAt(i).Key, options.ElementAt(i).Value);
             }
-            Console.WriteLine("[+]");
+            Console.WriteLine("[*]");
         }
 
         public static string GetParsedSetString(string input)
