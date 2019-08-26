@@ -85,7 +85,7 @@ namespace RedPeanut
                 }
                 else
                 {
-                    PrintOptions("Command not found", mainmenu);
+                    PrintOptionsNoStd("Command not found", mainmenu);
                 }
             }
         }

@@ -516,7 +516,7 @@ namespace RedPeanut
             }
         }
 
-        public static void PrintStandards()
+        private static void PrintStandards()
         {
             Console.WriteLine("[+]");
             Console.WriteLine("[+]  Commands");
@@ -530,11 +530,10 @@ namespace RedPeanut
             Console.WriteLine("[+]");
         }
 
-        public static void PrintOptions(String reason, Dictionary<string,string> menu)
+        private static void PrintModoleOptions(String reason, Dictionary<string, string> menu)
         {
-            PrintStandards();
             Console.WriteLine("[+]");
-            Console.WriteLine("[+]   {0}",reason);
+            Console.WriteLine("[+]   {0}", reason);
             Console.WriteLine("[+]");
             //Display help
             for (int i = 0; i < menu.Count; i++)
@@ -543,6 +542,17 @@ namespace RedPeanut
                 Console.WriteLine("[+]   {0}: {1}", menu.ElementAt(i).Key, menu.ElementAt(i).Value);
             }
             Console.WriteLine("[+]");
+        }
+
+        public static void PrintOptions(String reason, Dictionary<string,string> menu)
+        {
+            PrintStandards();
+            PrintModoleOptions(reason, menu);
+        }
+
+        public static void PrintOptionsNoStd(String reason, Dictionary<string, string> menu)
+        {
+            PrintModoleOptions(reason, menu);
         }
 
         public static void PrintCurrentConfig(string modulename, Dictionary<string, string> options)

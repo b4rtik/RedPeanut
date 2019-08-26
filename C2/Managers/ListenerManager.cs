@@ -78,7 +78,7 @@ namespace RedPeanut
                             exit = true;
                             break;
                         case "options":
-                            PrintOptions("Options", mainmenu);
+                            PrintOptionsNoStd("Options", mainmenu);
                             break;
                         case "back":
                             Program.GetMenuStack().Pop();
@@ -91,7 +91,7 @@ namespace RedPeanut
                 }
                 else
                 {
-                    PrintOptions("Command not found", mainmenu);
+                    PrintOptionsNoStd("Command not found", mainmenu);
                 }
             }
         }
