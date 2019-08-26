@@ -11,18 +11,16 @@ using static RedPeanut.Utility;
 
 namespace RedPeanut
 {
-    class SharpGPOAddImmediateTaskManager : IMenu
+    class SharpGPOAddUserScriptManager : IMenu
     {
         public static Dictionary<string, string> mainmenu = new Dictionary<string, string>
         {
-            { "set domaincontroller", "Set target DC" },
-            { "set domain", "Set context domain" },
-            { "set gponame", "Set gpo name" },
-            { "set taskname", "Set task name" },
-            { "set author", "Set author use DA account" },
-            { "set command", "Set command" },
-            { "set arguments", "Set arguments" },
-            { "set force", "Force replace original file " },
+            { "set domaincontroller", "Payload type to use" },
+            { "set domain", "Injection type" },
+            { "set gponame", "Process to spawn" },
+            { "set force", "Process to spawn" },
+            { "set scriptname", "Process to spawn" },
+            { "set scriptcontents", "Process to spawn" },
             { "run", "Execute module" },
             { "options", "Print help" },
             { "back", "Back to lateral menu" }
@@ -35,24 +33,21 @@ namespace RedPeanut
         }
 
         IAgentInstance agent = null;
-        string modulename = "gpoaddimmediatetask";
+        string modulename = "adduserscript";
         string domainController;
         private string domain;
-        private string gpoName;
-        private string taskName;
-        private string author;
-        private string command;
-        private string arguments;
         private bool force;
+        private string gpoName;
+        private string scriptName;
+        private string scriptContents;
 
         bool exit = false;
 
-        public SharpGPOAddImmediateTaskManager()
-        {
+        public SharpGPOAddUserScriptManager() {
 
         }
 
-        public SharpGPOAddImmediateTaskManager(IAgentInstance agent)
+        public SharpGPOAddUserScriptManager(IAgentInstance agent)
         {
             this.agent = agent;
         }
@@ -88,20 +83,14 @@ namespace RedPeanut
                         case "set gponame":
                             gpoName = GetParsedSetString(input);
                             break;
-                        case "set taskname":
-                            taskName = GetParsedSetString(input);
-                            break;
-                        case "set author":
-                            author = GetParsedSetString(input);
-                            break;
-                        case "set command":
-                            command = GetParsedSetString(input);
-                            break;
-                        case "set arguments":
-                            arguments = GetParsedSetStringMulti(input);
-                            break;
-                        case "set force":
+                       case "set force":
                             force = GetParsedSetBool(input);
+                            break;
+                        case "set scriptname":
+                            scriptName = GetParsedSetString(input);
+                            break;
+                        case "set scriptcontents":
+                            scriptContents = GetParsedSetStringMulti(input);
                             break;
                         case "run":
                             Run();
@@ -127,25 +116,19 @@ namespace RedPeanut
                 }
             }
         }
-        
 
         private void Run()
         {
-            if (!string.IsNullOrEmpty(gpoName) && !string.IsNullOrEmpty(taskName) && !string.IsNullOrEmpty(author) && 
-                !string.IsNullOrEmpty(command) && !string.IsNullOrEmpty(arguments))
+            if (!string.IsNullOrEmpty(gpoName) && !string.IsNullOrEmpty(scriptName) && !string.IsNullOrEmpty(scriptContents))
             {
                 List<string> args = new List<string>();
-                args.Add("--AddImmediateTask");
+                args.Add("--AddUserTask");
                 args.Add("--GPOName");
                 args.Add(gpoName);
-                args.Add("--TaskName");
-                args.Add(taskName);
-                args.Add("--Author" + author);
-                args.Add(author);
-                args.Add("--Command" + command);
-                args.Add(command);
-                args.Add("--Arguments" + arguments);
-                args.Add(arguments);
+                args.Add("--ScriptName");
+                args.Add(scriptName);
+                args.Add("--ScriptContents");
+                args.Add(scriptContents);
 
                 if (!string.IsNullOrEmpty(domain))
                 {
@@ -173,11 +156,9 @@ namespace RedPeanut
                 { "domaincontroller", domainController },
                 { "domain", domain },
                 { "gponame", gpoName },
-                { "taskname", taskName },
-                { "author", author },
-                { "command", command },
-                { "arguments", arguments },
-                { "force", force.ToString() }
+                { "force", force.ToString() },
+                { "scriptname", scriptName },
+                { "scriptcontents", scriptContents }
             };
 
             Utility.PrintCurrentConfig(modulename, properties);

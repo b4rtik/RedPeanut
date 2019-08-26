@@ -14,7 +14,7 @@ namespace RedPeanut
         public static Dictionary<string, string> mainmenu = new Dictionary<string, string>
         {
             { "credential", "Spawn and inject a process" },
-            { "exploit", "Exploit module" },
+            { "gpoabuse", "GPO Abuse" },
             { "privesc", "PrivEsc module" },
             { "recon", "Information gatering" },
             { "lateral", "Lateral movement" },
@@ -41,6 +41,7 @@ namespace RedPeanut
         static PowerShellExecuterManager powerm = null;
         static PersistenceManager persm = null;
         static SpawningManager spawnm = null;
+        static GPOAbuseManager gpoabusem = null;
 
         bool exit = false;
 
@@ -74,6 +75,11 @@ namespace RedPeanut
                         case "credential":
                             credm = new CredentialManager(agent);
                             Program.GetMenuStack().Push(credm);
+                            exit = true;
+                            break;
+                        case "gpoabuse":
+                            gpoabusem = new GPOAbuseManager(agent);
+                            Program.GetMenuStack().Push(gpoabusem);
                             exit = true;
                             break;
                         case "privesc":
