@@ -516,8 +516,23 @@ namespace RedPeanut
             }
         }
 
+        public static void PrintStandards()
+        {
+            Console.WriteLine("[+]");
+            Console.WriteLine("[+]  Commands");
+            Console.WriteLine("[+]");
+            //Display help
+            for (int i = 0; i < StandardCommand.mainmenu.Count; i++)
+            {
+                //Display help
+                Console.WriteLine("[+]   {0}: {1}", StandardCommand.mainmenu.ElementAt(i).Key, StandardCommand.mainmenu.ElementAt(i).Value);
+            }
+            Console.WriteLine("[+]");
+        }
+
         public static void PrintOptions(String reason, Dictionary<string,string> menu)
         {
+            PrintStandards();
             Console.WriteLine("[+]");
             Console.WriteLine("[+]   {0}",reason);
             Console.WriteLine("[+]");
