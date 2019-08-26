@@ -364,7 +364,7 @@ namespace RedPeanut
                     {
                         string response = CreateTaskMgs(agent, msg);
                         RedPeanutC2.server.RemoveCommand(agent, msg);
-                        Console.WriteLine("\n[*] Agent {0} tasked to run command...");
+                        Console.WriteLine("\n[*] Agent {0} tasked to run command...", agent.AgentId);
                         Program.GetMenuStack().Peek().RePrintCLI();
                         return Ok(response);
                     }
