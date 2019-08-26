@@ -100,17 +100,22 @@ public class PowerShellExecuter
             System.Threading.Thread.Sleep(90);
         }
 
+        int outputlen = 0;
         foreach (System.Management.Automation.PSObject item in pipeline.Output.ReadToEnd())
+        {
+            if (item != null)
             {
-                if (item != null)
-                {
-                    Console.WriteLine(item.ToString());
-                }
-                else
-                {
-                    Console.WriteLine("[x] No output");
-                }
+                outputlen += item.ToString().Length;
+                Console.WriteLine(item.ToString());
             }
+            else
+            {
+                Console.WriteLine("[x] No output");
+            }
+        }
+
+        if (outputlen <= 2048)
+            Console.WriteLine(new String(' ', 2048 - outputlen));
     }
 
     private static void PrintUsage()

@@ -17,7 +17,13 @@ namespace RedPeanut
             { "sharpadidnsdump", "SharpAdidnsdump" },
             { "back", "Back to main menu" }
         };
-        
+
+        public void RePrintCLI()
+        {
+            Utility.RePrintCLI(agent, modulename);
+            return;
+        }
+
         SeatbeltManager seatbeltmanager;
         SharpAdidnsdumpManager sharpadidnsdumpmanager;
 

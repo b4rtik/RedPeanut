@@ -9,5 +9,7 @@ namespace RedPeanut
     public interface IMenu
     {
         void Execute();
+
+        void RePrintCLI();
     }
 }

@@ -21,6 +21,12 @@ namespace RedPeanut
             { "back", "Back to lateral menu" }
         };
 
+        public void RePrintCLI()
+        {
+            Utility.RePrintCLI(null, modulename);
+            return;
+        }
+
         string modulename = "listener";
 
         C2Server srv = null;

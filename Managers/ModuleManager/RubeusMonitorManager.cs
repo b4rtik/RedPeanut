@@ -24,6 +24,12 @@ namespace RedPeanut
             { "back", "Back to lateral menu" }
         };
 
+        public void RePrintCLI()
+        {
+            Utility.RePrintCLI(agent, modulename);
+            return;
+        }
+
         IAgentInstance agent = null;
         string modulename = "monitor";
         int interval = 60;

@@ -25,6 +25,12 @@ namespace RedPeanut
             { "back", "Back to lateral menu" }
         };
 
+        public void RePrintCLI()
+        {
+            Utility.RePrintCLI(null, modulename);
+            return;
+        }
+
         string modulename = "http";
         string lhost = "";
         int profileid = 0;

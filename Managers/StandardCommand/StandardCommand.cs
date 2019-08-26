@@ -22,6 +22,12 @@ namespace RedPeanut
             { "reverttoself", "Revert all token" }
         };
 
+        public void RePrintCLI()
+        {
+            Utility.RePrintCLI(agent, null);
+            return;
+        }
+
         IAgentInstance agent = null;
 
         string folderrpath = Path.Combine(Directory.GetCurrentDirectory(), WORKSPACE_FOLDER, TEMPLATE_FOLDER);

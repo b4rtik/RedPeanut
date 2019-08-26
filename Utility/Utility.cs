@@ -224,6 +224,32 @@ namespace RedPeanut
             Console.ForegroundColor = ConsoleColor.Gray;
         }
 
+        static public void RePrintCLI(IAgentInstance agent,string modulename)
+        {
+            if(agent == null && string.IsNullOrEmpty(modulename))
+            {
+                PrintCLI();
+            }
+            else
+            {
+                if (agent == null && !string.IsNullOrEmpty(modulename))
+                {
+                    PrintCLI(modulename);
+                }
+                else
+                {
+                    if (agent != null && !string.IsNullOrEmpty(modulename))
+                    {
+                        PrintCLI(agent.AgentId,modulename);
+                    }
+                    else
+                    {
+                        PrintCLI(agent);
+                    }
+                }
+            }
+        }
+
         public static string ParseSelection(string input)
         {
             string[] a_input = Regex.Split(input, @"\s+");

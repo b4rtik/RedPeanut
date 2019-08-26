@@ -22,6 +22,12 @@ namespace RedPeanut
             { "back", "Back to main menu" }
         };
 
+        public void RePrintCLI()
+        {
+            Utility.RePrintCLI(agent, modulename);
+            return;
+        }
+
         IAgentInstance agent = null;
         string modulename = "gpoabuse";
         static SharpGPOAddImmediateTaskManager taskm = null;

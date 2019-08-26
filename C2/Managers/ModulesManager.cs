@@ -25,6 +25,12 @@ namespace RedPeanut
             { "back", "Back to main" }
         };
 
+        public void RePrintCLI()
+        {
+            Utility.RePrintCLI(agent, modulename);
+            return;
+        }
+
         IAgentInstance agent = null;
         string modulename = "module";
 

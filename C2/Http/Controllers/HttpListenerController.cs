@@ -238,12 +238,13 @@ namespace RedPeanut
                     string destfolder = Path.Combine(Directory.GetCurrentDirectory(), WORKSPACE_FOLDER, DOWNLOADS_FOLDER, "downloaded_item_" + msg.DownloadTask.FileNameDest);
                     System.IO.File.WriteAllBytes(destfolder, bytefile);
                     Console.WriteLine("[*] File {0} downloaded", destfolder);
-
+                    Program.GetMenuStack().Peek().RePrintCLI();
                     return Ok(CreateOkMgs(agent));
                 }
                 else
                 {
                     Console.WriteLine(responsemsg.Data);
+                    Program.GetMenuStack().Peek().RePrintCLI();
                     return Ok(CreateOkMgs(agent));
                 }
             }
@@ -252,6 +253,7 @@ namespace RedPeanut
                 // Something goes wrong decrypting or deserializing message return not found
                 Console.WriteLine("[x] Something goes wrong decrypting or deserializing message return {0}", e.Message);
                 Console.WriteLine("[x] {0}", e.StackTrace);
+                Program.GetMenuStack().Peek().RePrintCLI();
                 httpContextAccessor.HttpContext.Response.Headers.Add("Connection", "Close");
                 return NotFound();
             }
@@ -271,6 +273,7 @@ namespace RedPeanut
             {
                 // Someting goes wrong decrypting or deserializing message return not found
                 Console.WriteLine("[x] Something goes wrong decrypting or deserializing message return not found");
+                Program.GetMenuStack().Peek().RePrintCLI();
                 httpContextAccessor.HttpContext.Response.Headers.Add("Connection", "Close");
                 return NotFound();
             }
@@ -289,12 +292,14 @@ namespace RedPeanut
                 //Set cookie
                 SetCookieValue("sessionid", EncryptMessage(RedPeanutC2.server.GetServerKey(), agent.AgentId), 0);
                 Console.WriteLine("\n[*] Agent {0} connected", agent.AgentId);
+                Program.GetMenuStack().Peek().RePrintCLI();
                 return Ok(response);
             }
             catch (Exception e)
             {
                 // Operation error
                 Console.WriteLine("[x] Operation error {0}", e.Message);
+                Program.GetMenuStack().Peek().RePrintCLI();
                 httpContextAccessor.HttpContext.Response.Headers.Add("Connection", "Close");
                 return NotFound();
             }
@@ -311,7 +316,12 @@ namespace RedPeanut
                     agent.SysInfo = checkinmsg.systeminfo;
 
                     Console.WriteLine("\n[*] Agent " + agent.AgentId + " checkedin");
-                    Console.WriteLine("[*] IP: {0} | Integrity: {1} | User: {2} | Process: {3} | OS: {4}", agent.SysInfo.Ip, agent.SysInfo.Integrity, agent.SysInfo.User, agent.SysInfo.ProcessName, agent.SysInfo.Os);
+                    Console.WriteLine("[*]  {0}", new string('-', 144));
+                    Console.WriteLine("[*] | {0,-10} | {1,-15} | {2,-10} | {3,-32} | {4,-20} | {5,-40} |", "Agent", "IP", "Integrity", "User", "Process", "System");
+                    Console.WriteLine("[*]  {0}", new string('-', 144));
+                    Console.WriteLine("[*] | {0,-10} | {1,-15} | {2,-10} | {3,-32} | {4,-20} | {5,-40} |", agent.AgentId, agent.SysInfo.Ip, agent.SysInfo.Integrity, agent.SysInfo.User, agent.SysInfo.ProcessName, agent.SysInfo.Os);
+                    Console.WriteLine("[*]  {0}", new string('-', 144));
+                    Program.GetMenuStack().Peek().RePrintCLI();
                     RedPeanutC2.server.RemoveAgentInbound(agent.AgentId);
                     RedPeanutC2.server.RegisterAgent(agent.AgentId, agent);
                     return Ok(CreateOkMgs(agent));
@@ -320,6 +330,7 @@ namespace RedPeanut
                 {
                     Console.WriteLine("[x] Error during checkin agentid {0}", agent.AgentId);
                     Console.WriteLine("[x] {0}", e.Message);
+                    Program.GetMenuStack().Peek().RePrintCLI();
                     httpContextAccessor.HttpContext.Response.Headers.Add("Connection", "Close");
                     return NotFound();
                 }
@@ -353,11 +364,12 @@ namespace RedPeanut
                     {
                         string response = CreateTaskMgs(agent, msg);
                         RedPeanutC2.server.RemoveCommand(agent, msg);
+                        Console.WriteLine("\n[*] Agent {0} tasked to run command...", agent.AgentId);
+                        Program.GetMenuStack().Peek().RePrintCLI();
                         return Ok(response);
                     }
                     else
                     {
-                        Console.WriteLine("No command");
                         return Ok();
                     }
                     
@@ -423,6 +435,7 @@ namespace RedPeanut
                         {
                             // Agent does not exeists corrupted session or request not legitimate
                             Console.WriteLine("[x] Agent does not exeists corrupted session or request not legitimate");
+                            Program.GetMenuStack().Peek().RePrintCLI();
                             httpContextAccessor.HttpContext.Response.Headers.Add("Connection", "Close");
                             return NotFound();
                         }
@@ -432,6 +445,7 @@ namespace RedPeanut
                 {
                     // Operation error
                     Console.WriteLine("[x] Operation error {0}", e.Message);
+                    Program.GetMenuStack().Peek().RePrintCLI();
                     httpContextAccessor.HttpContext.Response.Headers.Add("Connection", "Close");
                     return NotFound();
                 }

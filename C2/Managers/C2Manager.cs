@@ -20,6 +20,11 @@ namespace RedPeanut
             { "back", "Back to main menu" }
         };
 
+        public void RePrintCLI()
+        {
+            Utility.RePrintCLI(null, modulename);
+            return;
+        }
 
         string modulename = "C2";
         static C2Server srv = null;
