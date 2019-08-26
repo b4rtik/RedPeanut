@@ -15,7 +15,7 @@ namespace RedPeanut
     {
         public static Dictionary<string, string> mainmenu = new Dictionary<string, string>
         {
-            { "pwd", "Set Domain" },
+            { "pwd", "Get current Directory" },
             { "getuid", "Set username" },
             { "getsystem", "Set SYSTEM" },
             { "killagent", "Kill current agent" },
