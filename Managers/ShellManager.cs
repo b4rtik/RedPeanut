@@ -7,6 +7,7 @@
 using static RedPeanut.Utility;
 using System.Collections.Generic;
 using static RedPeanut.Models;
+using System;
 
 namespace RedPeanut
 {
@@ -43,7 +44,7 @@ namespace RedPeanut
             {
                 input = RedPeanutCLI(agent, modulename);
                 Run(input);
-                if(input != "back")
+                if(input == "back")
                 {
                     Program.GetMenuStack().Pop();
                     exit = true;
@@ -73,6 +74,7 @@ namespace RedPeanut
             TaskMsg task = new TaskMsg
             {
                 TaskType = "command",
+                Instanceid = RandomAString(10, new Random()),
                 CommandTask = cmdconfig,
                 Agentid = agent.AgentId
             };
