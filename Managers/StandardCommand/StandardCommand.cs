@@ -144,9 +144,12 @@ namespace RedPeanut
 
         private void RunSetManaged()
         {
-            TaskMsg msg = new TaskMsg();
-            msg.Agentid = agent.AgentId;
-            msg.TaskType = "managed";
+            TaskMsg msg = new TaskMsg
+            {
+                Instanceid = RandomAString(10, new Random()),
+                Agentid = agent.AgentId,
+                TaskType = "managed"
+            };
 
             InjectionManaged injectionManagedTask = new InjectionManaged();
             injectionManagedTask.Managed = true;
@@ -158,9 +161,12 @@ namespace RedPeanut
 
         private void RunSetUnManaged()
         {
-            TaskMsg msg = new TaskMsg();
-            msg.Agentid = agent.AgentId;
-            msg.TaskType = "managed";
+            TaskMsg msg = new TaskMsg
+            {
+                Instanceid = RandomAString(10, new Random()),
+                Agentid = agent.AgentId,
+                TaskType = "managed"
+            };
 
             InjectionManaged injectionManagedTask = new InjectionManaged();
             injectionManagedTask.Managed = false;
