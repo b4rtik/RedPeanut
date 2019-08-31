@@ -112,7 +112,7 @@ namespace RedPeanut
             if (!string.IsNullOrEmpty(computername))
                 args.Add("--ComputerName " + computername);
             if (!string.IsNullOrEmpty(command))
-                args.Add("--ComputerName " + command);
+                args.Add("--Command " + command);
             string s = "";
             foreach (string ss in args.ToArray<string>())
                 s += ss;
