@@ -28,7 +28,8 @@ namespace RedPeanut
                     .Replace("#TARGETCLASS#", config.GetProfile().TargetClass)
                     .Replace("#NUTCLR#", ReadResourceFile(PL_COMMAND_NUTCLR))
                     .Replace("#SPAWN#", config.GetProfile().Spawn)
-                    .Replace("#FRAMEWORK#", targetframework.ToString());
+                    .Replace("#FRAMEWORK#", targetframework.ToString())
+                    .Replace("#MANAGED#", config.GetProfile().InjectionManaged.ToString());
 
             string headers = "";
 
@@ -68,7 +69,8 @@ namespace RedPeanut
                     .Replace("#TARGETCLASS#", "")
                     .Replace("#NUTCLR#", ReadResourceFile(PL_COMMAND_NUTCLR))
                     .Replace("#SPAWN#", config.GetProfile().Spawn)
-                    .Replace("#FRAMEWORK#", targetframework.ToString());
+                    .Replace("#FRAMEWORK#", targetframework.ToString())
+                    .Replace("#MANAGED#", config.GetProfile().InjectionManaged.ToString());
 
             source = source
                     .Replace("#HEADERS#", "");
