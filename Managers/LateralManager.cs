@@ -15,6 +15,7 @@ namespace RedPeanut
         {
             { "sharpwmi", "SharpWmi" },
             { "sharppsexec", "SharpPsExec" },
+            { "sharpcom", "SharpCom" },
             { "lateralmsbuild", "Run task on remote host via wmi and msbuild" },
             { "list", "List module" },
             { "back", "Back to main menu" }
@@ -29,6 +30,7 @@ namespace RedPeanut
         SharpWmiManager wmimanager;
         SharpPsExecManager psexecmanager;
         LateralMSBuildManager msbuildm;
+        SharpCOMManager sharpcomm;
         IAgentInstance agent = null;
         string modulename = "lateral";
 
@@ -73,6 +75,11 @@ namespace RedPeanut
                         case "sharppsexec":
                             psexecmanager = new SharpPsExecManager(agent);
                             Program.GetMenuStack().Push(psexecmanager);
+                            exit = true;
+                            break;
+                        case "sharpcom":
+                            sharpcomm = new SharpCOMManager(agent);
+                            Program.GetMenuStack().Push(sharpcomm);
                             exit = true;
                             break;
                         case "lateralmsbuild":
