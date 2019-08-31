@@ -25,6 +25,7 @@ namespace RedPeanut
             public HttpPost HttpPost { get; set; }
             public string UserAgent { get; set; }
             public string Spawn { get; set; }
+            public bool InjectionManaged { get; set; }
         }
 
         public class HttpClient
@@ -126,6 +127,11 @@ namespace RedPeanut
             public string[] Parameters { get; set; }
             public string Assembly { get; set; }
         }
+        
+        public class InjectionManaged
+        {
+            public bool Managed { get; set; }
+        }
 
         public class TaskMsg
         {
@@ -139,6 +145,7 @@ namespace RedPeanut
             public CommandConfig CommandTask { get; set; }
             public StandardConfig StandardTask { get; set; }
             public FileDownloadConfig DownloadTask { get; set; }
+            public InjectionManaged InjectionManagedTask { get; set; }
         }
 
         public class ResponseMsg

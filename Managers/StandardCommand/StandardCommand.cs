@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using static RedPeanut.Utility;
 using System.IO;
+using static RedPeanut.Models;
 
 namespace RedPeanut
 {
@@ -19,6 +20,8 @@ namespace RedPeanut
             { "getuid", "Set username" },
             { "getsystem", "Set SYSTEM" },
             { "killagent", "Kill current agent" },
+            { "managed", "Agent will run task in managed mode" },
+            { "unmanaged", "Agent will run task in unmanaged mode" },
             { "reverttoself", "Revert all token" }
         };
 
@@ -72,6 +75,12 @@ namespace RedPeanut
                             return true;
                         case "killagent":
                             RunKillAgent();
+                            return true;
+                        case "managed":
+                            RunSetManaged();
+                            return true;
+                        case "unmanaged":
+                            RunSetUnManaged();
                             return true;
                         default:
                             return false;
@@ -131,6 +140,40 @@ namespace RedPeanut
             string commandstr = Convert.ToBase64String(CompressGZipAssembly(Builder.BuidStreamAssembly(source, RandomAString(10, new Random()) + ".dll", agent.TargetFramework, compprofile: CompilationProfile.StandardCommand)));
 
             RunStandardBase64(commandstr, "KillAgent", "StandardCommandImpl.Program", new string[] { " " }, agent);
+        }
+
+        private void RunSetManaged()
+        {
+            TaskMsg msg = new TaskMsg
+            {
+                Instanceid = RandomAString(10, new Random()),
+                Agentid = agent.AgentId,
+                TaskType = "managed"
+            };
+
+            InjectionManaged injectionManagedTask = new InjectionManaged();
+            injectionManagedTask.Managed = true;
+
+            msg.InjectionManagedTask = injectionManagedTask;
+
+            agent.SendCommand(msg);
+        }
+
+        private void RunSetUnManaged()
+        {
+            TaskMsg msg = new TaskMsg
+            {
+                Instanceid = RandomAString(10, new Random()),
+                Agentid = agent.AgentId,
+                TaskType = "managed"
+            };
+
+            InjectionManaged injectionManagedTask = new InjectionManaged();
+            injectionManagedTask.Managed = false;
+
+            msg.InjectionManagedTask = injectionManagedTask;
+
+            agent.SendCommand(msg);
         }
     }
 }
