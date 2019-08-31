@@ -95,6 +95,7 @@ namespace RedPeanut
             if(!string.IsNullOrEmpty(pipename))
             {
                 TaskMsg msg = new TaskMsg();
+                msg.Instanceid = RandomAString(10, new Random());
                 msg.Agentid = agent.AgentId;
                 msg.TaskType = "pivot";
 
