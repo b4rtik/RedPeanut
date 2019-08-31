@@ -438,7 +438,7 @@ namespace RedPeanut
                             ContentUri = "/content/",
                             Spawn = "notepad.exe",
                             HtmlCovered = false,
-                            InjectionManged = true
+                            InjectionManaged = true
                         };
 
                         HttpGet httpget = new HttpGet
