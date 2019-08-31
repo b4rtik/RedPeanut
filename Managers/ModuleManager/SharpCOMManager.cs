@@ -108,16 +108,26 @@ namespace RedPeanut
         {
             List<string> args = new List<string>();
             if (!string.IsNullOrEmpty(method))
-                args.Add("--Method " + method);
+            {
+                args.Add("--Method");
+                args.Add(method);
+            }
             if (!string.IsNullOrEmpty(computername))
-                args.Add("--ComputerName " + computername);
+            {
+                args.Add("--ComputerName");
+                args.Add(computername);
+            }
             if (!string.IsNullOrEmpty(command))
-                args.Add("--Command " + command);
+            {
+                args.Add("--Command");
+                args.Add(command);
+            }
+            
             string s = "";
             foreach (string ss in args.ToArray<string>())
                 s += ss;
             Console.WriteLine("String command: " + s);
-            RunAssembly(PL_MODULE_SHARPCOM, "SharpCOM.Program", args.ToArray<string>(), agent);
+            RunAssembly(PL_MODULE_SHARPCOM, "SharpCOM.Program", args.ToArray(), agent);
         }
 
         private void PrintCurrentConfig()

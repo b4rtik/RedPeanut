@@ -456,7 +456,7 @@ namespace RedPeanut
                     Assembly = ReadResourceFile(resname),
                     Method = "Execute",
                     Moduleclass = type,
-                    Parameters = args.ToArray<string>()
+                    Parameters = args
                 };
 
                 TaskMsg task = new TaskMsg
