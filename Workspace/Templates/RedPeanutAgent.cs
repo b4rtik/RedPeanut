@@ -47,7 +47,7 @@ namespace RedPeanutAgent
             string agentid = "";
             Thread servert = null;
             bool smbstarted = false;
-            bool magaded = injectionmanaged;
+            bool managed = injectionmanaged;
 
             Dictionary<string, List<Core.Utility.TaskMsg>> commands = new Dictionary<string, List<Core.Utility.TaskMsg>>();
 
