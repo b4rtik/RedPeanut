@@ -15,8 +15,8 @@ namespace RedPeanut
     {
         public static Dictionary<string, string> mainmenu = new Dictionary<string, string>
         {
-            { "set method", "Set method" },
-            { "set computername ", "Set target computer name" },
+            { "set method", "Set method: ShellWindows,MMC,ShellBrowserWindow,ExcelDDE" },
+            { "set computername", "Set target computer name" },
             { "set command", "Set command to run" },
             { "run", "Execute module" },
             { "options", "Print current config" },
