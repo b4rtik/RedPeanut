@@ -414,6 +414,11 @@ namespace RedPeanutAgent.Core
             public string Assembly { get; set; }
         }
 
+        public class InjectionManaged
+        {
+            public bool Managed { get; set; }
+        }
+
         public class TaskMsg
         {
             public string Agentid { get; set; }
@@ -426,6 +431,7 @@ namespace RedPeanutAgent.Core
             public CommandConfig CommandTask { get; set; }
             public StandardConfig StandardTask { get; set; }
             public FileDownloadConfig DownloadTask { get; set; }
+            public InjectionManaged InjectionManagedTask { get; set; }
         }
 
         public class ResponseMsg

