@@ -147,7 +147,11 @@ namespace RedPeanut
             TaskMsg msg = new TaskMsg();
             msg.Agentid = agent.AgentId;
             msg.TaskType = "managed";
-            msg.InjectionManagedTask.Managed = true;
+
+            InjectionManaged injectionManagedTask = new InjectionManaged();
+            injectionManagedTask.Managed = true;
+
+            msg.InjectionManagedTask = injectionManagedTask;
 
             agent.SendCommand(msg);
         }
@@ -157,7 +161,11 @@ namespace RedPeanut
             TaskMsg msg = new TaskMsg();
             msg.Agentid = agent.AgentId;
             msg.TaskType = "managed";
-            msg.InjectionManagedTask.Managed = false;
+
+            InjectionManaged injectionManagedTask = new InjectionManaged();
+            injectionManagedTask.Managed = false;
+
+            msg.InjectionManagedTask = injectionManagedTask;
 
             agent.SendCommand(msg);
         }
