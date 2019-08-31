@@ -25,8 +25,9 @@ RedPeanut is a small RAT developed in .Net Core 2 and its agent in .Net 3.5 / 4.
 code execution is based on shellcode generated with [Donut](https://github.com/TheWover/donut). It is therefore a hybrid, although developed in .Net it 
 does not rely solely on the Assembly.Load. This increases the detection surface, but allows us 
 to practice and experiment with various evasion techniques related to the dotnet environment, process 
-management and injection. If you are interested in a .Net C2 Framework that is consistent and 
-can be used in an enagement, I suggest [Covenant](https://github.com/cobbr/Covenant).
+management and injection. This behavior can be changed at rutime with the "managed" and "unmanaged" commands.
+If you are interested in a .Net C2 Framework that is consistent and can be used in an enagement, 
+I suggest [Covenant](https://github.com/cobbr/Covenant).
 
 RedPeanut is weaponized with:
 
@@ -43,9 +44,10 @@ RedPeanut is weaponized with:
 ## RedPeanut Agent
 
 The RedPeanut agent can be compiled in .Net 3.5 and 4.0 and has pivoting capabilities via
-NamedPipe. The agent performs its own critical tasks in a separate process to prevent the
+NamedPipe. 
+The agent, when executed in an unmanaged mode, performs its own critical tasks in a separate process to prevent the
 AV response to detection or error during execution make you lose the whole
-agent. The execution flow is as follows:
+agent. The execution flow is as follow:
 
 1. Process creation
 2. Inject static shellcode generated with Donut
