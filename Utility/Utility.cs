@@ -30,6 +30,7 @@ namespace RedPeanut
 
         public const string PL_MODULE_SEATBELT = "RedPeanut.Resources.seatbelt.txt";
         public const string PL_MODULE_SHARPWMI = "RedPeanut.Resources.sharpwmi.txt";
+        public const string PL_MODULE_SHARPCOM = "RedPeanut.Resources.sharpcom.txt";
         public const string PL_MODULE_SHARPUP = "RedPeanut.Resources.sharpup.txt";
         public const string PL_MODULE_SHARPDPAPI = "RedPeanut.Resources.sharpdpapi.txt";
         public const string PL_MODULE_RUBEUS = "RedPeanut.Resources.rubeus.txt";
