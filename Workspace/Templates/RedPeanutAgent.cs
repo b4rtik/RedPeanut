@@ -15,6 +15,7 @@ using System.Net.Security;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Web.Script.Serialization;
 
 namespace RedPeanutAgent
 {
