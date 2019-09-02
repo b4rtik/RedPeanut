@@ -29,6 +29,7 @@
     <Compile Remove="Workspace\Templates\RedPeanutAgent\UAC\UACBypassHelper.cs" />
     <Compile Remove="Workspace\Templates\RedPeanutAgent\Wnf\WnfHelper.cs" />
     <Compile Remove="Workspace\Templates\RedPeanutInstallUtil.cs" />
+    <Compile Remove="Workspace\Templates\RedPeanutMigrate.cs" />
     <Compile Remove="Workspace\Templates\RedPeanutRP.cs" />
     <Compile Remove="Workspace\Templates\RedPeanutShooter.cs" />
     <Compile Remove="Workspace\Templates\RedPeanutSpawn.cs" />
@@ -130,6 +131,7 @@
     <None Include="Workspace\Templates\RedPeanutAgent\UAC\UACBypassHelper.cs" />
     <None Include="Workspace\Templates\RedPeanutAgent\Wnf\WnfHelper.cs" />
     <None Include="Workspace\Templates\RedPeanutInstallUtil.cs" />
+    <None Include="Workspace\Templates\RedPeanutMigrate.cs" />
     <None Include="Workspace\Templates\RedPeanutRP.cs" />
     <None Include="Workspace\Templates\RedPeanutShooter.cs" />
     <None Include="Workspace\Templates\RedPeanutSpawnTikiTorch.cs" />
