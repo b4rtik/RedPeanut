@@ -49,6 +49,9 @@ namespace RedPeanutAgent.Execution
             pipe.WaitForConnection();
 
             SendCommand(pipe, command);
+            if (hProcess == IntPtr.Zero)
+                return "";
+
             StringBuilder output = ReadOutput(hProcess, hReadPipe);
 
             return output.ToString();

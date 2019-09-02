@@ -290,6 +290,7 @@ namespace RedPeanut
                 RedPeanutC2.server.RegisterAgentInbound(agent.AgentId, agent);
                 string response = CreateMsgAgentId(agent, RedPeanutC2.server.GetServerKey(), Profileid, agentidrequest.framework);
                 //Set cookie
+                ((AgentInstanceHttp)agent).Cookie = EncryptMessage(RedPeanutC2.server.GetServerKey(), agent.AgentId);
                 SetCookieValue("sessionid", EncryptMessage(RedPeanutC2.server.GetServerKey(), agent.AgentId), 0);
                 Console.WriteLine("\n[*] Agent {0} connected", agent.AgentId);
                 Program.GetMenuStack().Peek().RePrintCLI();

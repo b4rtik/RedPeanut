@@ -187,5 +187,15 @@ namespace RedPeanut
             public int profile { get; set; }
             public ListenerType? ListenerType { get; set; }
         }
+
+        public class AgentState
+        {
+            public string Agentid { get; set; }
+            public byte[] sessionkey { get; set; }
+            public byte[] sessioniv { get; set; }
+            public string cookie { get; set; }
+            public string pipename { get; set; }
+            public string RequestInstanceid { get; set; }
+        }
     }
 }

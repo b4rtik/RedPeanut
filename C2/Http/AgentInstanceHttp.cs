@@ -22,7 +22,8 @@ namespace RedPeanut
         private C2Server server = null;
         private IAgentInstance pivoter = null;
         private int profileid = 0;
-        
+        public string Cookie {get;set;}
+
         public AgentInstanceHttp(C2Server server,string agentid, string serverkey, string address, int port, int targetframework, int profileid)
         {
             this.agentid = agentid;

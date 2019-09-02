@@ -16,7 +16,7 @@ using System.Web.Script.Serialization;
 
 namespace RedPeanutAgent.Core
 {
-    class Utility
+    public class Utility
     {
         public static string GetPipeName(int pid)
         {
@@ -65,7 +65,6 @@ namespace RedPeanutAgent.Core
             assemblyType.InvokeMember(method, System.Reflection.BindingFlags.InvokeMethod | System.Reflection.BindingFlags.Static |
                 System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.IgnoreReturn, null, assemblyObject, args);
         }
-
 
 
         public class CookiedWebClient : WebClient
@@ -443,6 +442,16 @@ namespace RedPeanutAgent.Core
             public bool Chunked { get; set; }
             public int Number { get; set; }
             public string Data { get; set; }
+        }
+
+        public class AgentState
+        {
+            public string Agentid { get; set; }
+            public string sessionkey { get; set; }
+            public string sessioniv { get; set; }
+            public string cookie { get; set; }
+            public string pipename { get; set; }
+            public string RequestInstanceid { get; set; }
         }
     }
 }
