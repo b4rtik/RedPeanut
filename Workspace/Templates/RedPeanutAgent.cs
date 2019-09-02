@@ -116,7 +116,7 @@ namespace RedPeanutAgent
             task.Instanceid = agentState.RequestInstanceid;
             Execution.CommandExecuter commandOutuput = new Execution.CommandExecuter(task, this);
 
-            string output = string.Format("[*] Agent sucessfuly migrated to {0}", Process.GetCurrentProcess().ProcessName);
+            string output = string.Format("[*] Agent successfully migrated to {0}", Process.GetCurrentProcess().ProcessName);
 
             commandOutuput.SendResponse(output);
 
