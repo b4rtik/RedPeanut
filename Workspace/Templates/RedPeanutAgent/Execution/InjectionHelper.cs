@@ -17,7 +17,7 @@ namespace RedPeanutAgent.Execution
             IntPtr hproc = OpenProcess(pid);
 
             bool retVal;
-            if (!Natives.isWow64Process(hproc, out retVal))
+            if (!Natives.IsWow64Process(hproc, out retVal))
             {
                 retVal = false;
             }
