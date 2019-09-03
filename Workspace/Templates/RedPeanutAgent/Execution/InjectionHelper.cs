@@ -12,12 +12,12 @@ namespace RedPeanutAgent.Execution
 {
     class InjectionHelper
     {
-        public static Is64bit(int pid)
+        public static bool Is64bit(int pid)
         {
             IntPtr hproc = OpenProcess(pid);
 
             bool retVal;
-            if (!Natives.isWow64Process(processHandle, out retVal))
+            if (!Natives.isWow64Process(hproc, out retVal))
             {
                 retVal = false;
             }
