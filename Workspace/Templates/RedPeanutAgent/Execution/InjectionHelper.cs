@@ -19,7 +19,7 @@ namespace RedPeanutAgent.Execution
             bool retVal;
             if (!Natives.IsWow64Process(hproc, out retVal))
             {
-                retVal = false;
+                retVal = true;
             }
             Natives.CloseHandle(hproc);
             return !retVal;            
