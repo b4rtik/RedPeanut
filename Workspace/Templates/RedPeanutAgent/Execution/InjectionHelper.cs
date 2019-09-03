@@ -12,6 +12,19 @@ namespace RedPeanutAgent.Execution
 {
     class InjectionHelper
     {
+        public static Is64bit(int pid)
+        {
+            IntPtr hproc = OpenProcess(pid);
+
+            bool retVal;
+            if (!Natives.isWow64Process(processHandle, out retVal))
+            {
+                retVal = false;
+            }
+            Natives.CloseHandle(hproc);
+            return !retVal;            
+        }
+
         public static bool OpenAndInject(int pid, byte[] payload)
         {
             IntPtr hproc = OpenProcess(pid);
@@ -53,6 +66,8 @@ namespace RedPeanutAgent.Execution
             }
 
             Natives.CreateRemoteThread(hproc, IntPtr.Zero, 0, baseAddrEx, IntPtr.Zero, 0, IntPtr.Zero);
+            Natives.CloseHandle(section);
+            Natives.CloseHandle(hproc);
             return true;
         }
 

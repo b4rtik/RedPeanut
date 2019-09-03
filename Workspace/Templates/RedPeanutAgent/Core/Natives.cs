@@ -371,7 +371,7 @@ namespace RedPeanutAgent.Core
         [DllImport("kernel32.dll", SetLastError = true)]
         public static extern IntPtr CreateRemoteThread(IntPtr hProcess, IntPtr lpThreadAttributes, uint dwStackSize, IntPtr lpStartAddress, IntPtr lpParameter, uint dwCreationFlags, IntPtr lpThreadId);
 
-        [DllImport("kernel32", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Auto, SetLastError = true)]
+        [DllImport("kernel32.dll", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Auto, SetLastError = true)]
         public static extern bool CloseHandle(IntPtr handle);
 
         [DllImport("kernel32.dll", CallingConvention = CallingConvention.StdCall, SetLastError = true)]
@@ -412,6 +412,9 @@ namespace RedPeanutAgent.Core
 
         [DllImport("kernel32.dll", SetLastError = true)]
         public static extern bool InitializeProcThreadAttributeList(IntPtr lpAttributeList, int dwAttributeCount, int dwFlags, ref IntPtr lpSize);
+
+        [DllImport("kernel32.dll", SetLastError = true, CallingConvention = CallingConvention.Winapi)]
+        public static extern bool IsWow64Process(IntPtr hProcess, out bool wow64Process);
 
     }
 }
