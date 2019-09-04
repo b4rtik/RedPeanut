@@ -69,7 +69,7 @@ namespace RedPeanut
             {
                 if(ssl)
                 {
-                    foreach (string s in profile.HttpGet.ApiPath)
+                    foreach(string s in profile.HttpGet.ApiPath)
                         routes.MapRoute(s, s.TrimStart('/'), new { controller = "HttpListener", action = "Get" });
 
                     foreach(string s in profile.HttpPost.ApiPath)

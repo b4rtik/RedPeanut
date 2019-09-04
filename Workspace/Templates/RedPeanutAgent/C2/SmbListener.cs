@@ -19,6 +19,7 @@ using System.Security.Principal;
 using System.Text;
 using System.Threading;
 using System.Web.Script.Serialization;
+using static RedPeanutAgent.Program;
 
 namespace RedPeanutAgent.C2
 {
@@ -35,14 +36,17 @@ namespace RedPeanutAgent.C2
         private byte[] aesiv;
         private string AgentPivoter = "";
 
-        public SmbListener(string pipename, string serverkey, byte[] aeskey, byte[] aesiv, string agentpivoter, Dictionary<string, List<Utility.TaskMsg>> commands)
+        Worker w;
+
+        public SmbListener(string pipename, string agentpivoter, Worker w)
         {
             this.pipename = pipename;
-            this.serverkey = serverkey;
-            this.aesiv = aesiv;
-            this.aeskey = aeskey;
-            this.commands = commands;
+            this.serverkey = w.serverkey;
+            this.aesiv = w.aesiv;
+            this.aeskey = w.aeskey;
+            this.commands = w.commands;
             AgentPivoter = agentpivoter;
+            this.w = w;
         }
 
         public bool GetIsStarted()
@@ -71,7 +75,7 @@ namespace RedPeanutAgent.C2
 
                 pipe.WaitForConnection();
 
-                AgentInstanceNamedPipe agentinstance = new AgentInstanceNamedPipe(pipe, AgentPivoter, serverkey, commands);
+                AgentInstanceNamedPipe agentinstance = new AgentInstanceNamedPipe(pipe, w);
                 Thread t = new Thread(new ThreadStart(agentinstance.Run));
                 t.Start();
                 listt.Add(t);

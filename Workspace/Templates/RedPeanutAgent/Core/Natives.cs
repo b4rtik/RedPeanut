@@ -43,6 +43,7 @@ namespace RedPeanutAgent.Core
         public const ulong PART_2 = 0x19890C35A3BC6075;
         public const ulong PART_3 = 0x19890C35A3BEC075;
         public const ulong PART_4 = 0x19890C35A3BEF875; //A3BEF875 - 19890C35 WNF_XBOX_SETTINGS_RAW_NOTIFICATION_RECEIVED
+        public const ulong PART_5 = 0x19890C35A3BDC075; //WNF_XBOX_SHELL_DATACACHE_ENTITY_CHANGED
         public const ulong WNF_XBOX_STORAGE_CHANGED = 0x19890C35A3BD6875;
 
         [Flags]
@@ -367,7 +368,10 @@ namespace RedPeanutAgent.Core
         [DllImport("Kernel32.dll", SetLastError = true, CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
         public static extern bool CreateProcess(IntPtr lpApplicationName, string lpCommandLine, IntPtr lpProcAttribs, IntPtr lpThreadAttribs, bool bInheritHandles, uint dwCreateFlags, IntPtr lpEnvironment, IntPtr lpCurrentDir, [In] ref STARTUPINFOEX lpStartinfo, out PROCESS_INFORMATION lpProcInformation);
 
-        [DllImport("kernel32", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Auto, SetLastError = true)]
+        [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern IntPtr CreateRemoteThread(IntPtr hProcess, IntPtr lpThreadAttributes, uint dwStackSize, IntPtr lpStartAddress, IntPtr lpParameter, uint dwCreationFlags, IntPtr lpThreadId);
+
+        [DllImport("kernel32.dll", CallingConvention = CallingConvention.StdCall, CharSet = CharSet.Auto, SetLastError = true)]
         public static extern bool CloseHandle(IntPtr handle);
 
         [DllImport("kernel32.dll", CallingConvention = CallingConvention.StdCall, SetLastError = true)]
@@ -408,6 +412,9 @@ namespace RedPeanutAgent.Core
 
         [DllImport("kernel32.dll", SetLastError = true)]
         public static extern bool InitializeProcThreadAttributeList(IntPtr lpAttributeList, int dwAttributeCount, int dwFlags, ref IntPtr lpSize);
+
+        [DllImport("kernel32.dll", SetLastError = true, CallingConvention = CallingConvention.Winapi)]
+        public static extern bool IsWow64Process(IntPtr hProcess, out bool wow64Process);
 
     }
 }
