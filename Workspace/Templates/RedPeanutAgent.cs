@@ -203,7 +203,7 @@ namespace RedPeanutAgent
             Random r = new Random();
             //TODO manage max delay via config
             int maxdelay = 8;
-            int rInt = r.Next(5, maxdelay);
+            return r.Next(5, maxdelay);
         }
 
         public void Run()
