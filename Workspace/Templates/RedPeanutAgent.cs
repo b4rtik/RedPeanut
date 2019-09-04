@@ -143,7 +143,7 @@ namespace RedPeanutAgent
                     
                 }
                 //More delay here?
-                int rInt = r.Next(5, maxdelay);
+                int rInt = GetDelay();
                 Thread.Sleep(rInt * 1000);
             }
 
@@ -198,14 +198,20 @@ namespace RedPeanutAgent
             return wc;
         }
 
+        public int GetDelay()
+        {
+            Random r = new Random();
+            //TODO manage max delay via config
+            int maxdelay = 8;
+            int rInt = r.Next(5, maxdelay);
+        }
+
         public void Run()
         {
             List<string> smblisteners = new List<string>();
 
             Random r = new Random();
-            //TODO manage max delay via config
-            int maxdelay = 8;
-            int rInt = r.Next(5, maxdelay);
+            int rInt = GetDelay();
 
 
             Thread servert = null;
