@@ -200,6 +200,7 @@ namespace RedPeanut
 
         public class AgentInstance
         {
+            public int AgentInstanceID { get; set; }
             public string agentid { get; set; }
             public string agentPivotid { get; set; }
             public string address { get; set; }
