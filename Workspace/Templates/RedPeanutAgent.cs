@@ -143,6 +143,7 @@ namespace RedPeanutAgent
                     
                 }
                 //More delay here?
+                int rInt = r.Next(5, maxdelay);
                 Thread.Sleep(rInt * 1000);
             }
 
