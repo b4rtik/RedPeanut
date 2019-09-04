@@ -332,7 +332,14 @@ namespace RedPeanut
                     Console.WriteLine("[*] | {0,-10} | {1,-15} | {2,-10} | {3,-32} | {4,-20} | {5,-40} |", agent.AgentId, agent.SysInfo.Ip, agent.SysInfo.Integrity, agent.SysInfo.User, agent.SysInfo.ProcessName, agent.SysInfo.Os);
                     Console.WriteLine("[*]  {0}", new string('-', 144));
                     Program.GetMenuStack().Peek().RePrintCLI();
-                    RedPeanutC2.server.RemoveAgentInbound(agent.AgentId);
+                    try
+                    {
+                        RedPeanutC2.server.RemoveAgentInbound(agent.AgentId);
+                    }
+                    catch (Exception )
+                    {
+                       
+                    }
                     RedPeanutC2.server.RegisterAgent(agent.AgentId, agent);
                     return Ok(CreateOkMgs(agent));
                 }

@@ -276,7 +276,7 @@ namespace RedPeanut
         {
             agentList.Add(agentid, agent);
             AgentInstance agentInstance = dbcontext.Agents.FirstOrDefault<AgentInstance>(s => s.agentid.Equals(agentid));
-            if (agentInstance != null)
+            if (agentInstance == null)
             {
                 AgentInstance agentinstance = new AgentInstance
                 {
