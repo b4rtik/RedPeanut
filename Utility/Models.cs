@@ -169,6 +169,16 @@ namespace RedPeanut
             Http,Https
         }
 
+        public class AgentState
+        {
+            public string Agentid { get; set; }
+            public byte[] sessionkey { get; set; }
+            public byte[] sessioniv { get; set; }
+            public string cookie { get; set; }
+            public string pipename { get; set; }
+            public string RequestInstanceid { get; set; }
+        }
+
         public class WebResource
         {
             public int WebResourceID { get; set; }
@@ -188,14 +198,16 @@ namespace RedPeanut
             public ListenerType? ListenerType { get; set; }
         }
 
-        public class AgentState
+        public class AgentInstance
         {
-            public string Agentid { get; set; }
+            public string agentid { get; set; }
+            public string agentPivotid { get; set; }
+            public string address { get; set; }
+            public int port { get; set; }
+            public int framework { get; set; }
+            public int profileid { get; set; }
             public byte[] sessionkey { get; set; }
             public byte[] sessioniv { get; set; }
-            public string cookie { get; set; }
-            public string pipename { get; set; }
-            public string RequestInstanceid { get; set; }
         }
     }
 }

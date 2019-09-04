@@ -24,7 +24,7 @@ namespace RedPeanut
         private int profileid = 0;
         public string Cookie {get;set;}
 
-        public AgentInstanceHttp(C2Server server,string agentid, string serverkey, string address, int port, int targetframework, int profileid)
+        public AgentInstanceHttp(C2Server server,string agentid, string serverkey, string address, int port, int targetframework, int profileid, byte[] sessionkey = null, byte[] sessioniv = null)
         {
             this.agentid = agentid;
             this.serverkey = serverkey;
@@ -33,6 +33,11 @@ namespace RedPeanut
             this.port = port;
             this.targetframwork = targetframework;
             aes = new AesManaged();
+            if(sessionkey != null && sessioniv != null)
+            {
+                aes.Key = sessionkey;
+                aes.IV = sessioniv;
+            }
             this.profileid = profileid;
         }
 
