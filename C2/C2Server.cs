@@ -275,6 +275,28 @@ namespace RedPeanut
         public void RegisterAgent(String agentid,IAgentInstance agent)
         {
             agentList.Add(agentid, agent);
+            AgentInstance agentInstance = dbcontext.Agents.FirstOrDefault<AgentInstance>(s => s.agentid.Equals(agentid));
+            if (agentInstance != null)
+            {
+                AgentInstance agentinstance = new AgentInstance
+                {
+                    agentid = agentid,
+                    address = ((AgentInstanceHttp)agent).GetAddress(),
+                    port = ((AgentInstanceHttp)agent).GetPort(),
+                    profileid = ((AgentInstanceHttp)agent).GetProfileid(),
+                    framework = ((AgentInstanceHttp)agent).TargetFramework,
+                    sessionkey = ((AgentInstanceHttp)agent).AesManager.Key,
+                    sessioniv = ((AgentInstanceHttp)agent).AesManager.IV
+                };
+
+                if (agent.Pivoter != null)
+                    agentinstance.agentPivotid = agent.Pivoter.AgentId;
+
+                dbcontext.Agents.Add(agentinstance);
+                dbcontext.SaveChanges();
+            }
+
+            
         }
 
         public IAgentInstance GetAgent(string agentid)
