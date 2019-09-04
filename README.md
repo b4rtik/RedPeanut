@@ -33,6 +33,7 @@ RedPeanut is weaponized with:
 
 * GhostPack
 * SharpGPOAbuse
+* SharpCOM
 * EvilClippy
 * DotNetToJS
 * SharpWeb
@@ -181,6 +182,7 @@ with AMSI bypass, Logging bypass and PowerView already loaded.
 * RubeusChangePw
 * RubeusASREPRoast
 * RubeusAskTgt
+* SharpCOM
 * SharpGPOAddUserRights
 * SharpGPOAddStartupScript
 * SharpGPOAddLocalAdmin
@@ -318,7 +320,7 @@ PS Z:\donut>
 ## CLR Persistence
 
 The CLR persistence technique was presented for the first time in this [post](https://www.contextis.com/en/blog/common-language-runtime-hook-for-persistence) by
-[@ Am0nsec](https://twitter.com/am0nsec). The technique consists in carrying out the application 
+[@Am0nsec](https://twitter.com/am0nsec). The technique consists in carrying out the application 
 domain manager hooking. As described in the post, the assembly to carry out hooking is necessary
 which is available in the GAC. An assembly to be used from the GAC must be strong-named and 
 then signed with a key. The CLR persistence module needs a key to be able to sign the assemblies, 
@@ -349,6 +351,7 @@ and encoded in Base64 with the ps RastaMouse's script [Get-CompressedShellcode.p
 * Donut - [@TheRealWover](https://twitter.com/TheRealWover)
 * SharpSploit - [@cobbr_io](https://twitter.com/cobbr_io)
 * GhostPack - [@harmj0y](https://twitter.com/harmj0y)
+* SharpCOM - [@rvrsh3ll](https://twitter.com/424f424f)
 * SharpGPOAbuse - [@mwrlabs](https://twitter.com/mwrlabs)
 * EvilClippy - [@StanHacked](https://twitter.com/StanHacked)
 * DotNetToJS - [@tiraniddo](https://twitter.com/tiraniddo)
