@@ -1,4 +1,4 @@
-﻿//
+//
 // Author: B4rtik (@b4rtik)
 // Project: RedPeanut (https://github.com/b4rtik/RedPeanut)
 // License: BSD 3-Clause
@@ -15,8 +15,8 @@ namespace RedPeanut
     {
         public static Dictionary<string, string> mainmenu = new Dictionary<string, string>
         {
-            { "set method", "Set method" },
-            { "set computername ", "Set target computer name" },
+            { "set method", "Set method: ShellWindows,MMC,ShellBrowserWindow,ExcelDDE" },
+            { "set computername", "Set target computer name" },
             { "set command", "Set command to run" },
             { "run", "Execute module" },
             { "options", "Print current config" },
@@ -108,16 +108,26 @@ namespace RedPeanut
         {
             List<string> args = new List<string>();
             if (!string.IsNullOrEmpty(method))
-                args.Add("--Method " + method);
+            {
+                args.Add("--Method");
+                args.Add(method);
+            }
             if (!string.IsNullOrEmpty(computername))
-                args.Add("--ComputerName " + computername);
+            {
+                args.Add("--ComputerName");
+                args.Add(computername);
+            }
             if (!string.IsNullOrEmpty(command))
-                args.Add("--ComputerName " + command);
+            {
+                args.Add("--Command");
+                args.Add(command);
+            }
+            
             string s = "";
             foreach (string ss in args.ToArray<string>())
                 s += ss;
             Console.WriteLine("String command: " + s);
-            RunAssembly(PL_MODULE_SHARPCOM, "SharpCOM.Program", args.ToArray<string>(), agent);
+            RunAssembly(PL_MODULE_SHARPCOM, "SharpCOM.Program", args.ToArray(), agent);
         }
 
         private void PrintCurrentConfig()
