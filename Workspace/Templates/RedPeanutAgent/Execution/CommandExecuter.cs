@@ -227,7 +227,6 @@ namespace RedPeanutAgent.Execution
             InjectionHelper.MapViewOfSection(section, procInfo.hProcess, ref baseAddrEx, ref viewSizeEx, Core.Natives.PAGE_EXECUTE);
             if (baseAddrEx == IntPtr.Zero || viewSizeEx == IntPtr.Zero)
             {
-                Console.WriteLine("Error mapping section remote " + Core.Natives.GetLastError());
                 return;
             }
 
