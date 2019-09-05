@@ -16,6 +16,7 @@ namespace RedPeanutAgent.Core
         public const uint PAGE_EXECUTE_READWRITE = 0x40;
         public const uint PAGE_READWRITE = 0x04;
         public const uint PAGE_EXECUTE_READ = 0x20;
+        public const uint PAGE_EXECUTE = 0x10;
 
         public const uint CreateSuspended = 0x00000004;
         public const uint CreateNoWindow = 0x08000000;
