@@ -233,7 +233,6 @@ namespace RedPeanutAgent.Execution
             IntPtr section = IntPtr.Zero;
             if (Natives.ZwCreateSection(ref section, Natives.GenericAll, IntPtr.Zero, ref largeinteger, protect, Natives.SecCommit, IntPtr.Zero) != 0)
             {
-                Console.WriteLine("Error mapping section remote " + Core.Natives.GetLastError());
                 return IntPtr.Zero;
             }
             return section;
@@ -245,6 +244,7 @@ namespace RedPeanutAgent.Execution
 
             if (Natives.ZwMapViewOfSection(section, hprocess, ref baseAddr, IntPtr.Zero, IntPtr.Zero, soffset, ref viewSize, 1, 0, protect) != 0)
             {
+                Console.WriteLine("Error mapping section remote " + Core.Natives.GetLastError());
                 return false;
             }
             return true;
