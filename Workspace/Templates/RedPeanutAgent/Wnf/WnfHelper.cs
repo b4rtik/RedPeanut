@@ -58,7 +58,7 @@ namespace RedPeanutAgent.Execution
                 part1.Write(stager, 0, chunksize);
                 part2.Write(stager, chunksize, chunksize);
                 part3.Write(stager, chunksize * 2, chunksize);
-                part4.Write(stager, chunksize * 3, stager.Length - (chunksize * 3));
+                part4.Write(stager, chunksize * 3, chunksize);
                 //
                 part5.Write(stager, chunksize * 4, stager.Length - (chunksize * 4));
 

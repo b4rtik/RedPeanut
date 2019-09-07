@@ -14,6 +14,10 @@ namespace RedPeanutAgent.Core
         public const uint STARTF_USESTDHANDLES = 0x00000100;
 
         public const uint PAGE_EXECUTE_READWRITE = 0x40;
+        public const uint PAGE_READWRITE = 0x04;
+        public const uint PAGE_EXECUTE_READ = 0x20;
+        public const uint PAGE_EXECUTE = 0x10;
+
         public const uint CreateSuspended = 0x00000004;
         public const uint CreateNoWindow = 0x08000000;
         public const uint SecCommit = 0x08000000;
@@ -43,7 +47,7 @@ namespace RedPeanutAgent.Core
         public const ulong PART_2 = 0x19890C35A3BC6075;
         public const ulong PART_3 = 0x19890C35A3BEC075;
         public const ulong PART_4 = 0x19890C35A3BEF875; //A3BEF875 - 19890C35 WNF_XBOX_SETTINGS_RAW_NOTIFICATION_RECEIVED
-        public const ulong PART_5 = 0x19890C35A3BDC075; //WNF_XBOX_SHELL_DATACACHE_ENTITY_CHANGED
+        public const ulong PART_5 = 0x19890c35A3BED075; //WNF_XBOX_MULTIPLAYER_RAW_NOTIFICATION_RECEIVED
         public const ulong WNF_XBOX_STORAGE_CHANGED = 0x19890C35A3BD6875;
 
         [Flags]
@@ -312,7 +316,7 @@ namespace RedPeanutAgent.Core
         public static extern int ZwCreateSection(ref IntPtr section, uint desiredAccess, IntPtr pAttrs, ref LARGE_INTEGER pMaxSize, uint pageProt, uint allocationAttribs, IntPtr hFile);
 
         [DllImport("ntdll.dll", CallingConvention = CallingConvention.StdCall, SetLastError = true)]
-        public static extern int ZwMapViewOfSection(IntPtr section, IntPtr process, ref IntPtr baseAddr, IntPtr zeroBits, IntPtr commitSize, IntPtr stuff, ref IntPtr viewSize, int inheritDispo, uint alloctype, uint prot);
+        public static extern int ZwMapViewOfSection(IntPtr section, IntPtr process, ref IntPtr baseAddr, IntPtr zeroBits, IntPtr commitSize, IntPtr stuff, ref IntPtr viewSize, int inheritDispo, uint alloctype, uint protect);
 
         [DllImport("ntdll.dll", CallingConvention = CallingConvention.StdCall)]
         public static extern int ZwUnmapViewOfSection(IntPtr hSection, IntPtr address);
@@ -416,5 +420,7 @@ namespace RedPeanutAgent.Core
         [DllImport("kernel32.dll", SetLastError = true, CallingConvention = CallingConvention.Winapi)]
         public static extern bool IsWow64Process(IntPtr hProcess, out bool wow64Process);
 
+        [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern bool VirtualProtectEx(IntPtr hProcess, IntPtr lpAddress, IntPtr dwSize, uint newprotect, out uint oldprotect);
     }
 }

