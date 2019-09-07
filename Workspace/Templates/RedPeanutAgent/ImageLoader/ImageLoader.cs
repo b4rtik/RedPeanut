@@ -20,7 +20,6 @@ namespace RedPeanutAgent.ImageLoader
     {
         public static byte[] Load(string baseurl, string rpaddress, string page, CookiedWebClient wc, string targetclass)
         {
-            Console.WriteLine("html " + page);
             List<string> imagetags = GetImagesInHTMLString(page, targetclass);
             string s = imagetags.First();
 
