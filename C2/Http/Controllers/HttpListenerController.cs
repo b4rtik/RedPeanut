@@ -458,10 +458,11 @@ namespace RedPeanut
                                 agent = CreateAgentInstance(RedPeanutC2.server, agentInstance.agentid,
                                     agentInstance.agentPivotid, RedPeanutC2.server.GetServerKey(), agentInstance.address, agentInstance.port,
                                     agentInstance.framework, Profileid, agentInstance.sessionkey, agentInstance.sessioniv);
-
+                                AgentInstanceHttp agenthttp = (AgentInstanceHttp)agent;
+                                agenthttp.Cookie = GetCookieValue("sessionid");
                                 StreamReader reader = new StreamReader(Request.Body, System.Text.Encoding.UTF8);
 
-                                return CheckIn(reader, agent);
+                                return CheckIn(reader, agenthttp);
                             }
                             else
                             {

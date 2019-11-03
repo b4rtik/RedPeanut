@@ -15,13 +15,13 @@ namespace RedPeanut
     {
         public static Dictionary<string, string> mainmenu = new Dictionary<string, string>
         {
-            { "set action", "Payload type to use" },
-            { "set query", "Injection type" },
-            { "set computername", "Process to spawn" },
-            { "set username", "Process to spawn" },
-            { "set password", "Process to spawn" },
-            { "set namespace", "Process to spawn" },
-            { "set command", "Process to spawn" },
+            { "set action", "Action to use: query, create, executevbs" },
+            { "set query", "Query text" },
+            { "set computername", "Set target computer name" },
+            { "set username", "Set username" },
+            { "set password", "Set password" },
+            { "set namespace", "Set namespace" },
+            { "set command", "Command to execute with action=create" },
             { "run", "Execute module" },
             { "options", "Print current config" },
             { "info", "Print help" },

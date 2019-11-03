@@ -26,7 +26,6 @@ namespace RedPeanut
                     .Replace("#PIPENAME#", "")
                     .Replace("#COVERED#", config.GetProfile().HtmlCovered.ToString().ToLower())
                     .Replace("#TARGETCLASS#", config.GetProfile().TargetClass)
-                    .Replace("#NUTCLR#", ReadResourceFile(PL_COMMAND_NUTCLR))
                     .Replace("#SPAWN#", config.GetProfile().Spawn)
                     .Replace("#FRAMEWORK#", targetframework.ToString())
                     .Replace("#MANAGED#", config.GetProfile().InjectionManaged.ToString());
@@ -67,7 +66,6 @@ namespace RedPeanut
                     .Replace("#PIPENAME#", config.GetPipename())
                     .Replace("#COVERED#", "false")
                     .Replace("#TARGETCLASS#", "")
-                    .Replace("#NUTCLR#", ReadResourceFile(PL_COMMAND_NUTCLR))
                     .Replace("#SPAWN#", config.GetProfile().Spawn)
                     .Replace("#FRAMEWORK#", targetframework.ToString())
                     .Replace("#MANAGED#", config.GetProfile().InjectionManaged.ToString());
@@ -174,12 +172,21 @@ namespace RedPeanut
             return page;
         }
 
-        public static string ReplaceMigrate(string src, string task, int pid)
+        public static string ReplaceMigrate(string src, string shellcode, int pid)
         {
             string source = src
-                    .Replace("#NUTCLR#", ReadResourceFile(PL_COMMAND_NUTCLR))
-                    .Replace("#TASK#", task)
+                    .Replace("#NUTCLR#", shellcode)
                     .Replace("#PID#", pid.ToString());
+
+            return source;
+        }
+
+        public static string ReplaceDonutLoader(string src, string compassembly, string type, string method)
+        {
+            string source = src
+                    .Replace("#COMPRESSEDASSEMBLY#", compassembly)
+                    .Replace("#TYPE#", type)
+                    .Replace("#METHOD#", method);
 
             return source;
         }

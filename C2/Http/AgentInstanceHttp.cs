@@ -22,6 +22,7 @@ namespace RedPeanut
         private C2Server server = null;
         private IAgentInstance pivoter = null;
         private int profileid = 0;
+        private bool managed = false;
         public string Cookie {get;set;}
 
         public AgentInstanceHttp(C2Server server,string agentid, string serverkey, string address, int port, int targetframework, int profileid, byte[] sessionkey = null, byte[] sessioniv = null)
@@ -39,6 +40,7 @@ namespace RedPeanut
                 aes.IV = sessioniv;
             }
             this.profileid = profileid;
+            Managed = false;
         }
 
         public AgentInstanceHttp(C2Server server, string agentid, string serverkey, int targetframework, IAgentInstance agent, int profileid)
@@ -50,6 +52,7 @@ namespace RedPeanut
             aes = new AesManaged();
             pivoter = agent;
             this.profileid = profileid;
+            Managed = false;
         }
 
         public int GetProfileid()
@@ -113,6 +116,18 @@ namespace RedPeanut
             get
             {
                 return aes;
+            }
+        }
+
+        public bool Managed
+        {
+            get
+            {
+                return this.managed;
+            }
+            set
+            {
+                this.managed = value;
             }
         }
 

