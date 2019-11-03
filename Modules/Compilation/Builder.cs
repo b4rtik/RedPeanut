@@ -30,13 +30,13 @@ namespace RedPeanut
 
         static Dictionary<CompilationProfile, string[]> compilationProfiles = new Dictionary<CompilationProfile, string[]>
         {
-            {CompilationProfile.Agent ,new string[]{ "NativeSysCall.cs", "Natives.cs", "Utility.cs", "Crypto.cs", "AgentInstanceNamedPipe.cs", "SmbListener.cs", "CommandExecuter.cs", "InjectionHelper.cs","InjectionLoaderListener.cs", "Spawner.cs", "ImageLoader.cs"}},
+            {CompilationProfile.Agent ,new string[]{ "CustomLoadLibrary.cs", "NativeSysCall.cs", "Natives.cs", "Utility.cs", "Crypto.cs", "AgentInstanceNamedPipe.cs", "SmbListener.cs", "CommandExecuter.cs", "InjectionHelper.cs","InjectionLoaderListener.cs", "Spawner.cs", "ImageLoader.cs"}},
             {CompilationProfile.Generic, new string[]{""}},
-            {CompilationProfile.UACBypass,new string[]{ "NativeSysCall.cs", "Natives.cs", "Crypto.cs", "Utility.cs", "ImageLoader.cs", "Spawner.cs" ,"InjectionHelper.cs", "InjectionLoaderListener.cs", "UACBypassHelper.cs","WnfHelper.cs", "Enums.cs", "Imports.cs", "Loader.cs", "Structs.cs","Tokens.cs", "Win32.cs", "Generic.cs"}},
+            {CompilationProfile.UACBypass,new string[]{ "CustomLoadLibrary.cs", "NativeSysCall.cs", "Natives.cs", "Crypto.cs", "Utility.cs", "ImageLoader.cs", "Spawner.cs" ,"InjectionHelper.cs", "InjectionLoaderListener.cs", "UACBypassHelper.cs","WnfHelper.cs", "Enums.cs", "Imports.cs", "Loader.cs", "Structs.cs","Tokens.cs", "Win32.cs", "Generic.cs"}},
             {CompilationProfile.StandardCommand,new string[]{"Tokens.cs", "Win32.cs", "Generic.cs", "Utility.cs", "Crypto.cs", "ImageLoader.cs"}},
             {CompilationProfile.Persistence,new string[]{ "Autorun.cs", "Startup.cs", "WMI.cs", "Registry.cs"}},
             {CompilationProfile.PersistenceCLR,new string[]{}},
-            {CompilationProfile.Migrate,new string[]{ "NativeSysCall.cs", "Natives.cs", "Utility.cs", "Crypto.cs", "InjectionHelper.cs","InjectionLoaderListener.cs", "Spawner.cs", "ImageLoader.cs","WnfHelper.cs"}}
+            {CompilationProfile.Migrate,new string[]{ "CustomLoadLibrary.cs", "NativeSysCall.cs", "Natives.cs", "Utility.cs", "Crypto.cs", "InjectionHelper.cs","InjectionLoaderListener.cs", "Spawner.cs", "ImageLoader.cs","WnfHelper.cs"}}
         };
 
         private static SyntaxTree Parse(string text, string filename = "", CSharpParseOptions options = null)
