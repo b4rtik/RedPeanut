@@ -29,6 +29,7 @@
     <Compile Remove="Workspace\Templates\RedPeanutAgent\C2\AgentInstanceNamedPipe.cs" />
     <Compile Remove="Workspace\Templates\RedPeanutAgent\C2\SmbListener.cs" />
     <Compile Remove="Workspace\Templates\RedPeanutAgent\Core\Crypto.cs" />
+    <Compile Remove="Workspace\Templates\RedPeanutAgent\Core\CustomLoadLibrary.cs" />
     <Compile Remove="Workspace\Templates\RedPeanutAgent\Core\Natives.cs" />
     <Compile Remove="Workspace\Templates\RedPeanutAgent\Core\NativeSysCall.cs" />
     <Compile Remove="Workspace\Templates\RedPeanutAgent\Core\Utility.cs" />
@@ -74,6 +75,7 @@
   <ItemGroup>
     <None Include="Workspace\Templates\RedPeanutAgent.cs" />
     <None Include="Workspace\Templates\RedPeanutAgent\Core\Crypto.cs" />
+    <None Include="Workspace\Templates\RedPeanutAgent\Core\CustomLoadLibrary.cs" />
     <None Include="Workspace\Templates\RedPeanutAgent\Core\Natives.cs" />
     <None Include="Workspace\Templates\RedPeanutAgent\Core\NativeSysCall.cs" />
     <None Include="Workspace\Templates\RedPeanutAgent\Core\Utility.cs" />

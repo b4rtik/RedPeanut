@@ -88,7 +88,7 @@ public class RedPeanutRP
 
                     webHeaderCollection.Add(HttpRequestHeader.UserAgent, "#USERAGENT#");
 
-# HEADERS#
+                    #HEADERS#
 
                     wc.Headers = webHeaderCollection;
 

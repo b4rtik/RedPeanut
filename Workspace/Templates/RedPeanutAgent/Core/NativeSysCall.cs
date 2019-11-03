@@ -125,8 +125,8 @@ namespace RedPeanutAgent.Core
 
                     IntPtr memoryAddress = (IntPtr)ptr;
 
-                    if (!VirtualProtectEx(Process.GetCurrentProcess().Handle, memoryAddress,
-                        (IntPtr)syscall.Length, 0x40, out uint oldprotect))
+                    if (!VirtualProtect( memoryAddress,
+                        (UIntPtr)syscall.Length, 0x40, out uint oldprotect))
                     {
                         throw new Win32Exception();
                     }
@@ -149,8 +149,8 @@ namespace RedPeanutAgent.Core
 
                     IntPtr memoryAddress = (IntPtr)ptr;
 
-                    if (!VirtualProtectEx(Process.GetCurrentProcess().Handle, memoryAddress,
-                        (IntPtr)syscall.Length, 0x40, out uint oldprotect))
+                    if (!VirtualProtect( memoryAddress,
+                        (UIntPtr)syscall.Length, 0x40, out uint oldprotect))
                     {
                         throw new Win32Exception();
                     }
@@ -173,8 +173,8 @@ namespace RedPeanutAgent.Core
 
                     IntPtr memoryAddress = (IntPtr)ptr;
 
-                    if (!VirtualProtectEx(Process.GetCurrentProcess().Handle, memoryAddress,
-                        (IntPtr)syscall.Length, 0x40, out uint oldprotect))
+                    if (!VirtualProtect( memoryAddress,
+                        (UIntPtr)syscall.Length, 0x40, out uint oldprotect))
                     {
                         throw new Win32Exception();
                     }
@@ -197,8 +197,8 @@ namespace RedPeanutAgent.Core
 
                     IntPtr memoryAddress = (IntPtr)ptr;
 
-                    if (!VirtualProtectEx(Process.GetCurrentProcess().Handle, memoryAddress,
-                        (IntPtr)syscall.Length, 0x40, out uint oldprotect))
+                    if (!VirtualProtect( memoryAddress,
+                        (UIntPtr)syscall.Length, 0x40, out uint oldprotect))
                     {
                         throw new Win32Exception();
                     }
@@ -221,8 +221,8 @@ namespace RedPeanutAgent.Core
 
                     IntPtr memoryAddress = (IntPtr)ptr;
 
-                    if (!VirtualProtectEx(Process.GetCurrentProcess().Handle, memoryAddress,
-                        (IntPtr)syscall.Length, 0x40, out uint oldprotect))
+                    if (!VirtualProtect( memoryAddress,
+                        (UIntPtr)syscall.Length, 0x40, out uint oldprotect))
                     {
                         throw new Win32Exception();
                     }
@@ -245,8 +245,8 @@ namespace RedPeanutAgent.Core
 
                     IntPtr memoryAddress = (IntPtr)ptr;
 
-                    if (!VirtualProtectEx(Process.GetCurrentProcess().Handle, memoryAddress,
-                        (IntPtr)syscall.Length, 0x40, out uint oldprotect))
+                    if (!VirtualProtect( memoryAddress,
+                        (UIntPtr)syscall.Length, 0x40, out uint oldprotect))
                     {
                         throw new Win32Exception();
                     }
@@ -269,8 +269,8 @@ namespace RedPeanutAgent.Core
 
                     IntPtr memoryAddress = (IntPtr)ptr;
 
-                    if (!VirtualProtectEx(Process.GetCurrentProcess().Handle, memoryAddress,
-                        (IntPtr)syscall.Length, 0x40, out uint oldprotect))
+                    if (!VirtualProtect( memoryAddress,
+                        (UIntPtr)syscall.Length, 0x40, out uint oldprotect))
                     {
                         throw new Win32Exception();
                     }
@@ -293,8 +293,8 @@ namespace RedPeanutAgent.Core
 
                     IntPtr memoryAddress = (IntPtr)ptr;
 
-                    if (!VirtualProtectEx(Process.GetCurrentProcess().Handle, memoryAddress,
-                        (IntPtr)syscall.Length, 0x40, out uint oldprotect))
+                    if (!VirtualProtect( memoryAddress,
+                        (UIntPtr)syscall.Length, 0x40, out uint oldprotect))
                     {
                         throw new Win32Exception();
                     }
@@ -317,8 +317,8 @@ namespace RedPeanutAgent.Core
 
                     IntPtr memoryAddress = (IntPtr)ptr;
 
-                    if (!VirtualProtectEx(Process.GetCurrentProcess().Handle, memoryAddress,
-                        (IntPtr)syscall.Length, 0x40, out uint oldprotect))
+                    if (!VirtualProtect( memoryAddress,
+                        (UIntPtr)syscall.Length, 0x40, out uint oldprotect))
                     {
                         throw new Win32Exception();
                     }
@@ -341,8 +341,8 @@ namespace RedPeanutAgent.Core
 
                     IntPtr memoryAddress = (IntPtr)ptr;
 
-                    if (!VirtualProtectEx(Process.GetCurrentProcess().Handle, memoryAddress,
-                        (IntPtr)syscall.Length, 0x40, out uint oldprotect))
+                    if (!VirtualProtect( memoryAddress,
+                        (UIntPtr)syscall.Length, 0x40, out uint oldprotect))
                     {
                         throw new Win32Exception();
                     }
@@ -365,8 +365,8 @@ namespace RedPeanutAgent.Core
 
                     IntPtr memoryAddress = (IntPtr)ptr;
 
-                    if (!VirtualProtectEx(Process.GetCurrentProcess().Handle, memoryAddress,
-                        (IntPtr)syscall.Length, 0x40, out uint oldprotect))
+                    if (!VirtualProtect( memoryAddress,
+                        (UIntPtr)syscall.Length, 0x40, out uint oldprotect))
                     {
                         throw new Win32Exception();
                     }
@@ -389,8 +389,8 @@ namespace RedPeanutAgent.Core
 
                     IntPtr memoryAddress = (IntPtr)ptr;
 
-                    if (!VirtualProtectEx(Process.GetCurrentProcess().Handle, memoryAddress,
-                        (IntPtr)syscall.Length, 0x40, out uint oldprotect))
+                    if (!VirtualProtect( memoryAddress,
+                        (UIntPtr)syscall.Length, 0x40, out uint oldprotect))
                     {
                         throw new Win32Exception();
                     }
@@ -413,8 +413,8 @@ namespace RedPeanutAgent.Core
 
                     IntPtr memoryAddress = (IntPtr)ptr;
 
-                    if (!VirtualProtectEx(Process.GetCurrentProcess().Handle, memoryAddress,
-                        (IntPtr)syscall.Length, 0x40, out uint oldprotect))
+                    if (!VirtualProtect( memoryAddress,
+                        (UIntPtr)syscall.Length, 0x40, out uint oldprotect))
                     {
                         throw new Win32Exception();
                     }
@@ -447,8 +447,8 @@ namespace RedPeanutAgent.Core
 
                     IntPtr memoryAddress = (IntPtr)ptr;
 
-                    if (!VirtualProtectEx(Process.GetCurrentProcess().Handle, memoryAddress,
-                        (IntPtr)syscall.Length, 0x40, out uint oldprotect))
+                    if (!VirtualProtect( memoryAddress,
+                        (UIntPtr)syscall.Length, 0x40, out uint oldprotect))
                     {
                         throw new Win32Exception();
                     }
@@ -643,7 +643,7 @@ namespace RedPeanutAgent.Core
 
             [SuppressUnmanagedCodeSecurity]
             [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-            public delegate bool ReadFile(IntPtr hFile, out byte[] lpBuffer, uint nNumberOfBytesToRead, out uint lpNumberOfBytesRead, IntPtr lpOverlapped);
+            public delegate bool ReadFile(IntPtr hFile, byte[] lpBuffer, uint nNumberOfBytesToRead, out uint lpNumberOfBytesRead, IntPtr lpOverlapped);
 
             [SuppressUnmanagedCodeSecurity]
             [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -692,7 +692,7 @@ namespace RedPeanutAgent.Core
             [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
             public delegate bool VirtualProtectEx(IntPtr hProcess, IntPtr lpAddress, IntPtr dwSize, uint newprotect, out uint oldprotect);
 
-
+            
         }
     }
 }
