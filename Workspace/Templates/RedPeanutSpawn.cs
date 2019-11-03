@@ -14,7 +14,6 @@ using static RedPeanutAgent.Execution.WnfHelper;
 class RedPeanutSpawn
 {
     static private string nutclr = "#NUTCLR#";
-    static private string task = "#TASK#";
     static private string shellcode = "#SHELLCODE#";
     static private string spawn = "#SPAWN#";
     static private string username = "#USERNAME#";
@@ -42,7 +41,6 @@ class RedPeanutSpawn
                 {
                     //Agent
                     Console.WriteLine("[*] Spawn Agent");
-                    WriteWnF(task);
                     result = Spawn(binarypath, nutclr, ppid);
                 }
                 else
@@ -59,7 +57,6 @@ class RedPeanutSpawn
                 {
                     //Agent
                     Console.WriteLine("[*] SpawnAs Agent");
-                    WriteWnF(task);
                     result = SpawnAs(binarypath, nutclr, domain, username, password);
                 }
                 else

