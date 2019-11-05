@@ -90,10 +90,10 @@ namespace RedPeanut
                             RunSetUnManaged();
                             return true;
                         case "blockdlls":
-                            RunSetManaged();
+                            RunSetBlockDlls();
                             return true;
                         case "unblockdlls":
-                            RunSetUnManaged();
+                            RunSetUnBlockDlls();
                             return true;
                         case "migrate":
                             RunMigrate(GetParsedSetInt("set " + inputcmd));
@@ -196,7 +196,7 @@ namespace RedPeanut
             agent.Managed = false;
         }
 
-        private void RunSetBlockDll()
+        private void RunSetBlockDlls()
         {
             TaskMsg msg = new TaskMsg
             {
@@ -215,7 +215,7 @@ namespace RedPeanut
             agent.Managed = true;
         }
 
-        private void RunSetUnBlockDll()
+        private void RunSetUnBlockDlls()
         {
             TaskMsg msg = new TaskMsg
             {
