@@ -175,7 +175,17 @@ namespace RedPeanutAgent.Execution
             SendResponse(output);
         }
 
-        public void ExecuteModuleUnManaged(bool blockdll)
+        public void ExecuteModuleUnManagedBlockDll()
+        {
+            ExecuteModuleUnManaged(true);
+        }
+
+        public void ExecuteModuleUnManaged()
+        {
+            ExecuteModuleUnManaged(false);
+        }
+
+        public void ExecuteModuleUnManaged(bool blockdlls)
         {
 
             string output = "";
@@ -188,7 +198,7 @@ namespace RedPeanutAgent.Execution
             }
 
             Core.Natives.PROCESS_INFORMATION procInfo = new Core.Natives.PROCESS_INFORMATION();
-            if (blockdll)
+            if (blockdlls)
             {
                 if (!Spawner.CreateProcess(hReadPipe, hWritePipe, this.processname, true, ref procInfo))
                 {

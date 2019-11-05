@@ -321,7 +321,7 @@ namespace RedPeanutAgent
                                         }
                                         else
                                         {
-                                            if (blockdll)
+                                            if (blockdlls)
                                             {
                                                 commandthread = new Thread(new ThreadStart(commandExecuter.ExecuteModuleUnManagedBlockDll));
                                             }
