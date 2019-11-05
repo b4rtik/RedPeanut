@@ -211,8 +211,6 @@ namespace RedPeanut
             msg.BlockDllsTask = blockDllsTask;
 
             agent.SendCommand(msg);
-
-            agent.Managed = true;
         }
 
         private void RunSetUnBlockDlls()
@@ -230,8 +228,6 @@ namespace RedPeanut
             msg.BlockDllsTask = blockDllsTask;
 
             agent.SendCommand(msg);
-
-            agent.Managed = false;
         }
 
         private void RunMigrate(int pid)
