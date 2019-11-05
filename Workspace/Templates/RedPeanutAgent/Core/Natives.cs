@@ -41,6 +41,7 @@ namespace RedPeanutAgent.Core
             TOKEN_ADJUST_SESSIONID);
 
         public const int PROC_THREAD_ATTRIBUTE_PARENT_PROCESS = 0x00020000;
+        public const int PROC_THREAD_ATTRIBUTE_MITIGATION_POLICY = 0x20007;
         public const uint SE_GROUP_INTEGRITY = 0x00000020;
 
         public const ulong PART_1 = 0x19890C35A3BEF075;
@@ -822,6 +823,13 @@ namespace RedPeanutAgent.Core
             public IntPtr MoreReserved;
         }
 
+        [StructLayout(LayoutKind.Sequential)]
+        public struct DWORD64
+        {
+            public long dwPart1;
+            public long dwPart2;
+        }
+
         [Flags]
         public enum HANDLE_FLAGS : uint
         {
@@ -1111,14 +1119,14 @@ namespace RedPeanutAgent.Core
 
         public static bool UpdateProcThreadAttribute(IntPtr lpAttributeList, uint dwFlags, IntPtr Attribute, IntPtr lpValue, IntPtr cbSize, IntPtr lpPreviousValue, IntPtr lpReturnSize)
         {
-            IntPtr proc = GetProcAddress(GetKernel32(), "UpdateProcThreadAttribute");
+            IntPtr proc = GetProcAddress(GetKernelbase(), "UpdateProcThreadAttribute");
             NativeSysCall.Delegates.UpdateProcThreadAttribute UpdateProcThreadAttribute = (NativeSysCall.Delegates.UpdateProcThreadAttribute)Marshal.GetDelegateForFunctionPointer(proc, typeof(NativeSysCall.Delegates.UpdateProcThreadAttribute));
             return UpdateProcThreadAttribute(lpAttributeList, dwFlags, Attribute, lpValue, cbSize, lpPreviousValue, lpReturnSize);
         }
 
         public static bool InitializeProcThreadAttributeList(IntPtr lpAttributeList, int dwAttributeCount, int dwFlags, ref IntPtr lpSize)
         {
-            IntPtr proc = GetProcAddress(GetKernel32(), "InitializeProcThreadAttributeList");
+            IntPtr proc = GetProcAddress(GetKernelbase(), "InitializeProcThreadAttributeList");
             NativeSysCall.Delegates.InitializeProcThreadAttributeList InitializeProcThreadAttributeList = (NativeSysCall.Delegates.InitializeProcThreadAttributeList)Marshal.GetDelegateForFunctionPointer(proc, typeof(NativeSysCall.Delegates.InitializeProcThreadAttributeList));
             return InitializeProcThreadAttributeList(lpAttributeList, dwAttributeCount, dwFlags, ref lpSize);
         }

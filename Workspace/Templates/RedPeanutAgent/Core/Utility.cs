@@ -418,6 +418,11 @@ namespace RedPeanutAgent.Core
             public bool Managed { get; set; }
         }
 
+        public class BlockDlls
+        {
+            public bool Block { get; set; }
+        }
+
         public class TaskMsg
         {
             public string Agentid { get; set; }
@@ -431,6 +436,7 @@ namespace RedPeanutAgent.Core
             public StandardConfig StandardTask { get; set; }
             public FileDownloadConfig DownloadTask { get; set; }
             public InjectionManaged InjectionManagedTask { get; set; }
+            public BlockDlls BlockDllsTask { get; set; }
         }
 
         public class ResponseMsg

