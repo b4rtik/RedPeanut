@@ -397,11 +397,11 @@ namespace RedPeanutAgent
                                     break;
                                 case "blockdlls":
                                     blockdlls = task.BlockDllsTask.Block;
-                                    Execution.CommandExecuter commandManaged = new Execution.CommandExecuter(task, this);
+                                    Execution.CommandExecuter commandBlockDlls = new Execution.CommandExecuter(task, this);
                                     if(blockdlls)
-                                        commandManaged.SendResponse("[*] Agent now block non Microsoft Dlls in child process");
+                                        commandBlockDlls.SendResponse("[*] Agent now block non Microsoft Dlls in child process");
                                     else
-                                        commandManaged.SendResponse("[*] Agent now not block non Microsoft Dlls in child process");
+                                        commandBlockDlls.SendResponse("[*] Agent now not block non Microsoft Dlls in child process");
                                     break;
                                 case "migrate":
                                     try
