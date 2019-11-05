@@ -946,28 +946,28 @@ namespace RedPeanutAgent.Core
 
         public static bool DuplicateTokenEx(IntPtr hExistingToken, uint dwDesiredAccess, ref SECURITY_ATTRIBUTES lpTokenAttributes, int ImpersonationLevel, int TokenType, ref IntPtr phNewToken)
         {
-            IntPtr proc = GetProcAddress(GetAdvapi32(), "DuplicateTokenEx");
+            IntPtr proc = GetProcAddress(GetKernelbase(), "DuplicateTokenEx");
             NativeSysCall.Delegates.DuplicateTokenEx DuplicateTokenEx = (NativeSysCall.Delegates.DuplicateTokenEx)Marshal.GetDelegateForFunctionPointer(proc, typeof(NativeSysCall.Delegates.DuplicateTokenEx));
             return DuplicateTokenEx(hExistingToken, dwDesiredAccess, ref lpTokenAttributes, ImpersonationLevel, TokenType, ref phNewToken);
         }
 
         public static bool RevertToSelf()
         {
-            IntPtr proc = GetProcAddress(GetAdvapi32(), "RevertToSelf");
+            IntPtr proc = GetProcAddress(GetKernelbase(), "RevertToSelf");
             NativeSysCall.Delegates.RevertToSelf RevertToSelf = (NativeSysCall.Delegates.RevertToSelf)Marshal.GetDelegateForFunctionPointer(proc, typeof(NativeSysCall.Delegates.RevertToSelf));
             return RevertToSelf();
         }
 
         public static bool OpenProcessToken(IntPtr ProcessHandle, uint DesiredAccess, out IntPtr TokenHandle)
         {
-            IntPtr proc = GetProcAddress(GetAdvapi32(), "OpenProcessToken");
+            IntPtr proc = GetProcAddress(GetKernelbase(), "OpenProcessToken");
             NativeSysCall.Delegates.OpenProcessToken OpenProcessToken = (NativeSysCall.Delegates.OpenProcessToken)Marshal.GetDelegateForFunctionPointer(proc, typeof(NativeSysCall.Delegates.OpenProcessToken));
             return OpenProcessToken(ProcessHandle, DesiredAccess, out TokenHandle);
         }
 
         public static Boolean ImpersonateLoggedOnUser(IntPtr hToken)
         {
-            IntPtr proc = GetProcAddress(GetAdvapi32(), "ImpersonateLoggedOnUser");
+            IntPtr proc = GetProcAddress(GetKernelbase(), "ImpersonateLoggedOnUser");
             NativeSysCall.Delegates.ImpersonateLoggedOnUser ImpersonateLoggedOnUser = (NativeSysCall.Delegates.ImpersonateLoggedOnUser)Marshal.GetDelegateForFunctionPointer(proc, typeof(NativeSysCall.Delegates.ImpersonateLoggedOnUser));
             return ImpersonateLoggedOnUser(hToken);
         }
@@ -986,7 +986,7 @@ namespace RedPeanutAgent.Core
                         out IntPtr pSid
                     )
         {
-            IntPtr proc = GetProcAddress(GetAdvapi32(), "AllocateAndInitializeSid");
+            IntPtr proc = GetProcAddress(GetKernelbase(), "AllocateAndInitializeSid");
             NativeSysCall.Delegates.AllocateAndInitializeSid AllocateAndInitializeSid = (NativeSysCall.Delegates.AllocateAndInitializeSid)Marshal.GetDelegateForFunctionPointer(proc, typeof(NativeSysCall.Delegates.AllocateAndInitializeSid));
             return AllocateAndInitializeSid(
                         ref pIdentifierAuthority,
@@ -1070,7 +1070,7 @@ namespace RedPeanutAgent.Core
 
         public static IntPtr CreateRemoteThread(IntPtr hProcess, IntPtr lpThreadAttributes, uint dwStackSize, IntPtr lpStartAddress, IntPtr lpParameter, uint dwCreationFlags, IntPtr lpThreadId)
         {
-            IntPtr proc = GetProcAddress(GetKernel32(), "CreateRemoteThread");
+            IntPtr proc = GetProcAddress(GetKernelbase(), "CreateRemoteThread");
             NativeSysCall.Delegates.CreateRemoteThread CreateRemoteThread = (NativeSysCall.Delegates.CreateRemoteThread)Marshal.GetDelegateForFunctionPointer(proc, typeof(NativeSysCall.Delegates.CreateRemoteThread));
             return CreateRemoteThread(hProcess, lpThreadAttributes, dwStackSize, lpStartAddress, lpParameter, dwCreationFlags, lpThreadId);
         }
@@ -1084,14 +1084,14 @@ namespace RedPeanutAgent.Core
 
         public static uint GetLastError()
         {
-            IntPtr proc = GetProcAddress(GetKernel32(), "GetLastError");
+            IntPtr proc = GetProcAddress(GetKernelbase(), "GetLastError");
             NativeSysCall.Delegates.GetLastError GetLastError = (NativeSysCall.Delegates.GetLastError)Marshal.GetDelegateForFunctionPointer(proc, typeof(NativeSysCall.Delegates.GetLastError));
             return GetLastError();
         }
 
         public static void GetSystemInfo(ref SYSTEM_INFO lpSysInfo)
         {
-            IntPtr proc = GetProcAddress(GetKernel32(), "GetSystemInfo");
+            IntPtr proc = GetProcAddress(GetKernelbase(), "GetSystemInfo");
             NativeSysCall.Delegates.GetSystemInfo GetSystemInfo = (NativeSysCall.Delegates.GetSystemInfo)Marshal.GetDelegateForFunctionPointer(proc, typeof(NativeSysCall.Delegates.GetSystemInfo));
             GetSystemInfo(ref lpSysInfo);
         }
@@ -1133,14 +1133,14 @@ namespace RedPeanutAgent.Core
 
         public static bool IsWow64Process(IntPtr hProcess, out bool wow64Process)
         {
-            IntPtr proc = GetProcAddress(GetKernel32(), "IsWow64Process");
+            IntPtr proc = GetProcAddress(GetKernelbase(), "IsWow64Process");
             NativeSysCall.Delegates.IsWow64Process IsWow64Process = (NativeSysCall.Delegates.IsWow64Process)Marshal.GetDelegateForFunctionPointer(proc, typeof(NativeSysCall.Delegates.IsWow64Process));
             return IsWow64Process(hProcess, out wow64Process);
         }
 
         public static void MoveMemory(IntPtr dest, IntPtr src, int size)
         {
-            IntPtr proc = GetProcAddress(GetKernel32(), "MoveMemory");
+            IntPtr proc = GetProcAddress(GetNtDll(), "MoveMemory");
             NativeSysCall.Delegates.MoveMemory MoveMemory = (NativeSysCall.Delegates.MoveMemory)Marshal.GetDelegateForFunctionPointer(proc, typeof(NativeSysCall.Delegates.MoveMemory));
             MoveMemory(dest, src, size);
         }
