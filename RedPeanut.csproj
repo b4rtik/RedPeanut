@@ -76,7 +76,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="Resources\sharpminidump.txt" />
+    <EmbeddedResource Include="Resources\sharpminidump.txt" />
   </ItemGroup>
 
   <ItemGroup>
