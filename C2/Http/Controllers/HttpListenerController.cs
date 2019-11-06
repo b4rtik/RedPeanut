@@ -250,7 +250,10 @@ namespace RedPeanut
                     if (responsemsg.Chunked)
                     {
                         if (!System.IO.File.Exists(destfolder+"."+ msg.Instanceid))
-                            System.IO.File.Create(destfolder + "." + msg.Instanceid);
+                        {
+                            FileStream f = System.IO.File.Create(destfolder + "." + msg.Instanceid);
+                            f.Close();
+                        }
 
                         if (responsemsg.Chunked && responsemsg.Number == 0)
                         {
