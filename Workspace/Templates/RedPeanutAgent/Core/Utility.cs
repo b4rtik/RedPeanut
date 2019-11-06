@@ -104,6 +104,7 @@ namespace RedPeanutAgent.Core
             wc.UseDefaultCredentials = true;
             wc.Proxy = WebRequest.DefaultWebProxy;
             wc.Proxy.Credentials = CredentialCache.DefaultNetworkCredentials;
+
             ResponseMsg respmsg = new ResponseMsg
             {
                 TaskInstanceid = taskinstance,

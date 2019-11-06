@@ -242,11 +242,12 @@ namespace RedPeanut
 
                 Console.WriteLine("\n[*] Received response from agent {0}....", agent.AgentId);
 
-                byte[] bytefile = Utility.DecompressDLL(Convert.FromBase64String(responsemsg.Data));
-                string destfolder = Path.Combine(Directory.GetCurrentDirectory(), WORKSPACE_FOLDER, DOWNLOADS_FOLDER, "downloaded_item_" + msg.DownloadTask.FileNameDest);
-
+               
                 if (msg.TaskType.Equals("download"))
                 {
+                    byte[] bytefile = Convert.FromBase64String(responsemsg.Data);
+                    string destfolder = Path.Combine(Directory.GetCurrentDirectory(), WORKSPACE_FOLDER, DOWNLOADS_FOLDER, "downloaded_item_" + msg.DownloadTask.FileNameDest);
+
                     if (responsemsg.Chunked)
                     {
                         if (!System.IO.File.Exists(destfolder+"."+ msg.Instanceid))
@@ -257,7 +258,9 @@ namespace RedPeanut
 
                         if (responsemsg.Chunked && responsemsg.Number == 0)
                         {
-                            System.IO.File.Move(destfolder + "." + msg.Instanceid, destfolder);
+                            byte[] decomp = Utility.DecompressDLL(System.IO.File.ReadAllBytes(destfolder + "." + msg.Instanceid));
+                            System.IO.File.WriteAllBytes(destfolder, decomp);
+                            System.IO.File.Delete(destfolder + "." + msg.Instanceid);
                             return Ok(CreateOkMgs(agent));
                         }
 
