@@ -39,6 +39,7 @@ namespace RedPeanut
         public const string PL_MODULE_SHARPGPOABUSE = "RedPeanut.Resources.sharpgpoabuse.txt";
         public const string PL_MODULE_SHARPPSEXEC = "RedPeanut.Resources.sharppsexec.txt";
         public const string PL_MODULE_SHARPADIDNSDUMP = "RedPeanut.Resources.sharpadidnsdump.txt";
+        public const string PL_MODULE_SHARPMINIDUMP = "RedPeanut.Resources.sharpminidump.txt";
 
         //public const string PL_COMMAND_NUTCLR = "RedPeanut.Resources.nutclr.txt";
         //public const string PL_COMMAND_NUTCLRWNF = "RedPeanut.Resources.nutclrwnf.txt";
