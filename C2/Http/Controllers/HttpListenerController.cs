@@ -222,6 +222,14 @@ namespace RedPeanut
             return msg;
         }
 
+        private void AppendAllBytes(string path, byte[] bytes)
+        {
+            using (var stream = new FileStream(path, FileMode.Append))
+            {
+                stream.Write(bytes, 0, bytes.Length);
+            }
+        }
+
         private ActionResult PostResponse(StreamReader reader, IAgentInstance agent)
         {
             ResponseMsg responsemsg = null;
@@ -250,11 +258,7 @@ namespace RedPeanut
                             return Ok(CreateOkMgs(agent));
                         }
 
-                        byte[] byteex = System.IO.File.ReadAllBytes(destfolder + "." + msg.Instanceid);
-                        byte[] bytedest = new byte[byteex.Length + bytefile.Length];
-                        Array.Copy(byteex, bytedest, byteex.Length);
-                        Array.Copy(bytefile, 0,bytedest, byteex.Length, bytefile.Length);
-                        System.IO.File.WriteAllBytes(destfolder + "." + msg.Instanceid, bytedest);
+                        AppendAllBytes(destfolder + "." + msg.Instanceid, bytefile);
                     }
                     else
                     {
