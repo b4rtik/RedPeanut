@@ -86,7 +86,7 @@ namespace RedPeanut
                             Program.GetMenuStack().Push(sharpwebm);
                             exit = true;
                             break;
-                        case "sharpminindump":
+                        case "sharpminidump":
                             minidumpm = new SharpMiniDumpManager(agent);
                             Program.GetMenuStack().Push(minidumpm);
                             exit = true;
