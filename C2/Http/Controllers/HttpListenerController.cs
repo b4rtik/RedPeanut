@@ -259,6 +259,7 @@ namespace RedPeanut
                         }
 
                         AppendAllBytes(destfolder + "." + msg.Instanceid, bytefile);
+                        return Ok(CreateOkMgs(agent));
                     }
                     else
                     {
@@ -267,11 +268,6 @@ namespace RedPeanut
                         Program.GetMenuStack().Peek().RePrintCLI();
                         return Ok(CreateOkMgs(agent));
                     }
-                    
-                    System.IO.File.WriteAllBytes(destfolder, bytefile);
-                    Console.WriteLine("[*] File {0} downloaded", destfolder);
-                    Program.GetMenuStack().Peek().RePrintCLI();
-                    return Ok(CreateOkMgs(agent));
                 }
                 else
                 {
