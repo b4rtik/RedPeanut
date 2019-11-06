@@ -68,10 +68,15 @@
     <None Remove="Resources\sharpcom.txt" />
     <None Remove="Resources\sharpdpapi.txt" />
     <None Remove="Resources\sharpgpoabuse.txt" />
+    <None Remove="Resources\sharpminidump.txt" />
     <None Remove="Resources\sharppsexec.txt" />
     <None Remove="Resources\sharpup.txt" />
     <None Remove="Resources\sharpweb.txt" />
     <None Remove="Resources\sharpwmi.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Resources\sharpminidump.txt" />
   </ItemGroup>
 
   <ItemGroup>
