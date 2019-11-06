@@ -233,10 +233,37 @@ namespace RedPeanut
                 TaskMsg msg = RedPeanutC2.server.GetTaskResponse(responsemsg.TaskInstanceid);
 
                 Console.WriteLine("\n[*] Received response from agent {0}....", agent.AgentId);
+
+                byte[] bytefile = Utility.DecompressDLL(Convert.FromBase64String(responsemsg.Data));
+                string destfolder = Path.Combine(Directory.GetCurrentDirectory(), WORKSPACE_FOLDER, DOWNLOADS_FOLDER, "downloaded_item_" + msg.DownloadTask.FileNameDest);
+
                 if (msg.TaskType.Equals("download"))
                 {
-                    byte[] bytefile = Utility.DecompressDLL(Convert.FromBase64String(responsemsg.Data));
-                    string destfolder = Path.Combine(Directory.GetCurrentDirectory(), WORKSPACE_FOLDER, DOWNLOADS_FOLDER, "downloaded_item_" + msg.DownloadTask.FileNameDest);
+                    if (responsemsg.Chunked)
+                    {
+                        if (!System.IO.File.Exists(destfolder+"."+ msg.Instanceid))
+                            System.IO.File.Create(destfolder + "." + msg.Instanceid);
+
+                        if (responsemsg.Chunked && responsemsg.Number == 0)
+                        {
+                            System.IO.File.Move(destfolder + "." + msg.Instanceid, destfolder);
+                            return Ok(CreateOkMgs(agent));
+                        }
+
+                        byte[] byteex = System.IO.File.ReadAllBytes(destfolder + "." + msg.Instanceid);
+                        byte[] bytedest = new byte[byteex.Length + bytefile.Length];
+                        Array.Copy(byteex, bytedest, byteex.Length);
+                        Array.Copy(bytefile, 0,bytedest, byteex.Length, bytefile.Length);
+                        System.IO.File.WriteAllBytes(destfolder + "." + msg.Instanceid, bytedest);
+                    }
+                    else
+                    {
+                        System.IO.File.WriteAllBytes(destfolder, bytefile);
+                        Console.WriteLine("[*] File {0} downloaded", destfolder);
+                        Program.GetMenuStack().Peek().RePrintCLI();
+                        return Ok(CreateOkMgs(agent));
+                    }
+                    
                     System.IO.File.WriteAllBytes(destfolder, bytefile);
                     Console.WriteLine("[*] File {0} downloaded", destfolder);
                     Program.GetMenuStack().Peek().RePrintCLI();
