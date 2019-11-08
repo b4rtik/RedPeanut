@@ -8,7 +8,7 @@ ooooooo___ooooooo_oo___oo_oooooo___ooooooo_oo___oo_oo____o_oo____o__oo____
 oo____oo__oo______oo___oo_oo_______oo______oo___oo_oo____o_ooo___o__oo__o_
 oo_____oo__ooooo___oooooo_oo________ooooo___oooo_o_oo____o_oo_ooo____ooo__
 __________________________________________________________________________
-________________________________________________RedPeanut_v0.2.3___@b4rtik
+________________________________________________RedPeanut_v0.3.0___@b4rtik
 __________________________________________________________________________
 ```
 - - - -
@@ -22,7 +22,7 @@ process -> spawnasshellcode
 - - - -
 
 RedPeanut is a small RAT developed in .Net Core 2 and its agent in .Net 3.5 / 4.0. RedPeanut 
-code execution is based on shellcode generated with [Donut](https://github.com/TheWover/donut). It is therefore a hybrid, although developed in .Net it 
+code execution is based on shellcode generated with [DonutCS](https://github.com/n1xbyte/donutCS). It is therefore a hybrid, although developed in .Net it 
 does not rely solely on the Assembly.Load. This increases the detection surface, but allows us 
 to practice and experiment with various evasion techniques related to the dotnet environment, process 
 management and injection. This behavior can be changed at rutime with the "managed" and "unmanaged" commands.
@@ -51,12 +51,9 @@ AV response to detection or error during execution make you lose the whole
 agent. The execution flow is as follow:
 
 1. Process creation
-2. Inject static shellcode generated with Donut
-3. The loader retrieves the stager via namedpipe in GZip base64 encoded format (for all tasks except "lateralmsbuild")
-4. The loader loads and executes the stager
+2. Inject static shellcode generated with DonutCS
+4. The loader loads and executes the stager on module
 
-For the "lateralmsbuild" task the loader retrieves the stager via the Windows Notification Facility
-(this limits the scope of application).
 The agent currently only supports https channel.
 
 
@@ -195,6 +192,7 @@ with AMSI bypass, Logging bypass and PowerView already loaded.
 * SpawnAsAgent
 * SpawnShellcode
 * SpawnAsShellcode
+* SpawnMiniDump
 
 
 ## Persistence
@@ -204,7 +202,23 @@ with AMSI bypass, Logging bypass and PowerView already loaded.
 * WMI
 * CRL
 
+## BlockDlls
 
+Starting with version 0.3.0 RedPeanutAgent supports the blockdlls command. With this option 
+enabled, child processes that are created to perform tasks in unmanaged mode are created with 
+the attribute PROCESS_CREATION_MITIGATION_POLICY_BLOCK_NON_MICROSOFT_BINARIES_ALWAYS_ON.
+This attribute prevents the process of loading dlls that are not signed by Microsoft, this 
+could protect our tasks from AV and EDR hooking techniques.
+
+## Direct Sysstem Call and Dynamic Dll Loading
+
+RedPeanutAgent uses Dynamic Dll loading to avoiding using of suspicious Dll Imports.
+Credits for Dynamic Dll Loading goes to [@TheRealWover](https://twitter.com/TheRealWover), [@cobbr_io](https://twitter.com/cobbr_io) and [@FuzzySec](https://twitter.com/FuzzySec) 
+for their work in [SharpSploit](https://github.com/cobbr/SharpSploit/tree/master/SharpSploit/Execution/DynamicInvoke).
+
+Some AV and EDR vendors used hooking technique to keep track of activities. To avoid using hooked 
+syscall RedPeanutAgent uses direct syscall, auto injecting the necessary code.
+Credits for Direct Syscall goes to [@Cneelis](https://github.com/outflanknl/Dumpert)
 
 ## Running
 
@@ -349,6 +363,7 @@ and encoded in Base64 with the ps RastaMouse's script [Get-CompressedShellcode.p
 ## Credits
 
 * Donut - [@TheRealWover](https://twitter.com/TheRealWover)
+* DonutCS - [@n1xbyte](https://github.com/n1xbyte/donutCS)
 * SharpSploit - [@cobbr_io](https://twitter.com/cobbr_io)
 * GhostPack - [@harmj0y](https://twitter.com/harmj0y)
 * SharpCOM - [@rvrsh3ll](https://twitter.com/424f424f)
