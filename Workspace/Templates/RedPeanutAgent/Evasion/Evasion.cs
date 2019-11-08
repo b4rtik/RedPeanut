@@ -12,7 +12,7 @@ using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace RedPeanutAgent.Core
+namespace RedPeanutAgent.Evasion
 {
     public class Evasion
     {
