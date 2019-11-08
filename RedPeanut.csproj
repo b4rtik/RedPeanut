@@ -35,6 +35,7 @@
     <Compile Remove="Workspace\Templates\RedPeanutAgent\Core\Natives.cs" />
     <Compile Remove="Workspace\Templates\RedPeanutAgent\Core\NativeSysCall.cs" />
     <Compile Remove="Workspace\Templates\RedPeanutAgent\Core\Utility.cs" />
+    <Compile Remove="Workspace\Templates\RedPeanutAgent\Evasion\Evasion.cs" />
     <Compile Remove="Workspace\Templates\RedPeanutAgent\Execution\CommandExecuter.cs" />
     <Compile Remove="Workspace\Templates\RedPeanutAgent\Execution\InjectionHelper.cs" />
     <Compile Remove="Workspace\Templates\RedPeanutAgent\Execution\InjectionLoaderListener.cs" />
@@ -86,6 +87,7 @@
     <None Include="Workspace\Templates\RedPeanutAgent\Core\Natives.cs" />
     <None Include="Workspace\Templates\RedPeanutAgent\Core\NativeSysCall.cs" />
     <None Include="Workspace\Templates\RedPeanutAgent\Core\Utility.cs" />
+    <None Include="Workspace\Templates\RedPeanutAgent\Evasion\Evasion.cs" />
     <None Include="Workspace\Templates\RedPeanutAgent\Execution\CommandExecuter.cs" />
     <None Include="Workspace\Templates\RedPeanutAgent\Execution\InjectionHelper.cs" />
     <None Include="Workspace\Templates\RedPeanutAgent\Execution\InjectionLoaderListener.cs" />
