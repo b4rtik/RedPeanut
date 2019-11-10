@@ -47,12 +47,13 @@ RedPeanut is weaponized with:
 The RedPeanut agent can be compiled in .Net 3.5 and 4.0 and has pivoting capabilities via
 NamedPipe. 
 The agent, when executed in an unmanaged mode, performs its own critical tasks in a separate process to prevent the
-AV response to detection or error during execution make you lose the whole
-agent. The execution flow is as follow:
+AV response to detection or error during execution make you lose the whole agent. 
+
+The execution flow is as follow:
 
 1. Process creation
 2. Inject static shellcode generated with DonutCS
-4. The loader loads and executes the stager on module
+4. The loader loads and executes the stager or module
 
 The agent currently only supports https channel.
 
@@ -107,7 +108,7 @@ The properties that can be set are:
 * _Http Post_
   * ApiPath (comma separated list of url es /news-list.jsp,/antani.php etc.)
   * Param (the name of the post request payload parameter)
-  * Mask (format for interpreting the key value pair eg {0}={1}) !!!!!!!!!!
+  * Mask (format for interpreting the key value pair eg {0}={1}) (need more work...)
   * _Server_
     * Prepend
     * Append
@@ -192,7 +193,7 @@ with AMSI bypass, Logging bypass and PowerView already loaded.
 * SpawnAsAgent
 * SpawnShellcode
 * SpawnAsShellcode
-* SpawnMiniDump
+* SharpMiniDump
 
 
 ## Persistence
@@ -278,57 +279,20 @@ ooooooo___ooooooo_oo___oo_oooooo___ooooooo_oo___oo_oo____o_oo____o__oo____
 oo____oo__oo______oo___oo_oo_______oo______oo___oo_oo____o_ooo___o__oo__o_
 oo_____oo__ooooo___oooooo_oo________ooooo___oooo_o_oo____o_oo_ooo____ooo__
 __________________________________________________________________________
-________________________________________________RedPeanut_v0.2.3___@b4rtik
+________________________________________________RedPeanut_v0.3.0___@b4rtik
 __________________________________________________________________________
 
 [*] No profile avalilable, creating new one...
 [RP] >
 ```
 
-## Donut static Shellcode to dynamic assembly execution 
+## Shellcode generator 
 
-Donut is a shellcode generation tool that creates position-independant shellcode payloads from .NET Assemblies. 
+[DonutCS](https://github.com/n1xbyte/donutCS) is a shellcode generation tool that creates position-independant shellcode payloads from .NET Assemblies. 
 This shellcode may be used to inject the Assembly into arbitrary Windows processes. 
 Given an arbitrary .NET Assembly, parameters, and an entry point (such as Program.Main), 
 it produces position-independent shellcode that loads it from memory. 
 The .NET Assembly can either be staged from a URL or stageless by being embedded directly in the shellcode. 
-
-Donut produces a shellcode with the embedded target assembly. This introduces a certain rigidity. While waiting for a shellcode generator to be used with .Net Core 2, I have created two possible solutions in this [repository](https://github.com/b4rtik/DonutSupport) :
-1. Recover the assembly from the calling process via NamedPipe [InjectionLoader](https://github.com/b4rtik/DonutSupport)
-2. Retrieve the assembly from the calling process using Wnf [InjectionLoaderWnf](https://github.com/b4rtik/DonutSupport)
-
-
-```
-PS Z:\donut> .\donut.exe -donut -f Z:\DonutSupport\InjectionLoaderWnf\bin\x64\Release\InjectionLoaderWnf.dll -a 2 -c InjectionLoaderWnf -m LoadRP
-
-  [ Donut .NET shellcode generator v0.9
-  [ Copyright (c) 2019 TheWover, Odzhan
-
-  [ Instance Type : PIC
-  [ .NET Assembly : "Z:\DonutSupport\InjectionLoaderWnf\bin\x64\Release\InjectionLoaderWnf.dll"
-  [ Assembly Type : DLL
-  [ Class         : InjectionLoaderWnf
-  [ Method        : LoadRP
-  [ Target CPU    : AMD64
-  [ Shellcode     : "payload.bin"
-
-PS Z:\donut>  Get-CompressedShellcode Z:\donut\payload.bin Z:\RedPeanut\Resources\nutclrwnf.txt
-PS Z:\donut> .\donut.exe -donut -f Z:\DonutSupport\InjectionLoader\bin\x64\Release\InjectionLoader.dll -a 2 -c InjectionLoader -m LoadRP
-
-  [ Donut .NET shellcode generator v0.9
-  [ Copyright (c) 2019 TheWover, Odzhan
-
-  [ Instance Type : PIC
-  [ .NET Assembly : "Z:\DonutSupport\InjectionLoader\bin\x64\Release\InjectionLoader.dll"
-  [ Assembly Type : DLL
-  [ Class         : InjectionLoader
-  [ Method        : LoadRP
-  [ Target CPU    : AMD64
-  [ Shellcode     : "payload.bin"
-
-PS Z:\donut> Get-CompressedShellcode Z:\donut\payload.bin Z:\RedPeanut\Resources\nutclr.txt
-PS Z:\donut>
-```
 
 
 ## CLR Persistence
