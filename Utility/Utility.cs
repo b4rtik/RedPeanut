@@ -39,9 +39,10 @@ namespace RedPeanut
         public const string PL_MODULE_SHARPGPOABUSE = "RedPeanut.Resources.sharpgpoabuse.txt";
         public const string PL_MODULE_SHARPPSEXEC = "RedPeanut.Resources.sharppsexec.txt";
         public const string PL_MODULE_SHARPADIDNSDUMP = "RedPeanut.Resources.sharpadidnsdump.txt";
+        public const string PL_MODULE_SHARPMINIDUMP = "RedPeanut.Resources.sharpminidump.txt";
 
-        public const string PL_COMMAND_NUTCLR = "RedPeanut.Resources.nutclr.txt";
-        public const string PL_COMMAND_NUTCLRWNF = "RedPeanut.Resources.nutclrwnf.txt";
+        //public const string PL_COMMAND_NUTCLR = "RedPeanut.Resources.nutclr.txt";
+        //public const string PL_COMMAND_NUTCLRWNF = "RedPeanut.Resources.nutclrwnf.txt";
 
         public const string SERVERKEY_FILE = "serverkey.json";
         public const string STAGER_TEMPLATE = "RedPeanutRP.cs";
@@ -465,6 +466,12 @@ namespace RedPeanut
                         Parameters = args.ToArray<string>()
                     };
 
+                    if (agent.Managed)
+                        modconfig.Assembly = assembly;
+                    else
+                        modconfig.Assembly = Convert.ToBase64String(CompressGZipAssembly(Builder.GenerateShellcode(
+                             assembly, RandomAString(10, new Random()) + ".exe", type, method, args)));
+
                     TaskMsg task = new TaskMsg
                     {
                         TaskType = "module",
@@ -497,6 +504,12 @@ namespace RedPeanut
                     Moduleclass = type,
                     Parameters = args
                 };
+
+                if (agent.Managed)
+                    modconfig.Assembly = ReadResourceFile(resname);
+                else
+                    modconfig.Assembly = Convert.ToBase64String(CompressGZipAssembly(Builder.GenerateShellcode(
+                         ReadResourceFile(resname), RandomAString(10, new Random()) + ".exe", type, "Execute", args)));
 
                 TaskMsg task = new TaskMsg
                 {
@@ -734,6 +747,15 @@ namespace RedPeanut
             AutoCompletionHandler autoc = new AutoCompletionHandler();
             autoc.menu = menu;
             ReadLine.AutoCompletionHandler = autoc;
+        }
+
+        public static IEnumerable<string> Split(string str, double chunkSize)
+        {
+            return Enumerable.Range(0, (int)Math.Ceiling(str.Length / chunkSize))
+               .Select(i => new string(str
+                   .Skip(i * (int)chunkSize)
+                   .Take((int)chunkSize)
+                   .ToArray()));
         }
     }
 }

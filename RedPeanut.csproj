@@ -7,7 +7,19 @@
     <Version>0.2.6</Version>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <NoWarn>1701;1702;0618;</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <Optimize>true</Optimize>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <NoWarn>1701;1702;0618;</NoWarn>
+  </PropertyGroup>
+
   <ItemGroup>
+    <Compile Remove="Workspace\Templates\DonutLoader.cs" />
     <Compile Remove="Workspace\Templates\FileDownLoader.cs" />
     <Compile Remove="Workspace\Templates\FileUpLoader.cs" />
     <Compile Remove="Workspace\Templates\PersAutorun.cs" />
@@ -19,8 +31,11 @@
     <Compile Remove="Workspace\Templates\RedPeanutAgent\C2\AgentInstanceNamedPipe.cs" />
     <Compile Remove="Workspace\Templates\RedPeanutAgent\C2\SmbListener.cs" />
     <Compile Remove="Workspace\Templates\RedPeanutAgent\Core\Crypto.cs" />
+    <Compile Remove="Workspace\Templates\RedPeanutAgent\Core\CustomLoadLibrary.cs" />
     <Compile Remove="Workspace\Templates\RedPeanutAgent\Core\Natives.cs" />
+    <Compile Remove="Workspace\Templates\RedPeanutAgent\Core\NativeSysCall.cs" />
     <Compile Remove="Workspace\Templates\RedPeanutAgent\Core\Utility.cs" />
+    <Compile Remove="Workspace\Templates\RedPeanutAgent\Evasion\Evasion.cs" />
     <Compile Remove="Workspace\Templates\RedPeanutAgent\Execution\CommandExecuter.cs" />
     <Compile Remove="Workspace\Templates\RedPeanutAgent\Execution\InjectionHelper.cs" />
     <Compile Remove="Workspace\Templates\RedPeanutAgent\Execution\InjectionLoaderListener.cs" />
@@ -47,8 +62,6 @@
     <None Remove="Resources\delegate-post.txt" />
     <None Remove="Resources\delegate-pre-35.txt" />
     <None Remove="Resources\delegate-pre.txt" />
-    <None Remove="Resources\nutclr.txt" />
-    <None Remove="Resources\nutclrwnf.txt" />
     <None Remove="Resources\rubeus.txt" />
     <None Remove="Resources\safetykatz.txt" />
     <None Remove="Resources\seatbelt.txt" />
@@ -56,6 +69,7 @@
     <None Remove="Resources\sharpcom.txt" />
     <None Remove="Resources\sharpdpapi.txt" />
     <None Remove="Resources\sharpgpoabuse.txt" />
+    <None Remove="Resources\sharpminidump.txt" />
     <None Remove="Resources\sharppsexec.txt" />
     <None Remove="Resources\sharpup.txt" />
     <None Remove="Resources\sharpweb.txt" />
@@ -63,12 +77,28 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Resources\sharpminidump.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Workspace\Templates\RedPeanutAgent.cs" />
+    <None Include="Workspace\Templates\RedPeanutAgent\Core\Crypto.cs" />
+    <None Include="Workspace\Templates\RedPeanutAgent\Core\CustomLoadLibrary.cs" />
+    <None Include="Workspace\Templates\RedPeanutAgent\Core\Natives.cs" />
+    <None Include="Workspace\Templates\RedPeanutAgent\Core\NativeSysCall.cs" />
+    <None Include="Workspace\Templates\RedPeanutAgent\Core\Utility.cs" />
+    <None Include="Workspace\Templates\RedPeanutAgent\Evasion\Evasion.cs" />
+    <None Include="Workspace\Templates\RedPeanutAgent\Execution\CommandExecuter.cs" />
+    <None Include="Workspace\Templates\RedPeanutAgent\Execution\InjectionHelper.cs" />
+    <None Include="Workspace\Templates\RedPeanutAgent\Execution\InjectionLoaderListener.cs" />
+    <None Include="Workspace\Templates\RedPeanutAgent\Execution\Spawner.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Include="Resources\delegate-post-35.txt" />
     <EmbeddedResource Include="Resources\delegate-pre-35.txt" />
-    <EmbeddedResource Include="Resources\nutclr.txt" />
     <EmbeddedResource Include="Resources\delegate-post.txt" />
     <EmbeddedResource Include="Resources\delegate-pre.txt" />
-    <EmbeddedResource Include="Resources\nutclrwnf.txt" />
     <EmbeddedResource Include="Resources\rubeus.txt" />
     <EmbeddedResource Include="Resources\safetykatz.txt" />
     <EmbeddedResource Include="Resources\seatbelt.txt" />
@@ -83,6 +113,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="CommandLineParser" Version="2.6.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.11" />
@@ -93,6 +124,7 @@
     <PackageReference Include="Microsoft.Rest.ClientRuntime" Version="2.3.10" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
     <PackageReference Include="OpenMcdf" Version="2.2.1.3" />
+    <PackageReference Include="PeNet" Version="1.1.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="1.1.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="1.1.0" />
     <PackageReference Include="System.Drawing.Common" Version="4.5.1" />
@@ -110,6 +142,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Workspace\Templates\DonutLoader.cs" />
     <None Include="Workspace\Templates\FileDownLoader.cs" />
     <None Include="Workspace\Templates\FileUpLoader.cs" />
     <None Include="Workspace\Templates\PersAutorun.cs" />
@@ -117,16 +150,8 @@
     <None Include="Workspace\Templates\PersStartup.cs" />
     <None Include="Workspace\Templates\PersWMI.cs" />
     <None Include="Workspace\Templates\PowerShellExecuter.cs" />
-    <None Include="Workspace\Templates\RedPeanutAgent.cs" />
     <None Include="Workspace\Templates\RedPeanutAgent\C2\AgentInstanceNamedPipe.cs" />
     <None Include="Workspace\Templates\RedPeanutAgent\C2\SmbListener.cs" />
-    <None Include="Workspace\Templates\RedPeanutAgent\Core\Crypto.cs" />
-    <None Include="Workspace\Templates\RedPeanutAgent\Core\Natives.cs" />
-    <None Include="Workspace\Templates\RedPeanutAgent\Core\Utility.cs" />
-    <None Include="Workspace\Templates\RedPeanutAgent\Execution\CommandExecuter.cs" />
-    <None Include="Workspace\Templates\RedPeanutAgent\Execution\InjectionHelper.cs" />
-    <None Include="Workspace\Templates\RedPeanutAgent\Execution\InjectionLoaderListener.cs" />
-    <None Include="Workspace\Templates\RedPeanutAgent\Execution\Spawner.cs" />
     <None Include="Workspace\Templates\RedPeanutAgent\ImageLoader\ImageLoader.cs" />
     <None Include="Workspace\Templates\RedPeanutAgent\UAC\UACBypassHelper.cs" />
     <None Include="Workspace\Templates\RedPeanutAgent\Wnf\WnfHelper.cs" />

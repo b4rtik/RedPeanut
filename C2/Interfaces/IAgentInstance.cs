@@ -17,6 +17,7 @@ namespace RedPeanut
         Models.SystemInfo SysInfo { get; set; }
         int TargetFramework { get; }
         IAgentInstance Pivoter { get; set; }
+        bool Managed { get; set; }
         // Manage agentid request
         void Run();
 
