@@ -826,8 +826,8 @@ namespace RedPeanutAgent.Core
         [StructLayout(LayoutKind.Sequential)]
         public struct DWORD64
         {
-            public long dwPart1;
-            public long dwPart2;
+            public uint dwPart1;
+            public uint dwPart2;
         }
 
         [Flags]

@@ -200,14 +200,14 @@ namespace RedPeanutAgent.Execution
             Core.Natives.PROCESS_INFORMATION procInfo = new Core.Natives.PROCESS_INFORMATION();
             if (blockdlls)
             {
-                if (!Spawner.CreateProcess(hReadPipe, hWritePipe, this.processname, true, ref procInfo))
+                if (!Spawner.CreateProcessPCMPBNMBSAO(hReadPipe, hWritePipe, this.processname, true, ref procInfo))
                 {
                     return;
                 }
             }
             else
             {
-                if (!Spawner.CreateProcessPCMPBNMBSAO(hReadPipe, hWritePipe, this.processname, true, ref procInfo))
+                if (!Spawner.CreateProcess(hReadPipe, hWritePipe, this.processname, true, ref procInfo))
                 {
                     return;
                 }
