@@ -34,7 +34,7 @@ namespace RedPeanut
             {CompilationProfile.StandardCommand,new string[]{"Tokens.cs", "Win32.cs", "Generic.cs", "Utility.cs", "Crypto.cs", "ImageLoader.cs"}},
             {CompilationProfile.Persistence,new string[]{ "Autorun.cs", "Startup.cs", "WMI.cs", "Registry.cs"}},
             {CompilationProfile.PersistenceCLR,new string[]{}},
-            {CompilationProfile.Migrate,new string[]{ "CustomLoadLibrary.cs", "NativeSysCall.cs", "Natives.cs", "Utility.cs", "Crypto.cs", "InjectionHelper.cs","InjectionLoaderListener.cs", "Spawner.cs", "ImageLoader.cs","WnfHelper.cs"}}
+            {CompilationProfile.Migrate,new string[]{ "Evasion.cs","CustomLoadLibrary.cs", "NativeSysCall.cs", "Natives.cs", "Utility.cs", "Crypto.cs", "InjectionHelper.cs","InjectionLoaderListener.cs", "Spawner.cs", "ImageLoader.cs","WnfHelper.cs"}}
         };
 
         private static SyntaxTree Parse(string text, string filename = "", CSharpParseOptions options = null)
