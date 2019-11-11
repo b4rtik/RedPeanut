@@ -39,7 +39,7 @@ namespace donutCS
             //int ret = Generator.Donut_Create(ref config, outfile);
 
             // Write Result
-            Console.WriteLine(@"Failed to generqte shellcode\n");
+            Console.WriteLine(@"Failed to generate shellcode\n");
             if (outputbyte == null)
             {
                 Marshal.FreeHGlobal(config.pic);
