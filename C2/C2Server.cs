@@ -449,7 +449,7 @@ namespace RedPeanut
 
                     if (availableprofile.Count == 0)
                     {
-                        Console.WriteLine("[*] No profile avalilable, creating new one...");
+                        Console.WriteLine("[*] No profile available, creating new one...");
 
                         var profile = new HttpProfile
                         {
