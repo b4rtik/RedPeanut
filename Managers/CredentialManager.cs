@@ -18,6 +18,7 @@ namespace RedPeanut
             { "sharpweb", "SharpWeb" },
             { "sharpminidump", "SharpMiniDump" },
             { "rubeus", "Rubeus" },
+            { "sharpkatz", "Sharpkatz" },
             { "list", "List module" },
             { "back", "Back to main menu" }
         };
@@ -33,6 +34,7 @@ namespace RedPeanut
         SharpWebManager sharpwebm;
         RubeusManager rubeusm;
         SharpMiniDumpManager minidumpm;
+        SharpkatzManager sharpkatz;
 
         IAgentInstance agent = null;
 
@@ -94,6 +96,11 @@ namespace RedPeanut
                         case "rubeus":
                             rubeusm = new RubeusManager(agent);
                             Program.GetMenuStack().Push(rubeusm);
+                            exit = true;
+                            break;
+                        case "sharpkatz":
+                            sharpkatz = new SharpkatzManager(agent);
+                            Program.GetMenuStack().Push(sharpkatz);
                             exit = true;
                             break;
                         case "list":
