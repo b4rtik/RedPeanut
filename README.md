@@ -194,6 +194,7 @@ with AMSI bypass, Logging bypass and PowerView already loaded.
 * SpawnShellcode
 * SpawnAsShellcode
 * SharpMiniDump
+* SharpKatz
 
 
 ## Persistence
