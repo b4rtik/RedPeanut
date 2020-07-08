@@ -149,7 +149,7 @@ namespace RedPeanut
                         }
                         if (!string.IsNullOrEmpty(domaincontroller))
                         {
-                            args.Add("--Domaincontroller " + domaincontroller);
+                            args.Add("--DomainController " + domaincontroller);
                         }
                         if (!string.IsNullOrEmpty(altservice))
                         {
