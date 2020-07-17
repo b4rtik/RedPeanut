@@ -40,7 +40,8 @@ namespace RedPeanut
                 aes.IV = sessioniv;
             }
             this.profileid = profileid;
-            Managed = false;
+            HttpProfile profile = Program.GetC2Manager().GetC2Server().GetProfile(profileid);
+            Managed = profile.InjectionManaged;
         }
 
         public AgentInstanceHttp(C2Server server, string agentid, string serverkey, int targetframework, IAgentInstance agent, int profileid)
@@ -52,7 +53,8 @@ namespace RedPeanut
             aes = new AesManaged();
             pivoter = agent;
             this.profileid = profileid;
-            Managed = false;
+            HttpProfile profile = Program.GetC2Manager().GetC2Server().GetProfile(profileid);
+            Managed = profile.InjectionManaged;
         }
 
         public int GetProfileid()

