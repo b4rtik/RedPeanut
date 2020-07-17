@@ -30,7 +30,7 @@ namespace RedPeanut
         {
             {CompilationProfile.Agent ,new string[]{ "Evasion.cs", "CustomLoadLibrary.cs", "NativeSysCall.cs", "Natives.cs", "Utility.cs", "Crypto.cs", "AgentInstanceNamedPipe.cs", "SmbListener.cs", "CommandExecuter.cs", "InjectionHelper.cs","InjectionLoaderListener.cs", "Spawner.cs", "ImageLoader.cs"}},
             {CompilationProfile.Generic, new string[]{ "Evasion.cs", "CustomLoadLibrary.cs", "NativeSysCall.cs", "Natives.cs"}},
-            {CompilationProfile.UACBypass,new string[]{ "CustomLoadLibrary.cs", "NativeSysCall.cs", "Natives.cs", "Crypto.cs", "Utility.cs", "ImageLoader.cs", "Spawner.cs" ,"InjectionHelper.cs", "InjectionLoaderListener.cs", "UACBypassHelper.cs","WnfHelper.cs", "Enums.cs", "Imports.cs", "Loader.cs", "Structs.cs","Tokens.cs", "Win32.cs", "Generic.cs"}},
+            {CompilationProfile.UACBypass,new string[]{ "CustomLoadLibrary.cs", "NativeSysCall.cs", "Natives.cs", "Crypto.cs", "Utility.cs", "ImageLoader.cs", "Spawner.cs" ,"InjectionHelper.cs", "InjectionLoaderListener.cs", "UACBypassHelper.cs","WnfHelper.cs", "Enums.cs", "Imports.cs", "Loader.cs", "Structs.cs","Tokens.cs", "Win32.cs", "Generic.cs","Native.cs","PE.cs","Map.cs","Overload.cs","Misc.cs","Utilities.cs"}},
             {CompilationProfile.StandardCommand,new string[]{"Tokens.cs", "Win32.cs", "Generic.cs", "Utility.cs", "Crypto.cs", "ImageLoader.cs"}},
             {CompilationProfile.Persistence,new string[]{ "Autorun.cs", "Startup.cs", "WMI.cs", "Registry.cs"}},
             {CompilationProfile.PersistenceCLR,new string[]{}},
