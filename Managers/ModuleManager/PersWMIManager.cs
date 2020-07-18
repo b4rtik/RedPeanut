@@ -174,7 +174,7 @@ namespace RedPeanut
                     RunAssemblyBase64(
                         Convert.ToBase64String(
                             CompressGZipAssembly(
-                                Builder.BuidStreamAssembly(perssrc, RandomAString(10, new Random()).ToLower() + ".dll",40, compprofile: CompilationProfile.Persistence)
+                                Builder.BuidStreamAssembly(perssrc, RandomAString(10, new Random()).ToLower() + ".dll",40, compprofile: CompilationProfile.SSploitPersistence)
                                 )
                             ), 
                         "PersWMI", 

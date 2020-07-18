@@ -356,8 +356,27 @@ namespace RedPeanut
                     {                   
                         SystemInfo sysinfo = item.Value.GetSystemInfo();
 
-                        Console.WriteLine("[*] | {0,-10} | {1,-15} | {2,-10} | {3,-32} | {4,-20} | {5,-40} |", item.Key, sysinfo.Ip, sysinfo.Integrity, sysinfo.User, sysinfo.ProcessName, sysinfo.Os);
-                    }catch(Exception)
+                        DateTime now = DateTime.Now;
+
+                        DateTime green = now.AddSeconds(-7);
+                        DateTime red = now.AddSeconds(-15);
+
+                        Console.Write("[*] | ");
+
+                        Console.ForegroundColor = ConsoleColor.Green;
+
+                        if (item.Value.lastseen.CompareTo(red) < 0 )
+                            Console.ForegroundColor = ConsoleColor.Red;
+                        else if (item.Value.lastseen.CompareTo(green) < 0)
+                            Console.ForegroundColor = ConsoleColor.DarkGreen;
+
+                        Console.Write("{0,-10}", item.Key);
+
+                        Console.ResetColor();
+
+                        Console.WriteLine(" | {0,-15} | {1,-10} | {2,-32} | {3,-20} | {4,-40} |", sysinfo.Ip, sysinfo.Integrity, sysinfo.User, sysinfo.ProcessName, sysinfo.Os);
+                    }
+                    catch(Exception)
                     {
                         //Console.WriteLine("[x] agent need to be removed {0}", e.Message);
                     }

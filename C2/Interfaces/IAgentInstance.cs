@@ -4,6 +4,7 @@
 // License: BSD 3-Clause
 //
 
+using System;
 using System.Security.Cryptography;
 using System.Text;
 using static RedPeanut.Models;
@@ -18,6 +19,7 @@ namespace RedPeanut
         int TargetFramework { get; }
         IAgentInstance Pivoter { get; set; }
         bool Managed { get; set; }
+        DateTime lastseen { get; set; }
         // Manage agentid request
         void Run();
 

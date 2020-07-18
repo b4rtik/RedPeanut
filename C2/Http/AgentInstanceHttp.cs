@@ -4,6 +4,7 @@
 // License: BSD 3-Clause
 //
 
+using System;
 using System.Security.Cryptography;
 using System.Text;
 using static RedPeanut.Models;
@@ -24,6 +25,7 @@ namespace RedPeanut
         private int profileid = 0;
         private bool managed = false;
         public string Cookie {get;set;}
+        public DateTime lastseen { get; set;}
 
         public AgentInstanceHttp(C2Server server,string agentid, string serverkey, string address, int port, int targetframework, int profileid, byte[] sessionkey = null, byte[] sessioniv = null)
         {
@@ -42,6 +44,7 @@ namespace RedPeanut
             this.profileid = profileid;
             HttpProfile profile = Program.GetC2Manager().GetC2Server().GetProfile(profileid);
             Managed = profile.InjectionManaged;
+            lastseen = DateTime.Now;
         }
 
         public AgentInstanceHttp(C2Server server, string agentid, string serverkey, int targetframework, IAgentInstance agent, int profileid)
@@ -55,6 +58,7 @@ namespace RedPeanut
             this.profileid = profileid;
             HttpProfile profile = Program.GetC2Manager().GetC2Server().GetProfile(profileid);
             Managed = profile.InjectionManaged;
+            lastseen = DateTime.Now;
         }
 
         public int GetProfileid()

@@ -26,15 +26,113 @@ namespace RedPeanut
         private static string srcPath = Path.Combine(Directory.GetCurrentDirectory(), WORKSPACE_FOLDER, TEMPLATE_FOLDER, SRC_FOLDER);
         private static string srcExternalPath = Path.Combine(Directory.GetCurrentDirectory(), EXTERNAL_FOLDER);
 
+        static List<string> evasion = new List<string> { "Evasion.cs" };
+
+        static List<string> generic = new List<string> { "CustomLoadLibrary.cs", "NativeSysCall.cs", "Natives.cs" };
+
+        static List<string> support = new List<string> { "Crypto.cs", "Utility.cs", "ImageLoader.cs", "Spawner.cs", "InjectionHelper.cs", "InjectionLoaderListener.cs" };
+
+        static List<string> agentDeps = new List<string> { "AgentInstanceNamedPipe.cs", "SmbListener.cs", "CommandExecuter.cs" };
+
+        static List<string> credentials = new List<string>{
+                "Mimikatz.cs",
+                "Tokens.cs"
+            };
+
+        static List<string> enumeration = new List<string>{
+                "Domain.cs",
+                "GPO.cs",
+                "Host.cs",
+                "Keylogger.cs",
+                "Network.cs",
+                "Registry.cs"
+            };
+
+        static List<string> ssevasion = new List<string>{
+                "Amsi.cs"
+            };
+
+        static List<string> execution = new List<string>{
+                "Assembly.cs",
+                "Native.cs",
+                "PE.cs",
+                "Shell.cs",
+                "ShellCode.cs",
+                "Win32.cs"
+            };
+
+        static List<string> execution_DynamicInvoke = new List<string>{
+                "Generic.cs",
+                "Native.cs",
+                "Win32.cs"
+            };
+
+        static List<string> execution_Injection = new List<string>{
+                "Allocation.cs",
+                "Execution.cs",
+                "Injector.cs",
+                "Payload.cs"
+            };
+
+        static List<string> execution_ManualMap = new List<string>{
+                "Map.cs",
+                "Overload.cs"
+            };
+
+        static List<string> ssgeneric = new List<string>{
+                "Generic.cs"
+            };
+
+        static List<string> lateralMovement = new List<string>{
+                "DCOM.cs",
+                "PowerShellRemoting.cs",
+                "SCM.cs",
+                "WMI.cs"
+            };
+
+        static List<string> misc = new List<string>{
+                "CountdownEvent.cs",
+                "Utilities.cs"
+            };
+
+        static List<string> persistence = new List<string>{
+                "Autorun.cs",
+                "Startup.cs",
+                "WMI.cs",
+                "Registry.cs",
+                "COM.cs"
+            };
+
+        static List<string> pivoting = new List<string>{
+                "ReversePortForwarding.cs"
+            };
+
+        static List<string> privilegeEscalation = new List<string>{
+                "Exchange.cs"
+            };
+
         static Dictionary<CompilationProfile, string[]> compilationProfiles = new Dictionary<CompilationProfile, string[]>
         {
-            {CompilationProfile.Agent ,new string[]{ "Evasion.cs", "CustomLoadLibrary.cs", "NativeSysCall.cs", "Natives.cs", "Utility.cs", "Crypto.cs", "AgentInstanceNamedPipe.cs", "SmbListener.cs", "CommandExecuter.cs", "InjectionHelper.cs","InjectionLoaderListener.cs", "Spawner.cs", "ImageLoader.cs"}},
-            {CompilationProfile.Generic, new string[]{ "Evasion.cs", "CustomLoadLibrary.cs", "NativeSysCall.cs", "Natives.cs"}},
-            {CompilationProfile.UACBypass,new string[]{ "CustomLoadLibrary.cs", "NativeSysCall.cs", "Natives.cs", "Crypto.cs", "Utility.cs", "ImageLoader.cs", "Spawner.cs" ,"InjectionHelper.cs", "InjectionLoaderListener.cs", "UACBypassHelper.cs","WnfHelper.cs", "Enums.cs", "Imports.cs", "Loader.cs", "Structs.cs","Tokens.cs", "Win32.cs", "Generic.cs","Native.cs","PE.cs","Map.cs","Overload.cs","Misc.cs","Utilities.cs"}},
-            {CompilationProfile.StandardCommand,new string[]{"Tokens.cs", "Win32.cs", "Generic.cs", "Utility.cs", "Crypto.cs", "ImageLoader.cs"}},
-            {CompilationProfile.Persistence,new string[]{ "Autorun.cs", "Startup.cs", "WMI.cs", "Registry.cs"}},
+            {CompilationProfile.Agent ,new List<string>().Concat(evasion).Concat(generic).Concat(support).Concat(agentDeps).ToArray() },
+            {CompilationProfile.Generic, new List<string>().Concat(evasion).Concat(generic).ToArray()},
+            {CompilationProfile.UACBypass, new List<string>().Concat(evasion).Concat(generic).Concat(support).Concat(credentials).Concat(execution).Concat(execution_DynamicInvoke).Concat(execution_ManualMap).Concat(misc).Concat(new List<string>{
+                "UACBypassHelper.cs",
+                "WnfHelper.cs",
+                "Enums.cs",//
+                "Imports.cs",
+                "Loader.cs",
+                "Structs.cs"
+            }).ToArray() },
+            {CompilationProfile.StandardCommand, new List<string>().Concat(ssgeneric).Concat(credentials).Concat(execution).Concat(execution_ManualMap).Concat(misc).Concat(new List<string>{
+                "Utility.cs",
+                "Crypto.cs",
+                "ImageLoader.cs"
+            }).ToArray()},
             {CompilationProfile.PersistenceCLR,new string[]{}},
-            {CompilationProfile.Migrate,new string[]{ "Evasion.cs","CustomLoadLibrary.cs", "NativeSysCall.cs", "Natives.cs", "Utility.cs", "Crypto.cs", "InjectionHelper.cs","InjectionLoaderListener.cs", "Spawner.cs", "ImageLoader.cs","WnfHelper.cs"}}
+            {CompilationProfile.Migrate,new List<string>().Concat(evasion).Concat(generic).Concat(support).Concat(agentDeps).Concat(new List<string>{
+                "WnfHelper.cs"
+            }).ToArray()},
+            {CompilationProfile.SSploitPersistence,persistence.ToArray()}
         };
 
         private static SyntaxTree Parse(string text, string filename = "", CSharpParseOptions options = null)

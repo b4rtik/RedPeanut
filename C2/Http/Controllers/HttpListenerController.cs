@@ -235,6 +235,7 @@ namespace RedPeanut
             ResponseMsg responsemsg = null;
             try
             {
+                agent.lastseen = DateTime.Now;
                 Dictionary<string, string> args = GetParsedArgs(reader.ReadToEnd());
                 responsemsg = GetResponseMsg(args.GetValueOrDefault(Paramname), agent);
 
@@ -409,6 +410,7 @@ namespace RedPeanut
                 IAgentInstance agent = RedPeanutC2.server.GetAgent(decriptedAgentid);
                 if(agent != null)
                 {
+                    agent.lastseen = DateTime.Now;
                     TaskMsg msg = RedPeanutC2.server.GetCommand(agent);
                     if (msg != null)
                     {

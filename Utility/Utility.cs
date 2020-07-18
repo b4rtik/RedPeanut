@@ -93,9 +93,22 @@ namespace RedPeanut
             Agent,
             UACBypass,
             StandardCommand,
-            Persistence,
             PersistenceCLR,
-            Migrate
+            Migrate,
+            SSploitCredentials,
+            SSploitEnumeration,
+            SSploitEvasion,
+            SSploitExecution,
+            SSploitExecution_DynamicInvoke,
+            SSploitExecution_Injection,
+            SSploitExecution_ManualMap,
+            SSploitExecution_PlatformInvoke,
+            SSploitGeneric,
+            SSploitLateralMovement,
+            SSploitMisc,
+            SSploitPivoting,
+            SSploitPersistence,
+            SSploitPrivilegeEscalation
         }
 
         public static void ShutDown()

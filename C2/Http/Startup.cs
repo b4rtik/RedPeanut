@@ -43,7 +43,8 @@ namespace RedPeanut
             services.AddRouting(options => options.LowercaseUrls = true);
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<IConfiguration>(Configuration);
-            services.AddEntityFrameworkSqlite().AddDbContext<RedPeanutDBContext>();
+            //services.AddEntityFrameworkSqlite().AddDbContext<RedPeanutDBContext>();.AddTransient
+            services.AddEntityFrameworkSqlite().AddDbContext<RedPeanutDBContext>(ServiceLifetime.Transient);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
