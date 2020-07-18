@@ -10,12 +10,12 @@ using static RedPeanut.Utility;
 
 namespace RedPeanut
 {
-    class StopListenerManager : IMenu
+    class RemoveListenerManager : IMenu
     {
         public static Dictionary<string, string> mainmenu = new Dictionary<string, string>
         {
-            { "set listenername", "Set listener to stop" },
-            { "stop", "Stop listener" },
+            { "set listenername", "Set listener to Remove" },
+            { "remove", "Remove listener" },
             { "options", "Print help" },
             { "back", "Back to lateral menu" }
         };
@@ -29,17 +29,17 @@ namespace RedPeanut
         C2Server server = null;
 
         IAgentInstance agent = null;
-        string modulename = "stoplistener";
+        string modulename = "removelistener";
         string listenername;
 
         bool exit = false;
 
-        public StopListenerManager(C2Server server)
+        public RemoveListenerManager(C2Server server)
         {
             this.server = server;
         }
 
-        public StopListenerManager(IAgentInstance agent)
+        public RemoveListenerManager(IAgentInstance agent)
         {
             this.agent = agent;
         }
@@ -66,11 +66,16 @@ namespace RedPeanut
                 {
                     switch (f_input.TrimEnd())
                     {
-                        case "stop":
+                        case "remove":
                             if(Program.GetC2Manager().GetC2Server().GetListenersConfig().ContainsKey(listenername) )
                             {
-                                ListenerConfig lc = Program.GetC2Manager().GetC2Server().GetListenersConfig()[listenername];
-                                lc.CancellationTokenSource.Cancel();
+                                try
+                                {
+                                    ListenerConfig lc = Program.GetC2Manager().GetC2Server().GetListenersConfig()[listenername];
+                                    lc.CancellationTokenSource.Cancel();
+                                    Program.GetC2Manager().GetC2Server().RemoveListenerConfig(lc);
+                                }catch(Exception)
+                                {}
                                 exit = true;
                             }
                             break;

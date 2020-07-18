@@ -17,6 +17,7 @@ namespace RedPeanut
             { "http", "Http listener" },
             { "list", "Print listenets list" },
             { "kill", "Stop a listener" },
+            { "remove", "Remove a listener" },
             { "options", "Print help" },
             { "back", "Back to lateral menu" }
         };
@@ -32,6 +33,7 @@ namespace RedPeanut
         C2Server srv = null;
         HttpServerManager httpmanager = null;
         StopListenerManager stopmanager = null;
+        RemoveListenerManager removemanager = null;
 
         bool exit = false;
 
@@ -75,6 +77,12 @@ namespace RedPeanut
                             if (stopmanager == null)
                                 stopmanager = new StopListenerManager(srv);
                             Program.GetMenuStack().Push(stopmanager);
+                            exit = true;
+                            break;
+                        case "remove":
+                            if (removemanager == null)
+                                removemanager = new RemoveListenerManager(srv);
+                            Program.GetMenuStack().Push(removemanager);
                             exit = true;
                             break;
                         case "options":
