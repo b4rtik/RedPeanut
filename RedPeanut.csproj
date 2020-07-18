@@ -19,6 +19,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Workspace\Templates\AssemblyLoader.cs" />
     <Compile Remove="Workspace\Templates\DonutLoader.cs" />
     <Compile Remove="Workspace\Templates\FileDownLoader.cs" />
     <Compile Remove="Workspace\Templates\FileUpLoader.cs" />
@@ -52,6 +53,7 @@
     <Compile Remove="Workspace\Templates\SharpPsExec.cs" />
     <Compile Remove="Workspace\Templates\SharpPsExecService.cs" />
     <Compile Remove="Workspace\Templates\SharpSpawner.cs" />
+    <Compile Remove="Workspace\Templates\SharpSploitReconImpl.cs" />
     <Compile Remove="Workspace\Templates\StandardCommandImpl.cs" />
     <Compile Remove="Workspace\Templates\TokenManipulation.cs" />
 	<Compile Remove="External\**" />
@@ -83,6 +85,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Workspace\Templates\AssemblyLoader.cs" />
     <None Include="Workspace\Templates\RedPeanutAgent.cs" />
     <None Include="Workspace\Templates\RedPeanutAgent\Core\Crypto.cs" />
     <None Include="Workspace\Templates\RedPeanutAgent\Core\CustomLoadLibrary.cs" />
@@ -168,6 +171,7 @@
     </None>
     <None Include="Workspace\Templates\SharpSpawner.cs" />
     <None Include="Workspace\Templates\RedPeanutSpawn.cs" />
+    <None Include="Workspace\Templates\SharpSploitReconImpl.cs" />
     <None Include="Workspace\Templates\StandardCommandImpl.cs" />
     <None Include="Workspace\Templates\TokenManipulation.cs" />
   </ItemGroup>

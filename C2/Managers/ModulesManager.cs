@@ -18,6 +18,7 @@ namespace RedPeanut
             { "privesc", "PrivEsc module" },
             { "recon", "Information gatering" },
             { "lateral", "Lateral movement" },
+            { "execute", "Execute external tools" },
             { "process", "Process creation" },
             { "persistence", "Persistence manager" },
             { "powershellexecuter", "Run PowerShell command" },
@@ -42,6 +43,7 @@ namespace RedPeanut
         static PersistenceManager persm = null;
         static SpawningManager spawnm = null;
         static GPOAbuseManager gpoabusem = null;
+        static ExecutionManager executionm = null;
 
         bool exit = false;
 
@@ -95,6 +97,11 @@ namespace RedPeanut
                         case "lateral":
                             lateral = new LateralManager(agent);
                             Program.GetMenuStack().Push(lateral);
+                            exit = true;
+                            break;
+                        case "execute":
+                            executionm = new ExecutionManager(agent);
+                            Program.GetMenuStack().Push(executionm);
                             exit = true;
                             break;
                         case "process":

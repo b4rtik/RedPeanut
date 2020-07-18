@@ -46,6 +46,7 @@ namespace RedPeanut
         //public const string PL_COMMAND_NUTCLRWNF = "RedPeanut.Resources.nutclrwnf.txt";
 
         public const string SERVERKEY_FILE = "serverkey.json";
+        public const string EXECUTE_ASSEMBLY_TEMPLATE = "AssemblyLoader.cs";
         public const string STAGER_TEMPLATE = "RedPeanutRP.cs";
         public const string SHOOTER_TEMPLATE = "RedPeanutShooter.cs";
         public const string SPAWNER_TEMPLATE = "SharpSpawner.cs";
