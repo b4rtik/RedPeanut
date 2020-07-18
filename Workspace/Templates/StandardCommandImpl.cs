@@ -47,6 +47,36 @@ namespace StandardCommandImpl
             }
         }
 
+        public static void GetCat(string[] param)
+        {
+            try
+            {
+                if (File.Exists(param[0]))
+                {
+                    using (StreamReader file = new StreamReader(param[0]))
+                    {
+                        int counter = 0;
+                        string ln;
+
+                        while ((ln = file.ReadLine()) != null)
+                        {
+                            Console.WriteLine("[*] {0}",ln);
+                            counter++;
+                        }
+                        file.Close();
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("[*] File not found {0}");
+                }
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("[*] Error executing cat");
+            }
+        }
+
         /// <summary>
         /// Impersonate the SYSTEM user. Equates to `ImpersonateUser("NT AUTHORITY\SYSTEM")`. (Requires Admin)
         /// </summary>

@@ -20,6 +20,8 @@ namespace RedPeanut
         public static Dictionary<string, string> mainmenu = new Dictionary<string, string>
         {
             { "pwd", "Get current Directory" },
+            { "cd", "Change current Directory" },
+            { "cat", "Read file content" },
             { "getuid", "Set username" },
             { "getsystem", "Set SYSTEM" },
             { "killagent", "Kill current agent" },
@@ -73,6 +75,12 @@ namespace RedPeanut
                             return true;
                         case "getuid":
                             RunGetUid();
+                            return true;
+                        case "cd":
+                            RunGetCd(GetParsedSetString("set " + inputcmd));
+                            return true;
+                        case "cat":
+                            RunGetCat(GetParsedSetString("set " + inputcmd));
                             return true;
                         case "getsystem":
                             RunGetSystem();
@@ -129,6 +137,24 @@ namespace RedPeanut
             string commandstr = Convert.ToBase64String(CompressGZipAssembly(Builder.BuidStreamAssembly(source, RandomAString(10, new Random()) + ".dll", agent.TargetFramework, compprofile: CompilationProfile.StandardCommand)));
 
             RunStandardBase64(commandstr, "GetUid", "StandardCommandImpl.Program", new string[] { " " }, agent);
+        }
+
+        private void RunGetCd(string dir)
+        {
+            string source = File.ReadAllText(Path.Combine(folderrpath, STANDARD_TEMPLATE));
+
+            string commandstr = Convert.ToBase64String(CompressGZipAssembly(Builder.BuidStreamAssembly(source, RandomAString(10, new Random()) + ".dll", agent.TargetFramework, compprofile: CompilationProfile.StandardCommand)));
+
+            RunStandardBase64(commandstr, "GetCd", "StandardCommandImpl.Program", new string[] { dir }, agent);
+        }
+
+        private void RunGetCat(string filepath)
+        {
+            string source = File.ReadAllText(Path.Combine(folderrpath, STANDARD_TEMPLATE));
+
+            string commandstr = Convert.ToBase64String(CompressGZipAssembly(Builder.BuidStreamAssembly(source, RandomAString(10, new Random()) + ".dll", agent.TargetFramework, compprofile: CompilationProfile.StandardCommand)));
+
+            RunStandardBase64(commandstr, "GetCat", "StandardCommandImpl.Program", new string[] { filepath }, agent);
         }
 
         private void RunGetSystem()
