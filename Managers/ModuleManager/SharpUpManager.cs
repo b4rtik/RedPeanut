@@ -98,7 +98,7 @@ namespace RedPeanut
             string auditm = "";
             if (auditmode.Equals("true"))
                 auditm = "audit";
-            RunAssembly(PL_MODULE_SHARPUP, "RedPeanut.SharpUp", new string[] { auditm }, agent);
+            RunAssembly(PL_MODULE_SHARPUP, "SharpUp.Program", new string[] { auditm }, agent);
         }
 
         private void PrintCurrentConfig()
