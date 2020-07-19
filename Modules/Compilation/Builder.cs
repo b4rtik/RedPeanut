@@ -144,7 +144,7 @@ namespace RedPeanut
                 "ImageLoader.cs"
             }).ToArray()},
             {CompilationProfile.PersistenceCLR,new string[]{}},
-            {CompilationProfile.Migrate,new List<string>().Concat(evasion).Concat(generic).Concat(support).Concat(agentDeps).Concat(new List<string>{
+            {CompilationProfile.Migrate,new List<string>().Concat(evasion).Concat(generic).Concat(support).Concat(new List<string>{
                 "WnfHelper.cs"
             }).ToArray()},
             {CompilationProfile.SSploitPersistence,persistence.ToArray()}
