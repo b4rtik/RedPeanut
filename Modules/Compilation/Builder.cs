@@ -48,6 +48,12 @@ namespace RedPeanut
                 "Registry.cs"
             };
 
+        static List<string> enumeration_host = new List<string>{
+                "Host.cs",
+                "Registry.cs"
+            };
+
+
         static List<string> ssevasion = new List<string>{
                 "Amsi.cs"
             };
@@ -123,7 +129,7 @@ namespace RedPeanut
                 "Loader.cs",
                 "Structs.cs"
             }).ToArray() },
-            {CompilationProfile.StandardCommand, new List<string>().Concat(ssgeneric).Concat(credentials).Concat(execution).Concat(execution_ManualMap).Concat(misc).Concat(new List<string>{
+            {CompilationProfile.StandardCommand, new List<string>().Concat(ssgeneric).Concat(credentials).Concat(execution).Concat(enumeration_host).Concat(execution_ManualMap).Concat(misc).Concat(new List<string>{
                 "Utility.cs",
                 "Crypto.cs",
                 "ImageLoader.cs"

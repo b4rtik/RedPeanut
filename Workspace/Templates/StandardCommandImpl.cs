@@ -77,6 +77,30 @@ namespace StandardCommandImpl
             }
         }
 
+        public static void GetLs(string[] param)
+        {
+            try
+            {
+                Console.WriteLine(string.IsNullOrEmpty(param[0].Trim()) ? SharpSploit.Enumeration.Host.GetDirectoryListing().ToString() : SharpSploit.Enumeration.Host.GetDirectoryListing(param[0].Trim()).ToString());
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("[*] Error executing ls");
+            }
+        }
+
+        public static void GetPs(string[] param)
+        {
+            try
+            {
+                Console.WriteLine(SharpSploit.Enumeration.Host.GetProcessList().ToString());
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("[*] Error executing ps");
+            }
+        }
+
         /// <summary>
         /// Impersonate the SYSTEM user. Equates to `ImpersonateUser("NT AUTHORITY\SYSTEM")`. (Requires Admin)
         /// </summary>
