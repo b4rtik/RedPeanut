@@ -19,7 +19,9 @@ namespace RedPeanut
 {
     public class C2Server
     {
-        
+        static readonly object _locker = new object();
+        static readonly object _printlocker = new object();
+
         Thread servert = null;
         
         RedPeanutC2 httplistener = null;
@@ -35,7 +37,6 @@ namespace RedPeanut
         Dictionary<string, IAgentInstance> agentInboundList = new Dictionary<string, IAgentInstance>();
         Dictionary<string, List<TaskMsg>> commandqueue = new Dictionary<string, List<TaskMsg>>();
         Dictionary<string, TaskMsg> awaitresponsequeue = new Dictionary<string, TaskMsg>();
-        //Dictionary<string, WebResourceInstance> webresources = new Dictionary<string, WebResourceInstance>();
         Dictionary<int, HttpProfile> availableprofile = new Dictionary<int, HttpProfile>();
         Dictionary<string, ListenerConfig> listeners = new Dictionary<string, ListenerConfig>();
 
@@ -274,29 +275,30 @@ namespace RedPeanut
 
         public void RegisterAgent(String agentid,IAgentInstance agent)
         {
-            agentList.Add(agentid, agent);
-            AgentInstance agentInstance = dbcontext.Agents.FirstOrDefault<AgentInstance>(s => s.agentid.Equals(agentid));
-            if (agentInstance == null)
+            lock (_locker)
             {
-                AgentInstance agentinstance = new AgentInstance
+                agentList.Add(agentid, agent);
+                AgentInstance agentInstance = dbcontext.Agents.FirstOrDefault<AgentInstance>(s => s.agentid.Equals(agentid));
+                if (agentInstance == null)
                 {
-                    agentid = agentid,
-                    address = ((AgentInstanceHttp)agent).GetAddress(),
-                    port = ((AgentInstanceHttp)agent).GetPort(),
-                    profileid = ((AgentInstanceHttp)agent).GetProfileid(),
-                    framework = ((AgentInstanceHttp)agent).TargetFramework,
-                    sessionkey = ((AgentInstanceHttp)agent).AesManager.Key,
-                    sessioniv = ((AgentInstanceHttp)agent).AesManager.IV
-                };
+                    AgentInstance agentinstance = new AgentInstance
+                    {
+                        agentid = agentid,
+                        address = ((AgentInstanceHttp)agent).GetAddress(),
+                        port = ((AgentInstanceHttp)agent).GetPort(),
+                        profileid = ((AgentInstanceHttp)agent).GetProfileid(),
+                        framework = ((AgentInstanceHttp)agent).TargetFramework,
+                        sessionkey = ((AgentInstanceHttp)agent).AesManager.Key,
+                        sessioniv = ((AgentInstanceHttp)agent).AesManager.IV
+                    };
 
-                if (agent.Pivoter != null)
-                    agentinstance.agentPivotid = agent.Pivoter.AgentId;
+                    if (agent.Pivoter != null)
+                        agentinstance.agentPivotid = agent.Pivoter.AgentId;
 
-                dbcontext.Agents.Add(agentinstance);
-                dbcontext.SaveChanges();
+                    dbcontext.Agents.Add(agentinstance);
+                    dbcontext.SaveChanges();
+                }
             }
-
-            
         }
 
         public IAgentInstance GetAgent(string agentid)
@@ -340,7 +342,20 @@ namespace RedPeanut
                 return false;
             }
         }
-        
+
+        public void PrintAgentCheckedIn(IAgentInstance agent)
+        {
+            lock (_printlocker)
+            {
+                Console.WriteLine("\n[*] Agent " + agent.AgentId + " checkedin");
+                Console.WriteLine("[*]  {0}", new string('-', 144));
+                Console.WriteLine("[*] | {0,-10} | {1,-15} | {2,-10} | {3,-32} | {4,-20} | {5,-40} |", "Agent", "IP", "Integrity", "User", "Process", "System");
+                Console.WriteLine("[*]  {0}", new string('-', 144));
+                Console.WriteLine("[*] | {0,-10} | {1,-15} | {2,-10} | {3,-32} | {4,-20} | {5,-40} |", agent.AgentId, agent.SysInfo.Ip, agent.SysInfo.Integrity, agent.SysInfo.User, agent.SysInfo.ProcessName, agent.SysInfo.Os);
+                Console.WriteLine("[*]  {0}", new string('-', 144));
+                Program.GetMenuStack().Peek().RePrintCLI();
+            }
+        }
 
         public void ListAgents()
         {
