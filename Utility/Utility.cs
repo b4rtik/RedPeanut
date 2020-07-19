@@ -73,6 +73,7 @@ namespace RedPeanut
         public const string CLRHOOKINSTALL_TEMPLATE = "PersCLRInstall.cs";
         public const string MIGRATE_TEMPLATE = "RedPeanutMigrate.cs";
         public const string SPAWN_TEMPLATE = "RedPeanutSpawn.cs";
+        public const string DOMAIN_RECON = "SharpSploitDomainReconImpl.cs";
         public const string WORKSPACE_FOLDER = "Workspace";
         public const string PAYLOADS_FOLDER = "Payloads";
         public const string PROFILES_FOLDER = "Profiles";
@@ -98,6 +99,7 @@ namespace RedPeanut
             Migrate,
             SSploitCredentials,
             SSploitEnumeration,
+            SSploitEnumerationDomain,
             SSploitEvasion,
             SSploitExecution,
             SSploitExecution_DynamicInvoke,

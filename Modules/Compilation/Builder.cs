@@ -53,6 +53,10 @@ namespace RedPeanut
                 "Registry.cs"
             };
 
+        static List<string> enumeration_domain = new List<string>{
+                "Domain.cs",
+            };
+
 
         static List<string> ssevasion = new List<string>{
                 "Amsi.cs"
@@ -134,6 +138,11 @@ namespace RedPeanut
                 "Crypto.cs",
                 "ImageLoader.cs"
             }).ToArray()},
+            {CompilationProfile.SSploitEnumerationDomain, new List<string>().Concat(ssgeneric).Concat(execution).Concat(enumeration_domain).Concat(execution_ManualMap).Concat(misc).Concat(new List<string>{
+                "Utility.cs",
+                "Crypto.cs",
+                "ImageLoader.cs"
+            }).ToArray()},
             {CompilationProfile.PersistenceCLR,new string[]{}},
             {CompilationProfile.Migrate,new List<string>().Concat(evasion).Concat(generic).Concat(support).Concat(agentDeps).Concat(new List<string>{
                 "WnfHelper.cs"
@@ -166,7 +175,9 @@ namespace RedPeanut
                 MetadataReference.CreateFromFile(string.Format(runtimePathRef, "System.ServiceProcess")),
                 MetadataReference.CreateFromFile(string.Format(runtimePathRef, "System.Management.Automation")),
                 MetadataReference.CreateFromFile(string.Format(runtimePathRef, "System.Management")),
-                MetadataReference.CreateFromFile(string.Format(runtimePathRef, "System.Drawing"))
+                MetadataReference.CreateFromFile(string.Format(runtimePathRef, "System.Drawing")),
+                MetadataReference.CreateFromFile(string.Format(runtimePathRef, "System.DirectoryServices")),
+                MetadataReference.CreateFromFile(string.Format(runtimePathRef, "System.IdentityModel"))
             };
             return References;
         }

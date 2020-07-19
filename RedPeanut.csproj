@@ -53,7 +53,7 @@
     <Compile Remove="Workspace\Templates\SharpPsExec.cs" />
     <Compile Remove="Workspace\Templates\SharpPsExecService.cs" />
     <Compile Remove="Workspace\Templates\SharpSpawner.cs" />
-    <Compile Remove="Workspace\Templates\SharpSploitReconImpl.cs" />
+    <Compile Remove="Workspace\Templates\SharpSploitDomainReconImpl.cs" />
     <Compile Remove="Workspace\Templates\StandardCommandImpl.cs" />
     <Compile Remove="Workspace\Templates\TokenManipulation.cs" />
 	<Compile Remove="External\**" />
@@ -171,7 +171,7 @@
     </None>
     <None Include="Workspace\Templates\SharpSpawner.cs" />
     <None Include="Workspace\Templates\RedPeanutSpawn.cs" />
-    <None Include="Workspace\Templates\SharpSploitReconImpl.cs" />
+    <None Include="Workspace\Templates\SharpSploitDomainReconImpl.cs" />
     <None Include="Workspace\Templates\StandardCommandImpl.cs" />
     <None Include="Workspace\Templates\TokenManipulation.cs" />
   </ItemGroup>

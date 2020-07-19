@@ -13,9 +13,10 @@ namespace RedPeanut
 {
     public static class Replacer
     {
-        public static string ReplaceAgentProfile(string src, string serverkey, int targetframework, ListenerConfig config)
+        public static string ReplaceAgentProfile(string src, string serverkey, int targetframework, ListenerConfig config, bool sandboxcheck = false)
         {
             string source = src
+                .Replace("#SANDBOXCHECK#", sandboxcheck.ToString())
                     .Replace("#HOST#", config.GetHost())
                     .Replace("#PORT#", config.GetPort().ToString())
                     .Replace("#PARAM#", config.GetProfile().HttpPost.Param)
@@ -53,9 +54,10 @@ namespace RedPeanut
             return source;
         }
 
-        public static string ReplaceAgentProfile(string src, string serverkey, int targetframework, ListenerPivotConfig config)
+        public static string ReplaceAgentProfile(string src, string serverkey, int targetframework, ListenerPivotConfig config, bool sandboxcheck = false)
         {
             string source = src
+                .Replace("#SANDBOXCHECK#", sandboxcheck.ToString())
                     .Replace("#HOST#", config.GetHost())
                     .Replace("#PORT#", "0")
                     .Replace("#PARAM#", "")
