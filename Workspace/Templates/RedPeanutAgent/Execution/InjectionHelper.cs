@@ -276,7 +276,7 @@ namespace RedPeanutAgent.Execution
         {
             IntPtr th = procInfo.hThread;
             ulong outsupn = 0;
-            int rest = Natives.ZwResumeThread(th, out outsupn);
+            int rest = Natives.ZwAlertResumeThread(th, out outsupn);
             return rest;
         }
     }
