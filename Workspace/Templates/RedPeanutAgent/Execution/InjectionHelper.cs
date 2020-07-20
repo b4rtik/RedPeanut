@@ -93,8 +93,6 @@ namespace RedPeanutAgent.Execution
                 return false;
             }
 
-            InjectionHelper.SetInformationThread(procInfo);
-
             InjectionHelper.ResumeThread(procInfo);
 
             return true;
@@ -150,8 +148,6 @@ namespace RedPeanutAgent.Execution
             {
                 return false;
             }
-
-            InjectionHelper.SetInformationThread(procInfo);
 
             InjectionHelper.ResumeThread(procInfo);
 
@@ -214,8 +210,6 @@ namespace RedPeanutAgent.Execution
             {
                 return false;
             }
-
-            InjectionHelper.SetInformationThread(procInfo);
 
             InjectionHelper.ResumeThread(procInfo);
 
