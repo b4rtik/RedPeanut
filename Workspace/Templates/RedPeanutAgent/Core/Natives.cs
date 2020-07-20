@@ -1075,6 +1075,13 @@ namespace RedPeanutAgent.Core
             return CreateProcessEx(lpApplicationName, lpCommandLine, lpProcAttribs, lpThreadAttribs, bInheritHandles, dwCreateFlags, lpEnvironment, lpCurrentDir, ref lpStartinfo, out lpProcInformation);
         }
 
+        public static uint NtCreateThreadEx(out IntPtr hThread, uint DesiredAccess,IntPtr lpThreadAttributes, IntPtr hProcess, IntPtr lpStartAddress, IntPtr lpParameter, bool CreateSuspended, uint StackZeroBits, uint SizeOfStackCommit, uint SizeOfStackReserve, IntPtr lpBytesBuffer)
+        {
+            IntPtr proc = GetProcAddress(GetNtDll(), "NtCreateThreadEx");
+            NativeSysCall.Delegates.NtCreateThreadEx NtCreateThreadEx = (NativeSysCall.Delegates.NtCreateThreadEx)Marshal.GetDelegateForFunctionPointer(proc, typeof(NativeSysCall.Delegates.NtCreateThreadEx));
+            return NtCreateThreadEx(out hThread, DesiredAccess, lpThreadAttributes, hProcess, lpStartAddress, lpParameter, CreateSuspended, StackZeroBits, SizeOfStackCommit, SizeOfStackReserve, lpBytesBuffer);
+        }
+
         public static IntPtr CreateRemoteThread(IntPtr hProcess, IntPtr lpThreadAttributes, uint dwStackSize, IntPtr lpStartAddress, IntPtr lpParameter, uint dwCreationFlags, IntPtr lpThreadId)
         {
             IntPtr proc = GetProcAddress(GetKernelbase(), "CreateRemoteThread");
