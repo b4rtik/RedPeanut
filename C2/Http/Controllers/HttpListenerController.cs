@@ -359,13 +359,6 @@ namespace RedPeanut
                 {
                     agent.SysInfo = checkinmsg.systeminfo;
 
-                    Console.WriteLine("\n[*] Agent " + agent.AgentId + " checkedin");
-                    Console.WriteLine("[*]  {0}", new string('-', 144));
-                    Console.WriteLine("[*] | {0,-10} | {1,-15} | {2,-10} | {3,-32} | {4,-20} | {5,-40} |", "Agent", "IP", "Integrity", "User", "Process", "System");
-                    Console.WriteLine("[*]  {0}", new string('-', 144));
-                    Console.WriteLine("[*] | {0,-10} | {1,-15} | {2,-10} | {3,-32} | {4,-20} | {5,-40} |", agent.AgentId, agent.SysInfo.Ip, agent.SysInfo.Integrity, agent.SysInfo.User, agent.SysInfo.ProcessName, agent.SysInfo.Os);
-                    Console.WriteLine("[*]  {0}", new string('-', 144));
-                    Program.GetMenuStack().Peek().RePrintCLI();
                     try
                     {
                         RedPeanutC2.server.RemoveAgentInbound(agent.AgentId);
@@ -375,6 +368,8 @@ namespace RedPeanut
                        
                     }
                     RedPeanutC2.server.RegisterAgent(agent.AgentId, agent);
+                    RedPeanutC2.server.PrintAgentCheckedIn(agent);
+
                     return Ok(CreateOkMgs(agent));
                 }
                 catch (Exception e)
