@@ -24,6 +24,7 @@ namespace RedPeanut
         private static string runtimePath = Path.Combine(Directory.GetCurrentDirectory(), WORKSPACE_FOLDER, DOTNET_40_REF_FOLDER, @"{0}.dll");
         private static string outputPath = Path.Combine(Directory.GetCurrentDirectory(), WORKSPACE_FOLDER, ASSEMBLY_OIUTPUT_FOLDER);
         private static string srcPath = Path.Combine(Directory.GetCurrentDirectory(), WORKSPACE_FOLDER, TEMPLATE_FOLDER, SRC_FOLDER);
+        private static string srcPathStager = Path.Combine(Directory.GetCurrentDirectory(), WORKSPACE_FOLDER, TEMPLATE_FOLDER, SRC_STAGER_FOLDER);
         private static string srcExternalPath = Path.Combine(Directory.GetCurrentDirectory(), EXTERNAL_FOLDER);
 
         static List<string> evasion = new List<string> { "Evasion.cs" };
@@ -188,7 +189,12 @@ namespace RedPeanut
             string keyfilename = Path.Combine(Directory.GetCurrentDirectory(), WORKSPACE_FOLDER, KEYFILE_FOLDER, "key.snk");
             List<SyntaxTree> compilationTrees = new List<SyntaxTree>();
 
-            string[] sourceDirectorys = { srcPath, srcExternalPath };
+            string localpath = srcPath;
+
+            if (compprofile == CompilationProfile.Generic)
+                localpath = srcPathStager;
+
+            string[] sourceDirectorys = { localpath, srcExternalPath };
 
             foreach (string s in sourceDirectorys)
             {

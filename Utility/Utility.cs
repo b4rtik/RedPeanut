@@ -85,6 +85,7 @@ namespace RedPeanut
         public const string EVILCLIPPY_FOLDER = "EvilClippy";
         public const string IMAGELOAD_FOLDER = "ImageLoad";
         public const string SRC_FOLDER = "RedPeanutAgent";
+        public const string SRC_STAGER_FOLDER = "RedPeanutRP";
         public const string EXTERNAL_FOLDER = "External";
         public const string SHELLCODE_FOLDER = "Shellcode";
         public const string KEYFILE_FOLDER = "KeyFile";

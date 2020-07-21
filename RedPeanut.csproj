@@ -47,6 +47,10 @@
     <Compile Remove="Workspace\Templates\RedPeanutInstallUtil.cs" />
     <Compile Remove="Workspace\Templates\RedPeanutMigrate.cs" />
     <Compile Remove="Workspace\Templates\RedPeanutRP.cs" />
+    <Compile Remove="Workspace\Templates\RedPeanutRP\Core\CustomLoadLibrary.cs" />
+    <Compile Remove="Workspace\Templates\RedPeanutRP\Core\Natives.cs" />
+    <Compile Remove="Workspace\Templates\RedPeanutRP\Core\NativeSysCall.cs" />
+    <Compile Remove="Workspace\Templates\RedPeanutRP\Evasion\Evasion.cs" />
     <Compile Remove="Workspace\Templates\RedPeanutShooter.cs" />
     <Compile Remove="Workspace\Templates\RedPeanutSpawn.cs" />
     <Compile Remove="Workspace\Templates\RedPeanutSpawnTikiTorch.cs" />
@@ -86,17 +90,6 @@
 
   <ItemGroup>
     <None Include="Workspace\Templates\AssemblyLoader.cs" />
-    <None Include="Workspace\Templates\RedPeanutAgent.cs" />
-    <None Include="Workspace\Templates\RedPeanutAgent\Core\Crypto.cs" />
-    <None Include="Workspace\Templates\RedPeanutAgent\Core\CustomLoadLibrary.cs" />
-    <None Include="Workspace\Templates\RedPeanutAgent\Core\Natives.cs" />
-    <None Include="Workspace\Templates\RedPeanutAgent\Core\NativeSysCall.cs" />
-    <None Include="Workspace\Templates\RedPeanutAgent\Core\Utility.cs" />
-    <None Include="Workspace\Templates\RedPeanutAgent\Evasion\Evasion.cs" />
-    <None Include="Workspace\Templates\RedPeanutAgent\Execution\CommandExecuter.cs" />
-    <None Include="Workspace\Templates\RedPeanutAgent\Execution\InjectionHelper.cs" />
-    <None Include="Workspace\Templates\RedPeanutAgent\Execution\InjectionLoaderListener.cs" />
-    <None Include="Workspace\Templates\RedPeanutAgent\Execution\Spawner.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -155,14 +148,29 @@
     <None Include="Workspace\Templates\PersStartup.cs" />
     <None Include="Workspace\Templates\PersWMI.cs" />
     <None Include="Workspace\Templates\PowerShellExecuter.cs" />
+    <None Include="Workspace\Templates\RedPeanutAgent.cs" />
     <None Include="Workspace\Templates\RedPeanutAgent\C2\AgentInstanceNamedPipe.cs" />
     <None Include="Workspace\Templates\RedPeanutAgent\C2\SmbListener.cs" />
+    <None Include="Workspace\Templates\RedPeanutAgent\Core\Crypto.cs" />
+    <None Include="Workspace\Templates\RedPeanutAgent\Core\CustomLoadLibrary.cs" />
+    <None Include="Workspace\Templates\RedPeanutAgent\Core\Natives.cs" />
+    <None Include="Workspace\Templates\RedPeanutAgent\Core\NativeSysCall.cs" />
+    <None Include="Workspace\Templates\RedPeanutAgent\Core\Utility.cs" />
+    <None Include="Workspace\Templates\RedPeanutAgent\Evasion\Evasion.cs" />
+    <None Include="Workspace\Templates\RedPeanutAgent\Execution\CommandExecuter.cs" />
+    <None Include="Workspace\Templates\RedPeanutAgent\Execution\InjectionHelper.cs" />
+    <None Include="Workspace\Templates\RedPeanutAgent\Execution\InjectionLoaderListener.cs" />
+    <None Include="Workspace\Templates\RedPeanutAgent\Execution\Spawner.cs" />
     <None Include="Workspace\Templates\RedPeanutAgent\ImageLoader\ImageLoader.cs" />
     <None Include="Workspace\Templates\RedPeanutAgent\UAC\UACBypassHelper.cs" />
     <None Include="Workspace\Templates\RedPeanutAgent\Wnf\WnfHelper.cs" />
     <None Include="Workspace\Templates\RedPeanutInstallUtil.cs" />
     <None Include="Workspace\Templates\RedPeanutMigrate.cs" />
     <None Include="Workspace\Templates\RedPeanutRP.cs" />
+    <None Include="Workspace\Templates\RedPeanutRP\Core\CustomLoadLibrary.cs" />
+    <None Include="Workspace\Templates\RedPeanutRP\Core\Natives.cs" />
+    <None Include="Workspace\Templates\RedPeanutRP\Core\NativeSysCall.cs" />
+    <None Include="Workspace\Templates\RedPeanutRP\Evasion\Evasion.cs" />
     <None Include="Workspace\Templates\RedPeanutShooter.cs" />
     <None Include="Workspace\Templates\RedPeanutSpawnTikiTorch.cs" />
     <None Include="Workspace\Templates\SharpPsExec.cs" />
