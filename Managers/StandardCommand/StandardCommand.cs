@@ -24,6 +24,8 @@ namespace RedPeanut
             { "ls", "List current directory" },
             { "ps", "List processes" },
             { "cat", "Read file content" },
+            { "cp", "Copy remote soruce file in remote destination file" },
+            { "mkdir", "Create a directory" },
             { "getuid", "Set username" },
             { "getsystem", "Set SYSTEM" },
             { "killagent", "Kill current agent" },
@@ -89,6 +91,12 @@ namespace RedPeanut
                             return true;
                         case "cat":
                             RunGetCat(GetParsedSetString("set " + inputcmd));
+                            return true;
+                        case "cp":
+                            RunGetCp(GetParsedSetStringMulti("set " + inputcmd));
+                            return true;
+                        case "mkdir":
+                            RunGetMkdir(GetParsedSetString("set " + inputcmd));
                             return true;
                         case "getsystem":
                             RunGetSystem();
@@ -181,6 +189,32 @@ namespace RedPeanut
             string commandstr = Convert.ToBase64String(CompressGZipAssembly(Builder.BuidStreamAssembly(source, RandomAString(10, new Random()) + ".dll", agent.TargetFramework, compprofile: CompilationProfile.StandardCommand)));
 
             RunStandardBase64(commandstr, "GetCat", "StandardCommandImpl.Program", new string[] { filepath }, agent);
+        }
+
+        private void RunGetCp(string args)
+        {
+            string[] largs = args.Split(" ");
+
+            if (largs.Length < 2)
+            {
+                Console.WriteLine("[!] usage: cp filsesrc filedest");
+                return;
+            }
+
+            string source = File.ReadAllText(Path.Combine(folderrpath, STANDARD_TEMPLATE));
+
+            string commandstr = Convert.ToBase64String(CompressGZipAssembly(Builder.BuidStreamAssembly(source, RandomAString(10, new Random()) + ".dll", agent.TargetFramework, compprofile: CompilationProfile.StandardCommand)));
+
+            RunStandardBase64(commandstr, "GetCp", "StandardCommandImpl.Program", largs, agent);
+        }
+
+        private void RunGetMkdir(string dirpath)
+        {
+            string source = File.ReadAllText(Path.Combine(folderrpath, STANDARD_TEMPLATE));
+
+            string commandstr = Convert.ToBase64String(CompressGZipAssembly(Builder.BuidStreamAssembly(source, RandomAString(10, new Random()) + ".dll", agent.TargetFramework, compprofile: CompilationProfile.StandardCommand)));
+
+            RunStandardBase64(commandstr, "GetMkdir", "StandardCommandImpl.Program", new string[] { dirpath }, agent);
         }
 
         private void RunGetSystem()

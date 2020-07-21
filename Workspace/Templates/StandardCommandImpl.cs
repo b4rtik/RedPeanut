@@ -101,6 +101,78 @@ namespace StandardCommandImpl
             }
         }
 
+        public static void GetCp(string[] param)
+        {
+            try
+            {
+
+                if (param.Length < 2)
+                {
+                    Console.WriteLine("[!] usage: cp filsesrc filedest");
+                    return;
+                }
+
+                if (!File.Exists(param[0]))
+                {
+                    Console.WriteLine("[!] Source file does not exists");
+                    return;
+                }
+
+                if (File.Exists(param[1]))
+                {
+                    Console.WriteLine("[*] Destination file already exists");
+                    try
+                    {
+                        File.Delete(param[1]);
+
+                        Console.WriteLine("[*] Destination file deleted");
+
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("[*] Error executing cp " + e.Message);
+                        return;
+                    }
+                }
+
+                try
+                {
+
+                    File.Copy(param[0], param[1]);
+
+                    Console.WriteLine("[*] Copied {0} -> {1}", param[0], param[1]);
+
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("[*] Error executing cp " + e.Message);
+                    return;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("[*] Error executing cp " + e.Message);
+            }
+        }
+
+        public static void GetMkdir(string[] param)
+        {
+            try
+            {
+                if (!Directory.Exists(param[0]))
+                {
+                    Directory.CreateDirectory(param[0]);
+                    Console.WriteLine("[*] Directory {0} created", param[0]);
+                }
+                else
+                    Console.WriteLine("[*] Error directory already exists");
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("[*] Error executing ps");
+            }
+        }
+
         /// <summary>
         /// Impersonate the SYSTEM user. Equates to `ImpersonateUser("NT AUTHORITY\SYSTEM")`. (Requires Admin)
         /// </summary>
