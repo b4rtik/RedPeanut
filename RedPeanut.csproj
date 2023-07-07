@@ -119,7 +119,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="2.1.11" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.1.11" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite.Core" Version="2.1.11" />
-    <PackageReference Include="Microsoft.Rest.ClientRuntime" Version="2.3.10" />
+    <PackageReference Include="Microsoft.Rest.ClientRuntime" Version="2.3.24" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
     <PackageReference Include="OpenMcdf" Version="2.2.1.3" />
     <PackageReference Include="PeNet" Version="1.1.1" />
